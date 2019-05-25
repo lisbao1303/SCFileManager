@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Projeto</string>
+    <string name="atualizar">Atualizar</string>
+    <string name="alerta_atualizacao">Menu Atualizado</string>
+    <string name="titulo_menu_principal">- Freela</string>
+    <string name="desenvolvedor">Por: Thiago de Souza, V1.</string>
+    <string name="islocked">Travado</string>
+    <string name="isunlocked">Destravado</string>
+    <string name="tab1_name">Conexao</string>
+    <string name="tab2_name">Banco de Dados</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="fragment_1_text">Fragment 1 Aqui</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="fragment_2_text">Fragment 2 Aqui</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
