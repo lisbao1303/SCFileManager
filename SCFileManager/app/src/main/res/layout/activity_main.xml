@@ -15,11 +15,17 @@
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         android:gravity="right"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
 
         <EditText
             android:id="@+id/editTextLogin"
@@ -45,6 +51,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:ems="10"
+            android:cursorVisible ="false"
             android:inputType="text"
             android:text="@string/login_password_text"
             android:textColor="@color/textHide"
@@ -59,8 +66,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="184dp"
-            android:text="Button"
-            android:textColor="@color/textHide" />
+            android:text="@string/ButtonLoginName"
+            android:onClick="buttonEntrarHandler"
+            />
 
 
     </LinearLayout>

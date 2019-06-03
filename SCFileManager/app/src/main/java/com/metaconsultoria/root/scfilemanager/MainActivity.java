@@ -1,17 +1,20 @@
 package com.metaconsultoria.root.scfilemanager;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-
-import static java.sql.Types.NULL;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private EditText text_login_object;
     private EditText text_password_object;
+    private boolean isFirstChangeNome = true;
+    private boolean isFirstChangePassword =true;
 
 
     @Override
@@ -23,8 +26,12 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        text_login_object.setText("");
-                        text_login_object.setTextColor(getResources().getColor(R.color.black));
+                        if(isFirstChangeNome) {
+                            text_login_object.setText("");
+                            text_login_object.setTextColor(getResources().getColor(R.color.black));
+                            text_login_object.setCursorVisible(true);
+                            isFirstChangeNome=false;
+                        }
                     }
                 }
         );
@@ -48,7 +55,24 @@ public class MainActivity extends AppCompatActivity {
         );
 
 
+
+
+
         text_password_object = (EditText) findViewById(R.id.editTextPassword);
+        text_password_object.setOnFocusChangeListener(
+                new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(isFirstChangePassword) {
+                            text_password_object.setText("");
+                            text_password_object.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            text_password_object.setTextColor(getResources().getColor(R.color.black));
+                            text_password_object.setCursorVisible(true);
+                            isFirstChangePassword=false;
+                        }
+                    }
+                }
+        );
         text_password_object.addTextChangedListener(
                 new TextWatcher() {
                     @Override
@@ -68,4 +92,22 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
     }
+    public void buttonEntrarHandler(View view){
+        String nomeDeUsuario=text_login_object.getText().toString();
+        String senha=text_password_object.getText().toString();
+        if(autenticacaoDeUsuario(nomeDeUsuario,senha)){
+            Bundle bundle = new Bundle();
+            bundle.putString("nomeCliente", nomeDeUsuario);
+            Intent intent = new Intent(this, MainNavigationDrawerActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this,"Usuario Inexistente",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean autenticacaoDeUsuario(String usuario, String senha){
+        return true;
+    }
+
 }
