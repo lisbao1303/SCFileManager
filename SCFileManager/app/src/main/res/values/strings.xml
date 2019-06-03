@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SC File Manager</string>
+    <string name="login_name_text">Login</string>
+    <string name="login_password_text">Senha</string>
+</resources>
