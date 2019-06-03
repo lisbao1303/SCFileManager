@@ -1,5 +1,6 @@
 package com.metaconsultoria.root.scfilemanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,15 +10,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private String matricula;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navigation_drawer);
+        Intent intentActivityMain = getIntent();
+        Bundle bundle = intentActivityMain.getExtras();
+        matricula = bundle.getString("nomeDeUsuario");
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,7 +51,14 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        //
+        // ATENCAO: Os elementos do Navigation Drawer sao instaciados somente aqui n icluir eles no onCreate
+        //
         getMenuInflater().inflate(R.menu.main_navigation_drawer, menu);
+        TextView nome_field = (TextView) findViewById(R.id.nav_text_nome_usuario);
+        nome_field.setText("nome: "+"Thiago de Souza Alves");
+        TextView matricula_field = (TextView) findViewById(R.id.nav_text_numero_de_matricula);
+        matricula_field.setText("matricula: "+matricula);
         return true;
     }
 

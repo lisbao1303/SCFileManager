@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         String senha=text_password_object.getText().toString();
         if(autenticacaoDeUsuario(nomeDeUsuario,senha)){
             Bundle bundle = new Bundle();
-            bundle.putString("nomeCliente", nomeDeUsuario);
+            bundle.putString("nomeDeUsuario", nomeDeUsuario);
             Intent intent = new Intent(this, MainNavigationDrawerActivity.class);
             intent.putExtras(bundle);
             startActivity(intent);
