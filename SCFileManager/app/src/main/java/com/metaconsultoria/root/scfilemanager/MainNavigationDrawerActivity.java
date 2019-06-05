@@ -105,6 +105,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public void botaoLeitorDeQR(View view) {
          this.abrirLeitorDeQR();
     }
+
+
     private void abrirLeitorDeQR(){
         Toast.makeText(this,"Action Import",Toast.LENGTH_SHORT).show();
     }
