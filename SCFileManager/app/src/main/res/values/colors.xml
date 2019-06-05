@@ -1,8 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="colorPrimary">#0039bc</color>
-    <color name="colorPrimaryDark">#000333</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="textHide">#a1a1a1</color>
-    <color name="black">#000000</color>
-</resources>
+<?xml version="1.0" encoding="utf-8"?><resources>    <color name="colorPrimary">#0039bc</color>    <color name="colorPrimaryDark">#000333</color>    <color name="colorAccent">#D81B60</color>    <color name="textHide">#a1a1a1</color>    <color name="black">#000000</color>    <color name="navigation_background">#c9cde2</color></resources>
