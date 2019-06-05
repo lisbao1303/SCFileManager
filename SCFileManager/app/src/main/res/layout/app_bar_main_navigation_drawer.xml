@@ -20,6 +20,22 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main_navigation_drawer" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_main_navigation_drawer" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="bottom|center"
+        app:srcCompat="@drawable/ic_qr_code"
+        app:backgroundTint="@color/amarelo"
+        android:onClick="botaoLeitorDeQR"
+        android:translationY="-25dp"
+        />
 
 </android.support.design.widget.CoordinatorLayout>

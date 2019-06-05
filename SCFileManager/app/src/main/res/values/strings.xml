@@ -13,4 +13,5 @@
     <string name="leitor_qr">Leitor de QR Code</string>
     <string name="pesquisador_ar">Explorador de Arquivos</string>
     <string name="editor_ar">Editor de Arquivos</string>
+    <string name="edit_version">Versao de Edicao</string>
 </resources>

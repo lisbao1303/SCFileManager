@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,11 +84,11 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            Toast.makeText(this,"Action Import",Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_openQR) {
+            this.abrirLeitorDeQR();
+        } else if (id == R.id.nav_open_explorer) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_edit_window) {
 
         } else if (id == R.id.nav_share) {
 
@@ -99,5 +100,12 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void botaoLeitorDeQR(View view) {
+         this.abrirLeitorDeQR();
+    }
+    private void abrirLeitorDeQR(){
+        Toast.makeText(this,"Action Import",Toast.LENGTH_SHORT).show();
     }
 }
