@@ -109,7 +109,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             ft.replace(R.id.screen_area, FragMenu);
             ft.commit();
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

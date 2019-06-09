@@ -84,34 +84,18 @@ public class FragmentFileEx extends Fragment {
                 m_view = p_convertView;
                 m_viewHolder = ((ViewHolder) m_view.getTag());
             }
-            if (!m_isRoot && p_position == 0) {
-                m_viewHolder.m_cbCheck.setVisibility(View.INVISIBLE);
-            }
 
             m_viewHolder.m_tvFileName.setText(m_item.get(p_position));
             m_viewHolder.m_ivIcon.setImageResource(setFileImageType(new File(m_path.get(p_position))));
             m_viewHolder.m_tvDate.setText(getLastDate(p_position));
-            m_viewHolder.m_cbCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        m_selectedItem.add(p_position);
-                    } else {
-                        m_selectedItem.remove(m_selectedItem.indexOf(p_position));
-                    }
-                }
-            });
             return m_view;
         }
 
         class ViewHolder {
-            CheckBox m_cbCheck;
             ImageView m_ivIcon;
             TextView m_tvFileName;
             TextView m_tvDate;
         }
-
         private int setFileImageType(File m_file) {
             int m_lastIndex = m_file.getAbsolutePath().lastIndexOf(".");
             String m_filepath = m_file.getAbsolutePath();
@@ -127,7 +111,6 @@ public class FragmentFileEx extends Fragment {
                 }
             }
         }
-
         String getLastDate(int p_pos) {
             File m_file = new File(m_path.get(p_pos));
             SimpleDateFormat m_dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -183,13 +166,13 @@ public class FragmentFileEx extends Fragment {
                 if (m_isFile.isDirectory()) {
                     getDirFromRoot(m_isFile.toString());
                 } else {
-                    if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")){
+                    /*if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")){
                         Bundle arguments = new Bundle();
                         arguments.putString("caminho",file.toString());
                         FragmentPDF fragment = new FragmentPDF();
                         fragment.setArguments(arguments);
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragment).commit();
-                    }
+                    }*/
                 }
             }
         });

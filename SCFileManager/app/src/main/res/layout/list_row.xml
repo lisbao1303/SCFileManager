@@ -12,16 +12,15 @@
         android:layout_alignParentTop="true"
         android:src="@drawable/ic_paste"
         android:clickable="false"
-        android:focusable="false"
-        android:contentDescription="@string/todo" />
+        android:focusable="false" />
 
     <TextView
         android:id="@+id/lr_tvFileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/lr_ivFileIcon"
-        android:text="@string/textviewfile1"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/lr_ivFileIcon"
+        android:text="TextView"
         android:clickable="false"
         android:focusable="false" />
 
@@ -30,10 +29,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lr_tvFileName"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/lr_ivFileIcon"
-        android:text="@string/textviewfile2"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/lr_ivFileIcon"
+        android:clickable="false"
         android:focusable="false"
-        android:clickable="false" />
+        android:text="TextView" />
 
 </RelativeLayout>
