@@ -1,6 +1,7 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,12 +11,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private EditText text_login_object;
     private EditText text_password_object;
     private boolean isFirstChangeNome = true;
     private boolean isFirstChangePassword =true;
-
+    private UsersDB db;
+    private Funcionario func;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +95,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+        db=new UsersDB(this);
+        func= new Funcionario("thiago","11711EMT002");
+        db.save(func);
     }
-    public void buttonEntrarHandler(View view){
+    public void buttonEntrarHandler(View view) {
+        AlertDialog.Builder b= new AlertDialog.Builder(this);
+        b.setTitle("Teste 1");
+        AlertDialog alerta = b.create();
+        alerta.show();
         String nomeDeUsuario=text_login_object.getText().toString();
         String senha=text_password_object.getText().toString();
         if(autenticacaoDeUsuario(nomeDeUsuario,senha)){
@@ -106,8 +117,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean autenticacaoDeUsuario(String usuario, String senha){
-        return true;
+    private boolean autenticacaoDeUsuario(String usuario, String senha) {
+        AlertDialog.Builder b= new AlertDialog.Builder(this);
+        b.setTitle("Teste 1");
+        AlertDialog alerta = b.create();
+        alerta.show();
+        Funcionario teste = db.findAll();
+            if (teste.getMatricula().equals(usuario)) {
+                return true;
+            }else {
+                return false;
+            }
     }
-
 }
