@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class UsersDB extends SQLiteOpenHelper {
     public static final String NOME_DO_BANCO = "bancoDeUsuarios.sqlite";
@@ -20,20 +23,26 @@ public class UsersDB extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        Log.d("sql","criando tabela");
         db.execSQL(
                 "create table if not exists funcionarios (id integer primary key autoincrement,nome text,matricula text,senha text);"
         );
-        Log.d("sql","criou tabela");
     }
 
     public void onUpgrade(SQLiteDatabase db,int oldVersion, int newVersion){
 
     }
+
+    public void gravarBy(Funcionario func_grav){
+        Funcionario teste= this.findByMatricula(func_grav.getMatricula());
+    }
+
     public long save(Funcionario funcionario){
         long id = funcionario.id;
         SQLiteDatabase db = getWritableDatabase();
         try{
+            //Funcionario outra_coisa = findByMatricula(funcionario.getMatricula(),db);
+
+
         ContentValues values = new ContentValues();
         values.put("nome",funcionario.getNome());
         values.put("matricula",funcionario.getMatricula());
@@ -49,25 +58,92 @@ public class UsersDB extends SQLiteOpenHelper {
             db.close();
         }
     }
-    public Funcionario findAll(){
+
+
+    public List<Funcionario>  findAll(){
         SQLiteDatabase db = getWritableDatabase();
         try{
             Cursor c = db.query("funcionarios",null,null,null,null,null,null);
             if(c.getCount()>0){
-                 Funcionario fx= new Funcionario();
-                 c.moveToFirst();
-                 fx.setNome(c.getString(c.getColumnIndex("nome")));
-                 fx.setMatricula(c.getString(c.getColumnIndex("matricula")));
-                 fx.setSenha(c.getString(c.getColumnIndex("senha")));
-                 return fx;
+                 List<Funcionario> fx_vetor= new ArrayList<Funcionario>();
+                 if(c.moveToFirst()){
+                    do {
+                        Funcionario fx=new Funcionario();
+                        fx.setNome(c.getString(c.getColumnIndex("nome")));
+                        fx.setMatricula(c.getString(c.getColumnIndex("matricula")));
+                        fx.setSenha(c.getString(c.getColumnIndex("senha")));
+                        fx_vetor.add(fx);
+                    } while(c.moveToNext());
+                 }
+                 return fx_vetor;
             }else{
                  return null;
             }
-        }
-        finally{
+        }finally{
             db.close();
         }
     }
+
+
+    public Funcionario findByMatricula(String matricula){
+        SQLiteDatabase db= getWritableDatabase();
+        try{
+            Cursor c= db.query("funcionarios",null,"matricula='"+matricula+"'",null,null,null,null);
+            if(c.getCount()>0){
+                Funcionario fx= new Funcionario();
+                c.moveToFirst();
+                fx.setNome(c.getString(c.getColumnIndex("nome")));
+                fx.setMatricula(c.getString(c.getColumnIndex("matricula")));
+                fx.setSenha(c.getString(c.getColumnIndex("senha")));
+                return fx;
+            }else{
+                return null;
+            }
+        }finally{
+            db.close();
+        }
+    }
+
+    public Funcionario findByMatricula(String matricula,SQLiteDatabase db){
+
+        try{
+            Cursor c= db.query("funcionarios",null,"matricula='"+matricula+"'",null,null,null,null);
+            if(c.getCount()>0){
+                Funcionario fx= new Funcionario();
+                c.moveToFirst();
+                fx.setNome(c.getString(c.getColumnIndex("nome")));
+                fx.setMatricula(c.getString(c.getColumnIndex("matricula")));
+                fx.setSenha(c.getString(c.getColumnIndex("senha")));
+                return fx;
+            }else{
+                return null;
+            }
+        }finally{
+            db.close();
+        }
+    }
+
+
+    public int deleteByMatricula(String matricula){
+        SQLiteDatabase db= getWritableDatabase();
+        try{
+            int count = db.delete("funcionarios","matricula=?",new String[]{matricula});
+            return count;
+        } finally{
+            db.close();
+        }
+    }
+
+    public int deleteAll(){
+        SQLiteDatabase db= getWritableDatabase();
+        try{
+            int count = db.delete("funcionarios","",null);
+            return count;
+        } finally{
+            db.close();
+        }
+    }
+
     public void execSQL(String sql){
         SQLiteDatabase db = getWritableDatabase();
         try{
