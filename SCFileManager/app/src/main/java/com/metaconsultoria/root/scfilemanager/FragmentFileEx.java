@@ -166,13 +166,13 @@ public class FragmentFileEx extends Fragment {
                 if (m_isFile.isDirectory()) {
                     getDirFromRoot(m_isFile.toString());
                 } else {
-                    /*if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")){
+                    if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")){
                         Bundle arguments = new Bundle();
                         arguments.putString("caminho",file.toString());
                         FragmentPDF fragment = new FragmentPDF();
                         fragment.setArguments(arguments);
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragment).commit();
-                    }*/
+                    }
                 }
             }
         });
