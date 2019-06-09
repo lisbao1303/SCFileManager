@@ -1,13 +1,19 @@
 package com.metaconsultoria.root.scfilemanager;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,6 +35,14 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(checkPermissionForReadExtertalStorage()){
+        }else{
+            try {
+                requestPermissionForReadExternalStorage();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         setContentView(R.layout.activity_main_navigation_drawer);
         Intent intentActivityMain = getIntent();
         Bundle bundle = intentActivityMain.getExtras();
@@ -134,6 +148,22 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+    public boolean checkPermissionForReadExtertalStorage() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int result = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE);
+            return result == PackageManager.PERMISSION_GRANTED;
+        }
+        return false;
+    }
+    public void requestPermissionForReadExternalStorage() throws Exception {
+        try {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    0x3);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 }

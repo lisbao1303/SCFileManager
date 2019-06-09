@@ -1,12 +1,18 @@
 package com.metaconsultoria.root.scfilemanager;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +41,7 @@ public class FragmentFileEx extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         m_RootList = view.findViewById(R.id.rl_lvListRoot);
-        getDirFromRoot(m_root);
+            getDirFromRoot(m_root);
     }
 
     public class ListAdapter extends BaseAdapter {
@@ -177,4 +183,5 @@ public class FragmentFileEx extends Fragment {
             }
         });
     }
+
 }
