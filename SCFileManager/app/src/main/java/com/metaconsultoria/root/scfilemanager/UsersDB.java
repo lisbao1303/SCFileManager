@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 
 public class UsersDB extends SQLiteOpenHelper {
@@ -21,7 +22,7 @@ public class UsersDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.d("sql","criando tabela");
         db.execSQL(
-                "create table if not exists funcionarios (id integer primary key autoincrement,nome text,matricula text);"
+                "create table if not exists funcionarios (id integer primary key autoincrement,nome text,matricula text,senha text);"
         );
         Log.d("sql","criou tabela");
     }
@@ -30,12 +31,20 @@ public class UsersDB extends SQLiteOpenHelper {
 
     }
     public long save(Funcionario funcionario){
+        long id = funcionario.id;
         SQLiteDatabase db = getWritableDatabase();
         try{
         ContentValues values = new ContentValues();
         values.put("nome",funcionario.getNome());
         values.put("matricula",funcionario.getMatricula());
-        return db.insert("funcionarios","",values);
+        values.put("senha",funcionario.getSenha());
+        if(id==0) {
+            return db.insert("funcionarios", "", values);
+        }else {
+            String _id = String.valueOf(funcionario.id);
+            String[] whereArgs = new String[]{_id};
+            return db.update("funcionarios",values,"_id",whereArgs);
+        }
         }finally{
             db.close();
         }
@@ -49,6 +58,7 @@ public class UsersDB extends SQLiteOpenHelper {
                  c.moveToFirst();
                  fx.setNome(c.getString(c.getColumnIndex("nome")));
                  fx.setMatricula(c.getString(c.getColumnIndex("matricula")));
+                 fx.setSenha(c.getString(c.getColumnIndex("senha")));
                  return fx;
             }else{
                  return null;

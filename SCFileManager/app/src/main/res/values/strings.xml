@@ -3,7 +3,7 @@
     <string name="login_name_text">N° de Matricula</string>
     <string name="login_password_text">Senha</string>
     <string name="ButtonLoginName">Entrar</string>
-    <string name="title_activity_main_navigation_drawer">MainNavigationDrawerActivity</string>
+    <string name="title_activity_main_navigation_drawer">Menu</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -14,4 +14,6 @@
     <string name="pesquisador_ar">Explorador de Arquivos</string>
     <string name="editor_ar">Editor de Arquivos</string>
     <string name="edit_version">Versao de Edicao</string>
+    <string name="matricula_const">Matricula: </string>
+    <string name="nome_const">Nome: </string>
 </resources>

@@ -58,15 +58,14 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //
+
         // ATENCAO: Os elementos do Navigation Drawer sao instaciados somente aqui n icluir eles no onCreate
         //
         getMenuInflater().inflate(R.menu.main_navigation_drawer, menu);
         TextView nome_field = (TextView) findViewById(R.id.nav_text_nome_usuario);
-        nome_field.setText("nome: "+"Thiago de Souza Alves");
+        nome_field.setText(getString(R.string.nome_const)+"Thiago de Souza Alves");
         TextView matricula_field = (TextView) findViewById(R.id.nav_text_numero_de_matricula);
-        matricula_field.setText("matricula: "+matricula);
+        matricula_field.setText(getString(R.string.matricula_const)+matricula);
         return true;
     }
 

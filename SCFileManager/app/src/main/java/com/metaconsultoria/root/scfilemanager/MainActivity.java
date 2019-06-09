@@ -1,7 +1,6 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,8 +9,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private EditText text_login_object;
@@ -57,11 +54,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
-
-
-
-
         text_password_object = (EditText) findViewById(R.id.editTextPassword);
         text_password_object.setOnFocusChangeListener(
                 new View.OnFocusChangeListener() {
@@ -96,14 +88,10 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
         db=new UsersDB(this);
-        func= new Funcionario("thiago","11711EMT002");
+        func= new Funcionario("thiago","11711EMT002","teste");
         db.save(func);
     }
     public void buttonEntrarHandler(View view) {
-        AlertDialog.Builder b= new AlertDialog.Builder(this);
-        b.setTitle("Teste 1");
-        AlertDialog alerta = b.create();
-        alerta.show();
         String nomeDeUsuario=text_login_object.getText().toString();
         String senha=text_password_object.getText().toString();
         if(autenticacaoDeUsuario(nomeDeUsuario,senha)){
@@ -113,17 +101,12 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtras(bundle);
             startActivity(intent);
         }else{
-            Toast.makeText(this,"Usuario Inexistente",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Usuario ou Senha Inexistentes",Toast.LENGTH_SHORT).show();
         }
     }
-
     private boolean autenticacaoDeUsuario(String usuario, String senha) {
-        AlertDialog.Builder b= new AlertDialog.Builder(this);
-        b.setTitle("Teste 1");
-        AlertDialog alerta = b.create();
-        alerta.show();
         Funcionario teste = db.findAll();
-            if (teste.getMatricula().equals(usuario)) {
+            if (teste.getMatricula().equals(usuario) && teste.getSenha().equals(senha)) {
                 return true;
             }else {
                 return false;
