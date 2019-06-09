@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private EditText text_login_object;
     private EditText text_password_object;
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
         db=new UsersDB(this);
-        func= new Funcionario("thiago","11711EMT002","teste");
+        func= new Funcionario("Thiago de Souza Alves","11711EMT002","teste");
         db.save(func);
     }
     public void buttonEntrarHandler(View view) {
@@ -105,8 +107,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private boolean autenticacaoDeUsuario(String usuario, String senha) {
-        Funcionario teste = db.findAll();
-            if (teste.getMatricula().equals(usuario) && teste.getSenha().equals(senha)) {
+
+        if(usuario.equals("")){
+            Toast.makeText(this,"Campo de usuario vazio",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(usuario.equals("N° de matricula")){
+            Toast.makeText(this,"Campo de usuario vazio",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(senha.equals("")){
+            Toast.makeText(this,"Campo de senha vazio",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(senha.equals("senha")){
+            Toast.makeText(this,"Campo de senha vazio",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        Funcionario teste = db.findByMatricula(usuario);
+
+          if (teste.getSenha().equals(senha)) {
                 return true;
             }else {
                 return false;
