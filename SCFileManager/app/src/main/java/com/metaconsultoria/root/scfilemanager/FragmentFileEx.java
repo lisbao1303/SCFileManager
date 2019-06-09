@@ -43,7 +43,6 @@ public class FragmentFileEx extends Fragment {
         m_RootList = view.findViewById(R.id.rl_lvListRoot);
             getDirFromRoot(m_root);
     }
-
     public class ListAdapter extends BaseAdapter {
         private List<String> m_item;
         private List<String> m_path;
@@ -90,13 +89,11 @@ public class FragmentFileEx extends Fragment {
                 m_view = p_convertView;
                 m_viewHolder = ((ViewHolder) m_view.getTag());
             }
-
             m_viewHolder.m_tvFileName.setText(m_item.get(p_position));
             m_viewHolder.m_ivIcon.setImageResource(setFileImageType(new File(m_path.get(p_position))));
             m_viewHolder.m_tvDate.setText(getLastDate(p_position));
             return m_view;
         }
-
         class ViewHolder {
             ImageView m_ivIcon;
             TextView m_tvFileName;
@@ -123,7 +120,6 @@ public class FragmentFileEx extends Fragment {
             return m_dateFormat.format(m_file.lastModified());
         }
     }
-
     //// Obtendo os arquivos da memória
     public void getDirFromRoot(String p_rootPath) {
         ArrayList m_item = new ArrayList<String>();
