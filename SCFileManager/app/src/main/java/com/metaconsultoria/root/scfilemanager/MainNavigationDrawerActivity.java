@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -88,11 +91,11 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        Fragment FragMenu = null;
         if (id == R.id.nav_openQR) {
             this.abrirLeitorDeQR();
         } else if (id == R.id.nav_open_explorer) {
-
+        FragMenu = new FragmentFileEx();
         } else if (id == R.id.nav_edit_window) {
 
         } else if (id == R.id.nav_share) {
@@ -100,7 +103,12 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
+        if (FragMenu != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.replace(R.id.screen_area, FragMenu);
+            ft.commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
