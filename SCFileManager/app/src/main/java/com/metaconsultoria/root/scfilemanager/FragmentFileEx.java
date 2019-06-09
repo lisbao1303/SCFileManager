@@ -34,6 +34,8 @@ public class FragmentFileEx extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        m_RootList = view.findViewById(R.id.rl_lvListRoot);
+        getDirFromRoot(m_root);
     }
 
     public class ListAdapter extends BaseAdapter {
