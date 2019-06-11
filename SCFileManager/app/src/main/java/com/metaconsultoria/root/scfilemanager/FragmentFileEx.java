@@ -35,11 +35,13 @@ public class FragmentFileEx extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fraglayoutex,null);
     }
-    ListView m_RootList;
-    String m_root= Environment.getExternalStorageDirectory().getPath();
+    private ListView m_RootList;
+    private String m_root;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Bundle bundle = getArguments();
+        m_root = bundle.getString("qrcode");
         m_RootList = view.findViewById(R.id.rl_lvListRoot);
             getDirFromRoot(m_root);
     }
@@ -107,8 +109,6 @@ public class FragmentFileEx extends Fragment {
             else {
                 if (m_filepath.substring(m_lastIndex).equalsIgnoreCase(".pdf")) {
                     return R.drawable.ic_pdf;
-                } else if (m_filepath.substring(m_lastIndex).equalsIgnoreCase(".jpg")) {
-                    return R.drawable.ic_file;
                 } else {
                     return R.drawable.ic_file;
                 }

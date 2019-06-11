@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -107,6 +108,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             this.abrirLeitorDeQR();
         } else if (id == R.id.nav_open_explorer) {
         FragMenu = new FragmentFileEx();
+            Bundle arguments = new Bundle();
+            String mainpath = Environment.getExternalStorageDirectory().getPath();
+            arguments.putString("qrcode",mainpath);
+            FragMenu.setArguments(arguments);
         } else if (id == R.id.nav_edit_window) {
 
         } else if (id == R.id.nav_share) {
@@ -120,7 +125,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             ft.replace(R.id.screen_area, FragMenu);
             ft.commit();
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -130,7 +135,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
     private void abrirLeitorDeQR(){
-        IntentIntegrator integrator = new IntentIntegrator(activity);
+        IntentIntegrator integrator;
+        integrator = new IntentIntegrator(activity);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         integrator.setPrompt("");
         integrator.setCameraId(0);
@@ -142,6 +148,15 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         if(result != null){
             if (result.getContents() != null){
                 codigoqr=result.getContents();
+                FragmentFileEx Frags;
+                Frags = new FragmentFileEx();
+                Bundle arguments = new Bundle();
+                arguments.putString("qrcode",codigoqr);
+                Frags.setArguments(arguments);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction ft = fragmentManager.beginTransaction();
+                ft.replace(R.id.screen_area, Frags);
+                ft.commit();
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
