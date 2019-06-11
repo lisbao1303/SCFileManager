@@ -23,9 +23,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.io.File;
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -112,6 +115,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             String mainpath = Environment.getExternalStorageDirectory().getPath();
             arguments.putString("qrcode",mainpath);
             FragMenu.setArguments(arguments);
+            Toast.makeText(getApplicationContext(),mainpath,Toast.LENGTH_LONG).show();
         } else if (id == R.id.nav_edit_window) {
 
         } else if (id == R.id.nav_share) {
@@ -148,15 +152,20 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         if(result != null){
             if (result.getContents() != null){
                 codigoqr=result.getContents();
-                FragmentFileEx Frags;
-                Frags = new FragmentFileEx();
-                Bundle arguments = new Bundle();
-                arguments.putString("qrcode",codigoqr);
-                Frags.setArguments(arguments);
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.replace(R.id.screen_area, Frags);
-                ft.commit();
+                boolean exists = (new File(codigoqr)).exists();
+                if(exists) {
+                    FragmentFileEx Frags;
+                    Frags = new FragmentFileEx();
+                    Bundle arguments2 = new Bundle();
+                    arguments2.putString("qrcode", codigoqr);
+                    Frags.setArguments(arguments2);
+                    FragmentManager fragmentManager2 = getSupportFragmentManager();
+                    FragmentTransaction ft2 = fragmentManager2.beginTransaction();
+                    ft2.replace(R.id.screen_area, Frags);
+                    ft2.commit();
+                }else{
+                    Toast.makeText(getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
+                }
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
