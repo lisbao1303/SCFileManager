@@ -128,33 +128,47 @@ public class FragmentFileEx extends Fragment {
         ArrayList m_files = new ArrayList<String>();
         ArrayList m_filesPath = new ArrayList<String>();
         File m_file = new File(p_rootPath);
-        File[] m_filesArray = m_file.listFiles();
-        if (!p_rootPath.equals(m_root)) {
-            m_item.add("../");
-            m_path.add(m_file.getParent());
-            m_isRoot = false;
-        }
-        String m_curDir = p_rootPath;
-        //sorting file list in alphabetical order
-        Arrays.sort(m_filesArray);
-        for (int i = 0; i < m_filesArray.length; i++) {
-            File file = m_filesArray[i];
-            if (file.isDirectory()) {
-                m_item.add(file.getName());
-                m_path.add(file.getPath());
-            } else {
-                m_files.add(file.getName());
-                m_filesPath.add(file.getPath());
+        ListAdapter m_listAdapter = null;
+        if (m_file.isDirectory()) {
+            File[] m_filesArray = m_file.listFiles();
+            if (!p_rootPath.equals(m_root)) {
+                m_item.add("../");
+                m_path.add(m_file.getParent());
+                m_isRoot = false;
             }
-        }
+            String m_curDir = p_rootPath;
+            //sorting file list in alphabetical order
+            Arrays.sort(m_filesArray);
+            for (int i = 0; i < m_filesArray.length; i++) {
+                File file = m_filesArray[i];
+                if (file.isDirectory()) {
+                    m_item.add(file.getName());
+                    m_path.add(file.getPath());
+                } else {
+                    m_files.add(file.getName());
+                    m_filesPath.add(file.getPath());
+                }
+            }
 
-        for (Object m_AddFile : m_files) {
-            m_item.add(m_AddFile);
+            for (Object m_AddFile : m_files) {
+                m_item.add(m_AddFile);
+            }
+            for (Object m_AddPath : m_filesPath) {
+                m_path.add(m_AddPath);
+            }
+            m_listAdapter = new ListAdapter(this, m_item, m_path, m_isRoot);
+        }else{
+            m_files.add(m_file.getName());
+            m_filesPath.add(m_file.getPath());
+            for (Object m_AddFile : m_files) {
+                m_item.add(m_AddFile);
+            }
+            for (Object m_AddPath : m_filesPath) {
+                m_path.add(m_AddPath);
+            }
+            m_isRoot = false;
+            m_listAdapter = new ListAdapter(this, m_item, m_path, m_isRoot);
         }
-        for (Object m_AddPath : m_filesPath) {
-            m_path.add(m_AddPath);
-        }
-        ListAdapter m_listAdapter = new ListAdapter(this, m_item, m_path, m_isRoot);
         m_RootList.setAdapter(m_listAdapter);
         m_RootList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

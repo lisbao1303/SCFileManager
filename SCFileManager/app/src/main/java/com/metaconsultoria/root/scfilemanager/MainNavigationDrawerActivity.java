@@ -34,7 +34,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private String matricula;
     private final Activity activity = this;
-    private String codigoqr;
+    private Fragment FragMenu = null;
+    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private FragmentTransaction ft = fragmentManager.beginTransaction();
+    private String mainpath = Environment.getExternalStorageDirectory().getPath();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,16 +109,12 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        Fragment FragMenu = null;
+        FragMenu = null;
         if (id == R.id.nav_openQR) {
             this.abrirLeitorDeQR();
         } else if (id == R.id.nav_open_explorer) {
         FragMenu = new FragmentFileEx();
-            Bundle arguments = new Bundle();
-            String mainpath = Environment.getExternalStorageDirectory().getPath();
-            arguments.putString("qrcode",mainpath);
-            FragMenu.setArguments(arguments);
-            Toast.makeText(getApplicationContext(),mainpath,Toast.LENGTH_LONG).show();
+        argumentos(mainpath);
         } else if (id == R.id.nav_edit_window) {
 
         } else if (id == R.id.nav_share) {
@@ -124,10 +123,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
         }
         if (FragMenu != null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.replace(R.id.screen_area, FragMenu);
-            ft.commit();
+            execucao();
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -151,18 +147,17 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
         if(result != null){
             if (result.getContents() != null){
-                codigoqr=result.getContents();
-                boolean exists = (new File(codigoqr)).exists();
+                String codigoqr = result.getContents();
+                String caminhoqr = mainpath + codigoqr;
+                boolean exists = false;
+                if(codigoqr!=null) {
+                    exists = (new File(caminhoqr)).exists();
+                }
                 if(exists) {
-                    FragmentFileEx Frags;
-                    Frags = new FragmentFileEx();
-                    Bundle arguments2 = new Bundle();
-                    arguments2.putString("qrcode", codigoqr);
-                    Frags.setArguments(arguments2);
-                    FragmentManager fragmentManager2 = getSupportFragmentManager();
-                    FragmentTransaction ft2 = fragmentManager2.beginTransaction();
-                    ft2.replace(R.id.screen_area, Frags);
-                    ft2.commit();
+                    FragMenu = null;
+                    FragMenu = new FragmentFileEx();
+                    argumentos(caminhoqr);
+                    execucao();
                 }else{
                     Toast.makeText(getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
                 }
@@ -170,6 +165,15 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         }else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+    public void argumentos(String arg){
+        Bundle arguments = new Bundle();
+        arguments.putString("qrcode",arg);
+        FragMenu.setArguments(arguments);
+    }
+    public  void execucao(){
+        ft.replace(R.id.screen_area, FragMenu);
+        ft.commit();
     }
     public boolean checkPermissionForReadExtertalStorage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
