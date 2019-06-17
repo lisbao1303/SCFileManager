@@ -30,19 +30,20 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FragmentFileEx extends Fragment {
+    private ListView m_RootList;
+    private String m_root =null;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fraglayoutex,null);
     }
-    private ListView m_RootList;
-    private String m_root;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Bundle bundle = getArguments();
-        m_root = bundle.getString("qrcode");
         m_RootList = view.findViewById(R.id.rl_lvListRoot);
+        Bundle bundle = getArguments();
+        m_root = bundle.getString("arqpath");
             getDirFromRoot(m_root);
     }
     public class ListAdapter extends BaseAdapter {

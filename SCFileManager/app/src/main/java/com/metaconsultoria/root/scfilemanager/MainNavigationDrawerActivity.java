@@ -34,9 +34,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private String matricula;
     private final Activity activity = this;
-    private Fragment FragMenu = null;
-    private FragmentManager fragmentManager = getSupportFragmentManager();
-    private FragmentTransaction ft = fragmentManager.beginTransaction();
+    private FragmentFileEx FragMenu = null;
+    private boolean code;
+    private String codigoqr=null;
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,12 +109,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        FragMenu = null;
         if (id == R.id.nav_openQR) {
             this.abrirLeitorDeQR();
         } else if (id == R.id.nav_open_explorer) {
-        FragMenu = new FragmentFileEx();
-        argumentos(mainpath);
+        abrirexplorador();
         } else if (id == R.id.nav_edit_window) {
 
         } else if (id == R.id.nav_share) {
@@ -122,9 +120,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-        if (FragMenu != null) {
-            execucao();
-        }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -147,33 +143,42 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
         if(result != null){
             if (result.getContents() != null){
-                String codigoqr = result.getContents();
-                String caminhoqr = mainpath + codigoqr;
-                boolean exists = false;
+                codigoqr = result.getContents();
                 if(codigoqr!=null) {
-                    exists = (new File(caminhoqr)).exists();
-                }
-                if(exists) {
-                    FragMenu = null;
-                    FragMenu = new FragmentFileEx();
-                    argumentos(caminhoqr);
-                    execucao();
-                }else{
-                    Toast.makeText(getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
+                    String caminhoqr = mainpath + codigoqr;
+                    boolean exists = (new File(caminhoqr)).exists();
+                    if(exists){
+                        code=true;
+                    } else{
+                        codigoqr=null;
+                        Toast.makeText(getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-    public void argumentos(String arg){
-        Bundle arguments = new Bundle();
-        arguments.putString("qrcode",arg);
-        FragMenu.setArguments(arguments);
+
+    @Override
+    protected void onResume() {
+        if(code){
+            abrirexplorador();
+        }
+            super.onResume();
     }
-    public  void execucao(){
-        ft.replace(R.id.screen_area, FragMenu);
-        ft.commit();
+
+    public void abrirexplorador(){
+        FragMenu = new FragmentFileEx();
+        Bundle arguments = new Bundle();
+        if(codigoqr!=null){
+            arguments.putString("arqpath",mainpath+codigoqr);
+            FragMenu.setArguments(arguments);
+        }else{
+            arguments.putString("arqpath",mainpath);
+            FragMenu.setArguments(arguments);
+        }
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, FragMenu).commit();
     }
     public boolean checkPermissionForReadExtertalStorage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
