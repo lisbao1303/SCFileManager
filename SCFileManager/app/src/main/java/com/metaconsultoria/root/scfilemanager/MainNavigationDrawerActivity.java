@@ -144,16 +144,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         if(result != null){
             if (result.getContents() != null){
                 codigoqr = result.getContents();
-                if(codigoqr!=null) {
-                    String caminhoqr = mainpath + codigoqr;
-                    boolean exists = (new File(caminhoqr)).exists();
-                    if(exists){
-                        code=true;
-                    } else{
-                        codigoqr=null;
-                        Toast.makeText(getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
-                    }
-                }
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -162,10 +152,17 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        if(code){
-            abrirexplorador();
+        if(codigoqr!=null) {
+            String caminhoqr = mainpath + codigoqr;
+            boolean exists = (new File(caminhoqr)).exists();
+            if(exists){
+                abrirexplorador();
+            } else{
+                codigoqr=null;
+                Toast.makeText(getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
+            }
         }
-            super.onResume();
+        super.onResume();
     }
 
     public void abrirexplorador(){
@@ -174,6 +171,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         if(codigoqr!=null){
             arguments.putString("arqpath",mainpath+codigoqr);
             FragMenu.setArguments(arguments);
+            codigoqr=null;
         }else{
             arguments.putString("arqpath",mainpath);
             FragMenu.setArguments(arguments);
