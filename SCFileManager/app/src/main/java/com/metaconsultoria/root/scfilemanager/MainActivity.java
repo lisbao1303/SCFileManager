@@ -1,6 +1,7 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -96,44 +97,46 @@ public class MainActivity extends AppCompatActivity {
     public void buttonEntrarHandler(View view) {
         String nomeDeUsuario=text_login_object.getText().toString();
         String senha=text_password_object.getText().toString();
-        if(/*autenticacaoDeUsuario(nomeDeUsuario,senha)*/true){
+        if(autenticacaoDeUsuario(nomeDeUsuario,senha)){
             Bundle bundle = new Bundle();
             bundle.putString("nomeDeUsuario", nomeDeUsuario);
             Intent intent = new Intent(this, MainNavigationDrawerActivity.class);
             intent.putExtras(bundle);
             startActivity(intent);
         }else{
-            Toast.makeText(this,"Usuario ou Senha Inexistentes",Toast.LENGTH_SHORT).show();
+            ///
         }
     }
-    private boolean autenticacaoDeUsuario(String usuario, String senha) {
 
+    private boolean autenticacaoDeUsuario(@NonNull String usuario, String senha) {
         if(usuario.equals("")){
-            Toast.makeText(this,"Campo de usuario vazio",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.erro_login_2),Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if(usuario.equals("N° de matricula")){
-            Toast.makeText(this,"Campo de usuario vazio",Toast.LENGTH_SHORT).show();
+        if(usuario.equals(getString(R.string.login_name_text))){
+            Toast.makeText(this,getString(R.string.erro_login_2),Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(senha.equals("")){
-            Toast.makeText(this,"Campo de senha vazio",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.erro_login_3),Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if(senha.equals("senha")){
-            Toast.makeText(this,"Campo de senha vazio",Toast.LENGTH_SHORT).show();
+        if(senha.equals(getString(R.string.login_password_text))){
+            Toast.makeText(this,getString(R.string.erro_login_3),Toast.LENGTH_SHORT).show();
             return false;
         }
 
         Funcionario teste = db.findByMatricula(usuario);
-
-          if (teste.getSenha().equals(senha)) {
+        if(teste!=null) {
+            if (teste.getSenha().equals(senha)) {
                 return true;
-            }else {
-                return false;
             }
+        }
+
+        Toast.makeText(this,getString(R.string.erro_login_1),Toast.LENGTH_SHORT).show();
+        return false;
     }
 }

@@ -184,8 +184,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
     public void requestPermissionForReadExternalStorage() throws Exception {
         try {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    0x3);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0x3);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

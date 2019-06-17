@@ -19,4 +19,8 @@
     <string name="todo">TODO</string>
     <string name="textviewfile1">TextView</string>
     <string name="textviewfile2">TextView</string>
+    <string name="erro_login_1">Usuario Inexistente ou Senha Incorreta</string>
+    <string name="erro_login_2">Campo de Usuario Vazio</string>
+    <string name="erro_login_3">Campo de Senho Vazio</string>
+
 </resources>
