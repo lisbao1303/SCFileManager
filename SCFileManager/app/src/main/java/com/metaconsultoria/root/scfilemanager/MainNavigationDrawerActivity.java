@@ -9,10 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ActivityCompat;;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -34,9 +31,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private String matricula;
     private final Activity activity = this;
-    private Fragment FragMenu = null;
-    private FragmentManager fragmentManager = getSupportFragmentManager();
-    private FragmentTransaction ft = fragmentManager.beginTransaction();
+    private FragmentFileEx FragMenu = null;
+    private boolean code;
+    private String codigoqr=null;
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +63,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        abrirexplorador();
     }
 
     @Override
@@ -109,12 +108,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        FragMenu = null;
         if (id == R.id.nav_openQR) {
             this.abrirLeitorDeQR();
         } else if (id == R.id.nav_open_explorer) {
-        FragMenu = new FragmentFileEx();
-        argumentos(mainpath);
+            abrirexplorador();
         } else if (id == R.id.nav_edit_window) {
 
         } else if (id == R.id.nav_share) {
@@ -122,16 +119,14 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-        if (FragMenu != null) {
-            execucao();
-        }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     public void botaoLeitorDeQR(View view) {
-         this.abrirLeitorDeQR();
+        this.abrirLeitorDeQR();
     }
 
     private void abrirLeitorDeQR(){
@@ -142,39 +137,48 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         integrator.setCameraId(0);
         integrator.initiateScan();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
         if(result != null){
             if (result.getContents() != null){
-                String codigoqr = result.getContents();
-                String caminhoqr = mainpath + codigoqr;
-                boolean exists = false;
-                if(codigoqr!=null) {
-                    exists = (new File(caminhoqr)).exists();
-                }
-                if(exists) {
-                    FragMenu = null;
-                    FragMenu = new FragmentFileEx();
-                    argumentos(caminhoqr);
-                    execucao();
-                }else{
-                    Toast.makeText(getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
-                }
+                codigoqr = result.getContents();
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-    public void argumentos(String arg){
+
+    @Override
+    protected void onResume() {
+        if(codigoqr!=null) {
+            String caminhoqr = mainpath + codigoqr;
+            boolean exists = (new File(caminhoqr)).exists();
+            if(exists){
+                abrirexplorador();
+            } else{
+                codigoqr=null;
+                Toast.makeText(getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
+            }
+        }
+        super.onResume();
+    }
+
+    public void abrirexplorador(){
+        FragMenu = new FragmentFileEx();
         Bundle arguments = new Bundle();
-        arguments.putString("qrcode",arg);
-        FragMenu.setArguments(arguments);
+        if(codigoqr!=null){
+            arguments.putString("arqpath",mainpath+codigoqr);
+            FragMenu.setArguments(arguments);
+            codigoqr=null;
+        }else{
+            arguments.putString("arqpath",mainpath);
+            FragMenu.setArguments(arguments);
+        }
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, FragMenu).commit();
     }
-    public  void execucao(){
-        ft.replace(R.id.screen_area, FragMenu);
-        ft.commit();
-    }
+
     public boolean checkPermissionForReadExtertalStorage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int result = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -182,6 +186,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         }
         return false;
     }
+
     public void requestPermissionForReadExternalStorage() throws Exception {
         try {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0x3);

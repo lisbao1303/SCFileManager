@@ -92,19 +92,20 @@ public class MainActivity extends AppCompatActivity {
         );
         db=new UsersDB(this);
         func= new Funcionario("Thiago de Souza Alves","11711EMT002","teste");
+        db.init(func);
         db.save(func);
     }
+
     public void buttonEntrarHandler(View view) {
         String nomeDeUsuario=text_login_object.getText().toString();
         String senha=text_password_object.getText().toString();
+        //Toast.makeText(this,"" + db.findAll().size(),Toast.LENGTH_SHORT).show();
         if(autenticacaoDeUsuario(nomeDeUsuario,senha)){
             Bundle bundle = new Bundle();
             bundle.putString("nomeDeUsuario", nomeDeUsuario);
             Intent intent = new Intent(this, MainNavigationDrawerActivity.class);
             intent.putExtras(bundle);
             startActivity(intent);
-        }else{
-            ///
         }
     }
 

@@ -5,8 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import android.widget.Toast;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +35,37 @@ public class UsersDB extends SQLiteOpenHelper {
         Funcionario teste= this.findByMatricula(func_grav.getMatricula());
     }
 
+    public long init(Funcionario funcionario){
+        long id = funcionario.id;
+        SQLiteDatabase db = getWritableDatabase();
+        try{
+
+
+            ContentValues values = new ContentValues();
+            values.put("nome",funcionario.getNome());
+            values.put("matricula",funcionario.getMatricula());
+            values.put("senha",funcionario.getSenha());
+            if(id==0) {
+                return db.insert("funcionarios", "", values);
+            }else {
+                String _id = String.valueOf(funcionario.id);
+                String[] whereArgs = new String[]{_id};
+                return db.update("funcionarios",values,"_id",whereArgs);
+            }
+        }finally{
+            db.close();
+        }
+    }
+
     public long save(Funcionario funcionario){
         long id = funcionario.id;
         SQLiteDatabase db = getWritableDatabase();
         try{
-            //Funcionario outra_coisa = findByMatricula(funcionario.getMatricula(),db);
 
+        Funcionario outra_coisa = findByMatricula(funcionario.getMatricula(),db);
+        if(funcionario.getMatricula().equals(outra_coisa.getMatricula())){
+            return 0;
+        }
 
         ContentValues values = new ContentValues();
         values.put("nome",funcionario.getNome());

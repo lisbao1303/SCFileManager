@@ -25,7 +25,9 @@ public class FragmentPDF extends Fragment {
         Bundle bundle = getArguments();
         String caminho = bundle.getString("caminho");
         PDFView pdfviewer = view.findViewById(R.id.pdfviewer);
+
         //Toast.makeText(getActivity().getApplicationContext(),caminho,Toast.LENGTH_LONG).show();
+
         pdfviewer.fromUri(Uri.parse(caminho)).load();
     }
 }
