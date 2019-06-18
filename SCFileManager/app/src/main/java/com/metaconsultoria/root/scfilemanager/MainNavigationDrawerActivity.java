@@ -15,9 +15,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +33,7 @@ import com.google.zxing.integration.android.IntentResult;
 import java.io.File;
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
     private String matricula;
     private final Activity activity = this;
     private FragmentFileEx FragMenu = null;
@@ -68,6 +70,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -88,7 +91,24 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         nome_field.setText(getString(R.string.nome_const)+"Thiago de Souza Alves");
         TextView matricula_field = (TextView) findViewById(R.id.nav_text_numero_de_matricula);
         matricula_field.setText(getString(R.string.matricula_const)+matricula);
+
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
         return true;
+    }
+    @Override
+    public boolean onQueryTextSubmit (String query){
+        // User pressed the search button
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange (String newText){
+        // User changed the text
+        return false;
     }
 
     @Override
@@ -153,8 +173,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         if(codigoqr!=null) {
-            String caminhoqr = mainpath + codigoqr;
-            boolean exists = (new File(caminhoqr)).exists();
+            boolean exists = (new File(mainpath + codigoqr)).exists();
             if(exists){
                 abrirexplorador();
             } else{
@@ -192,5 +211,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             e.printStackTrace();
             throw e;
         }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

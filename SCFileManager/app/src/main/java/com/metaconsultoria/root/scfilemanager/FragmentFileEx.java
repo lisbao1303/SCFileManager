@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,6 +47,8 @@ public class FragmentFileEx extends Fragment {
         m_root = bundle.getString("arqpath");
             getDirFromRoot(m_root);
     }
+
+
     public class ListAdapter extends BaseAdapter {
         private List<String> m_item;
         private List<String> m_path;
