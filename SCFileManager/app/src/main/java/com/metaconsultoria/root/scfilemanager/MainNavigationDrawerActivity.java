@@ -37,9 +37,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private String matricula;
     private final Activity activity = this;
     private FragmentFileEx FragMenu = null;
-    private boolean code;
+    private String textSearch = null;
     private String codigoqr=null;
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
+    private MenuItem searchItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +94,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         matricula_field.setText(getString(R.string.matricula_const)+matricula);
 
         getMenuInflater().inflate(R.menu.menu_search, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.search);
+        searchItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(this);
         return true;
@@ -107,7 +107,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange (String newText){
-        // User changed the text
+        textSearch = newText;
+        abrirexplorador();
         return false;
     }
 
@@ -187,14 +188,23 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public void abrirexplorador(){
         FragMenu = new FragmentFileEx();
         Bundle arguments = new Bundle();
+        if(textSearch==null){
         if(codigoqr!=null){
             arguments.putString("arqpath",mainpath+codigoqr);
+            arguments.putString("text",null);
             FragMenu.setArguments(arguments);
             codigoqr=null;
         }else{
             arguments.putString("arqpath",mainpath);
+            arguments.putString("text",null);
             FragMenu.setArguments(arguments);
         }
+        }else{
+            arguments.putString("arqpath",null);
+            arguments.putString("text",textSearch);
+            FragMenu.setArguments(arguments);
+        }
+        searchItem.setVisible(true);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, FragMenu).commit();
     }
     public boolean checkPermissionForReadExtertalStorage() {

@@ -33,7 +33,7 @@ import java.util.List;
 public class FragmentFileEx extends Fragment {
     private ListView m_RootList;
     private String m_root =null;
-
+    private String mainpath = Environment.getExternalStorageDirectory().getPath();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,11 +44,14 @@ public class FragmentFileEx extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         m_RootList = view.findViewById(R.id.rl_lvListRoot);
         Bundle bundle = getArguments();
-        m_root = bundle.getString("arqpath");
-            getDirFromRoot(m_root);
+        if(bundle.getString("arqpath")!=null) {
+            m_root = bundle.getString("arqpath");
+            getDirFromRoot(m_root,null);
+        }else{
+            getDirFromRoot(mainpath,bundle.getString("text"));
+        }
+
     }
-
-
     public class ListAdapter extends BaseAdapter {
         private List<String> m_item;
         private List<String> m_path;
@@ -125,7 +128,7 @@ public class FragmentFileEx extends Fragment {
         }
     }
     //// Obtendo os arquivos da memória
-    public void getDirFromRoot(String p_rootPath) {
+    public void getDirFromRoot(String p_rootPath,String procura) {
         ArrayList m_item = new ArrayList<String>();
         Boolean m_isRoot = true;
         final ArrayList m_path = new ArrayList<String>();
@@ -184,7 +187,7 @@ public class FragmentFileEx extends Fragment {
                 String m_caminhofile = m_isFile.getAbsolutePath();
                 Uri file = Uri.fromFile(m_isFile);
                 if (m_isFile.isDirectory()) {
-                    getDirFromRoot(m_isFile.toString());
+                    getDirFromRoot(m_isFile.toString(),null);
                 } else {
                     if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")){
                         Bundle arguments = new Bundle();
