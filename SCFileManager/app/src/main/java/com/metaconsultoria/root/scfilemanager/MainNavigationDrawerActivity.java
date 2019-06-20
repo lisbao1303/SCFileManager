@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,11 +37,11 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
     private String matricula;
     private final Activity activity = this;
-    private FragmentFileEx FragMenu = null;
     private String textSearch = null;
     private String codigoqr=null;
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
     private MenuItem searchItem;
+    public boolean explorer = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +53,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
+
         setContentView(R.layout.activity_main_navigation_drawer);
         Intent intentActivityMain = getIntent();
         Bundle bundle = intentActivityMain.getExtras();
@@ -101,7 +103,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
     @Override
     public boolean onQueryTextSubmit (String query){
-        // User pressed the search button
+        textSearch=null;
         return false;
     }
 
@@ -111,6 +113,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         abrirexplorador();
         return false;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -185,27 +188,37 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         super.onResume();
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(explorer) {
+            searchItem.setVisible(true);
+        }
+    }
+
     public void abrirexplorador(){
-        FragMenu = new FragmentFileEx();
+        FragmentFileEx fragMenu = new FragmentFileEx();
         Bundle arguments = new Bundle();
         if(textSearch==null){
         if(codigoqr!=null){
             arguments.putString("arqpath",mainpath+codigoqr);
             arguments.putString("text",null);
-            FragMenu.setArguments(arguments);
+            fragMenu.setArguments(arguments);
             codigoqr=null;
         }else{
             arguments.putString("arqpath",mainpath);
             arguments.putString("text",null);
-            FragMenu.setArguments(arguments);
+            fragMenu.setArguments(arguments);
         }
         }else{
             arguments.putString("arqpath",null);
             arguments.putString("text",textSearch);
-            FragMenu.setArguments(arguments);
+            fragMenu.setArguments(arguments);
+            textSearch=null;
         }
         searchItem.setVisible(true);
-        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, FragMenu).commit();
+        explorer = true;
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMenu).commit();
     }
     public boolean checkPermissionForReadExtertalStorage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
