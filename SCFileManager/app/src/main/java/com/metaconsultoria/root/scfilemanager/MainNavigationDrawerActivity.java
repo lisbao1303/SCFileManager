@@ -11,9 +11,6 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -34,10 +31,10 @@ import com.google.zxing.integration.android.IntentResult;
 import java.io.File;
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener {
     private String matricula;
     private final Activity activity = this;
-    private String textSearch = null;
+    private FragmentFileEx fragMenu = new FragmentFileEx();
     private String codigoqr=null;
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
     private MenuItem searchItem;
@@ -103,17 +100,24 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
     @Override
     public boolean onQueryTextSubmit (String query){
-        textSearch=null;
         return false;
     }
 
     @Override
     public boolean onQueryTextChange (String newText){
-        textSearch = newText;
-        abrirexplorador();
+        fragMenu.NewSearch(newText);
         return false;
     }
 
+    @Override
+    public void metodo() {
+        Bundle arguments = new Bundle();
+        arguments.putString("caminho", fragMenu.file.toString());
+        FragmentPDF fragment = new FragmentPDF();
+        fragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragment).commit();
+        searchItem.setVisible(false);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -144,7 +148,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -197,28 +200,23 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
     public void abrirexplorador(){
-        FragmentFileEx fragMenu = new FragmentFileEx();
-        Bundle arguments = new Bundle();
-        if(textSearch==null){
-        if(codigoqr!=null){
-            arguments.putString("arqpath",mainpath+codigoqr);
-            arguments.putString("text",null);
-            fragMenu.setArguments(arguments);
-            codigoqr=null;
-        }else{
-            arguments.putString("arqpath",mainpath);
-            arguments.putString("text",null);
-            fragMenu.setArguments(arguments);
-        }
-        }else{
-            arguments.putString("arqpath",null);
-            arguments.putString("text",textSearch);
-            fragMenu.setArguments(arguments);
-            textSearch=null;
-        }
+            fragMenu = new FragmentFileEx();
+            Bundle arguments = new Bundle();
+            if(codigoqr!=null){
+                arguments.putString("arqpath",mainpath+codigoqr);
+                arguments.putString("text",null);
+                fragMenu.setArguments(arguments);
+                codigoqr=null;
+            }else{
+                arguments.putString("arqpath",mainpath);
+                arguments.putString("text",null);
+                fragMenu.setArguments(arguments);
+            }
+            this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMenu).commit();
+
         searchItem.setVisible(true);
         explorer = true;
-        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMenu).commit();
+
     }
     public boolean checkPermissionForReadExtertalStorage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
