@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean isFirstChangePassword =true;
     private UsersDB db;
     private Funcionario func;
-    private boolean banco_instanciado= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

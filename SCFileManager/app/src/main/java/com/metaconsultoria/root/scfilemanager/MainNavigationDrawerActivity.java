@@ -140,9 +140,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         if (id == R.id.nav_openQR) {
             this.abrirLeitorDeQR();
         } else if (id == R.id.nav_open_explorer) {
-        abrirexplorador();
+            this.abrirexplorador();
         } else if (id == R.id.nav_edit_window) {
-
+            this.abrirEditorDeArquivos();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -165,6 +165,33 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         integrator.setCameraId(0);
         integrator.initiateScan();
     }
+
+    public void abrirexplorador(){
+        fragMenu = new FragmentFileEx();
+        Bundle arguments = new Bundle();
+        if(codigoqr!=null){
+            arguments.putString("arqpath",mainpath+codigoqr);
+            arguments.putString("text",null);
+            fragMenu.setArguments(arguments);
+            codigoqr=null;
+        }else{
+            arguments.putString("arqpath",mainpath);
+            arguments.putString("text",null);
+            fragMenu.setArguments(arguments);
+        }
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMenu).commit();
+
+        searchItem.setVisible(true);
+        explorer = true;
+
+    }
+
+    private void abrirEditorDeArquivos(){
+
+    }
+
+    //ciclo de vida da activity
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
@@ -199,25 +226,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         }
     }
 
-    public void abrirexplorador(){
-            fragMenu = new FragmentFileEx();
-            Bundle arguments = new Bundle();
-            if(codigoqr!=null){
-                arguments.putString("arqpath",mainpath+codigoqr);
-                arguments.putString("text",null);
-                fragMenu.setArguments(arguments);
-                codigoqr=null;
-            }else{
-                arguments.putString("arqpath",mainpath);
-                arguments.putString("text",null);
-                fragMenu.setArguments(arguments);
-            }
-            this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMenu).commit();
+    //permissoes
 
-        searchItem.setVisible(true);
-        explorer = true;
-
-    }
     public boolean checkPermissionForReadExtertalStorage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int result = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE);
