@@ -11,8 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
     private EditText text_login_object;
     private EditText text_password_object;
@@ -20,10 +18,20 @@ public class MainActivity extends AppCompatActivity {
     private boolean isFirstChangePassword =true;
     private UsersDB db;
     private Funcionario func;
+    private boolean banco_instanciado= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db=new UsersDB(this);
+        if(db.findByMatricula("11711EMT002")==null){
+            func= new Funcionario("Thiago de Souza Alves","11711EMT002","teste");
+            db.init(func);
+        }
+    }
+
+    protected void onResume(){
+        super.onResume();
         setContentView(R.layout.activity_main);
         text_login_object = (EditText) findViewById(R.id.editTextLogin);
         text_login_object.setOnFocusChangeListener(
@@ -90,10 +98,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-        db=new UsersDB(this);
-        func= new Funcionario("Thiago de Souza Alves","11711EMT002","teste");
-        db.init(func);
-        db.save(func);
     }
 
     public void buttonEntrarHandler(View view) {
@@ -105,8 +109,15 @@ public class MainActivity extends AppCompatActivity {
             bundle.putString("nomeDeUsuario", nomeDeUsuario);
             Intent intent = new Intent(this, MainNavigationDrawerActivity.class);
             intent.putExtras(bundle);
+            resetParametros(true);
+            //Toast.makeText(this,Integer.toString(db.findAll().size()),Toast.LENGTH_SHORT).show();
             startActivity(intent);
         }
+    }
+
+    private void resetParametros(boolean parametro){
+        this.isFirstChangeNome=parametro;
+        this.isFirstChangePassword=parametro;
     }
 
     private boolean autenticacaoDeUsuario(@NonNull String usuario, String senha) {
@@ -140,4 +151,5 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this,getString(R.string.erro_login_1),Toast.LENGTH_SHORT).show();
         return false;
     }
+
 }

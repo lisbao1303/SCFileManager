@@ -31,9 +31,6 @@ public class UsersDB extends SQLiteOpenHelper {
 
     }
 
-    public void gravarBy(Funcionario func_grav){
-        Funcionario teste= this.findByMatricula(func_grav.getMatricula());
-    }
 
     public long init(Funcionario funcionario){
         long id = funcionario.id;
