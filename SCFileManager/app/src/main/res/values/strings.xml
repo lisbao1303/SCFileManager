@@ -22,6 +22,8 @@
     <string name="erro_login_1">Usuario Inexistente ou Senha Incorreta</string>
     <string name="erro_login_2">Campo de Usuario Vazio</string>
     <string name="erro_login_3">Campo de Senho Vazio</string>
-    <string name="scan_tile">Scannear QR Code</string>
+    <string name="button">Button</string>
+    <string name="pesquisar">Pesquisar</string>
+    <string name="hint_search" />
 
 </resources>
