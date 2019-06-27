@@ -98,6 +98,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(this);
         return true;
     }
+
     @Override
     public boolean onQueryTextSubmit (String query){
         return false;
