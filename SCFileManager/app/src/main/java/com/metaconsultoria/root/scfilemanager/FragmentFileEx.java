@@ -1,25 +1,20 @@
 package com.metaconsultoria.root.scfilemanager;
 
-import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+
 
 public class FragmentFileEx extends Fragment {
     private ListView m_RootList;
@@ -125,7 +120,7 @@ public class FragmentFileEx extends Fragment {
                     } else {
                         if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")) {
                             FragmentListener mListener = (FragmentListener) getActivity();
-                            mListener.metodo();
+                            mListener.setpdffrag();
                         }
                     }
                 }
@@ -178,7 +173,7 @@ public class FragmentFileEx extends Fragment {
                     } else {
                         if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")) {
                             FragmentListener mListener = (FragmentListener) getActivity();
-                            mListener.metodo();
+                            mListener.setpdffrag();
                         }
                     }
                 }
@@ -209,8 +204,7 @@ public class FragmentFileEx extends Fragment {
     }
 
     public interface FragmentListener {
-        public void metodo();
+        void setpdffrag();
+        void Scanner(String qR);
     }
-
-
 }

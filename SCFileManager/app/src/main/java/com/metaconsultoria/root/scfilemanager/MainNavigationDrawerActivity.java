@@ -1,14 +1,11 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -23,22 +20,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
-import java.io.File;
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener{
     private String matricula;
-    private final Activity activity = this;
     private FragmentFileEx fragMenu = new FragmentFileEx();
-    private String codigoqr=null;
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
     private MenuItem searchItem;
-    public boolean explorer = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,23 +47,23 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         matricula = bundle.getString("nomeDeUsuario");
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -111,13 +101,19 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
     @Override
-    public void metodo() {
+    public void setpdffrag() {
         Bundle arguments = new Bundle();
         arguments.putString("caminho", fragMenu.file.toString());
         FragmentPDF fragment = new FragmentPDF();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragment).commit();
+        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         searchItem.setVisible(false);
+    }
+
+    @Override
+    public void Scanner(String qR) {
+        abrirexplorador(qR);
     }
 
     @Override
@@ -141,7 +137,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         if (id == R.id.nav_openQR) {
             this.abrirLeitorDeQR();
         } else if (id == R.id.nav_open_explorer) {
-            this.abrirexplorador();
+            abrirexplorador(mainpath);
         } else if (id == R.id.nav_edit_window) {
             this.abrirEditorDeArquivos();
         } else if (id == R.id.nav_share) {
@@ -149,6 +145,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -159,72 +156,26 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
     private void abrirLeitorDeQR(){
-        IntentIntegrator integrator;
-        integrator = new IntentIntegrator(activity);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        integrator.setPrompt("");
-        integrator.setCameraId(0);
-        integrator.initiateScan();
+        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+        searchItem.setVisible(false);
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, new FragmentScanner()).commit();
     }
 
-    public void abrirexplorador(){
+    private void abrirexplorador(String Cpass){
         fragMenu = new FragmentFileEx();
         Bundle arguments = new Bundle();
-        if(codigoqr!=null){
-            arguments.putString("arqpath",mainpath+codigoqr);
-            arguments.putString("text",null);
-            fragMenu.setArguments(arguments);
-            codigoqr=null;
-        }else{
-            arguments.putString("arqpath",mainpath);
-            arguments.putString("text",null);
-            fragMenu.setArguments(arguments);
-        }
+        arguments.putString("arqpath",Cpass);
+        arguments.putString("text",null);
+        fragMenu.setArguments(arguments);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMenu).commit();
-
+        if(findViewById(R.id.floatingActionButton).getVisibility()==View.INVISIBLE){
+            findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
+        }
         searchItem.setVisible(true);
-        explorer = true;
-
     }
 
     private void abrirEditorDeArquivos(){
 
-    }
-
-    //ciclo de vida da activity
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
-        if(result != null){
-            if (result.getContents() != null){
-                codigoqr = result.getContents();
-            }
-        }else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        if(codigoqr!=null) {
-            boolean exists = (new File(mainpath + codigoqr)).exists();
-            if(exists){
-                abrirexplorador();
-            } else{
-                codigoqr=null;
-                Toast.makeText(getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
-            }
-        }
-        super.onResume();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if(explorer) {
-            searchItem.setVisible(true);
-        }
     }
 
     //permissoes
@@ -249,4 +200,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+
 }
