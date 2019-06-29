@@ -1,69 +1,83 @@
 package com.metaconsultoria.root.scfilemanager;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
 
-import java.io.File;
-
+import me.dm7.barcodescanner.core.IViewFinder;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class FragmentScanner extends Fragment implements ZXingScannerView.ResultHandler{
-    private ZXingScannerView mScannerView;
+import android.graphics.Color;
+
+import java.io.File;
+
+
+public class FragmentScanner extends Fragment implements ZXingScannerView.ResultHandler {
+    private View fragmentRootView;
+    private ZXingScannerView scannerView;
+    private LinearLayout scannerViewLayout;
+    private CustomZXingScannerView customZXingScannerView;
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
+
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragmentscanner,null);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        fragmentRootView = inflater.inflate(R.layout.fragmentscanner, container, false);
+        scannerViewLayout = fragmentRootView.findViewById(R.id.scanner_view_layout);
+        return fragmentRootView;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mScannerView = view.findViewById(R.id.z_xing_scanner);
-        mScannerView.setBorderColor(Color.YELLOW);
-        mScannerView.setLaserColor(Color.BLUE);
-        mScannerView.setAutoFocus(true);
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
-        mScannerView.startCamera();          // Start camera on resume
+
+
+        customZXingScannerView = new CustomZXingScannerView(getContext());
+        customZXingScannerView.setBorderColor(Color.GRAY);
+        customZXingScannerView.setLaserColor(Color.GREEN);
+
+        scannerView = new ZXingScannerView(getContext()) {
+            @Override
+            protected IViewFinder createViewFinderView(Context context) {
+                return customZXingScannerView;
+            }
+        };
+        scannerViewLayout.addView(scannerView);
+        scannerView.setResultHandler(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mScannerView.stopCamera();           // Stop camera on pause
+        scannerView.stopCamera();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mScannerView.stopCamera();
+    public void onResume() {
+        super.onResume();
+        scannerView.startCamera(0);
     }
+
     @Override
     public void handleResult(Result result) {
-        if(result != null){
-            if (result.getText() != null){
-                boolean exists = (new File(mainpath + result.getText())).exists();
-                if(exists){
-                    FragmentFileEx.FragmentListener mListener = (FragmentFileEx.FragmentListener) getActivity();
-                    mListener.Scanner(mainpath+result.getText());
-                }else{
-                    onResume();
-                    Toast.makeText(getActivity().getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
-                }
+        if (result != null) {
+            boolean exists = (new File(mainpath+result.getText())).exists();
+            if(exists) {
+                FragmentFileEx.FragmentListener mListener = (FragmentFileEx.FragmentListener) getActivity();
+                mListener.Scanner(mainpath+result.getText());
+            }else{
+                Toast.makeText(getContext().getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
+                scannerView.resumeCameraPreview(this);
             }
         }
     }
