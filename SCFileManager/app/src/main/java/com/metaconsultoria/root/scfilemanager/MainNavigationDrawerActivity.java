@@ -29,6 +29,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private FragmentFileEx fragMenu = new FragmentFileEx();
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
     private MenuItem searchItem;
+    private UsersDB db;
+    private Funcionario fx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         Intent intentActivityMain = getIntent();
         Bundle bundle = intentActivityMain.getExtras();
         matricula = bundle.getString("nomeDeUsuario");
+        db = new UsersDB(this);
+        fx=db.findByMatricula(matricula);
 
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
@@ -78,9 +82,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         //
         getMenuInflater().inflate(R.menu.main_navigation_drawer, menu);
         TextView nome_field = (TextView) findViewById(R.id.nav_text_nome_usuario);
-        nome_field.setText(getString(R.string.nome_const)+"Thiago de Souza Alves");
+        nome_field.setText(getString(R.string.nome_const)+fx.getNome());
         TextView matricula_field = (TextView) findViewById(R.id.nav_text_numero_de_matricula);
-        matricula_field.setText(getString(R.string.matricula_const)+matricula);
+        matricula_field.setText(getString(R.string.matricula_const)+fx.getMatricula());
 
         getMenuInflater().inflate(R.menu.menu_search, menu);
         searchItem = menu.findItem(R.id.search);

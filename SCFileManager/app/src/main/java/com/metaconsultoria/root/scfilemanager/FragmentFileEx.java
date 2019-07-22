@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 public class FragmentFileEx extends Fragment {
     private ListView m_RootList;
-    private String m_root =null;
+    public String m_root =null;
     private ArrayList m_itemp = new ArrayList<String>();
     private ArrayList m_pathp = new ArrayList<String>();
     ArrayList m_filesp = new ArrayList<String>();
