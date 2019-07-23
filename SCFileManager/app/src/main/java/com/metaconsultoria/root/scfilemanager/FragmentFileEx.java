@@ -25,11 +25,13 @@ public class FragmentFileEx extends Fragment {
     ArrayList m_filesPathp = new ArrayList<String>();
     public String ultimodir = null;
     public Uri file;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fraglayoutex,null);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -39,6 +41,7 @@ public class FragmentFileEx extends Fragment {
         ultimodir = m_root;
         getDirFromRoot(m_root,null);
     }
+
     public void NewSearch(String text){
         m_itemp = new ArrayList<String>();
         m_pathp = new ArrayList<String>();

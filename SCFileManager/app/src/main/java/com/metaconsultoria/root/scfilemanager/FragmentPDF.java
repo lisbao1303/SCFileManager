@@ -1,5 +1,9 @@
 package com.metaconsultoria.root.scfilemanager;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,8 +15,16 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.listener.OnDrawListener;
+import com.github.barteksc.pdfviewer.listener.OnErrorListener;
+import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
+import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
+import com.github.barteksc.pdfviewer.listener.OnPageScrollListener;
 
-public class FragmentPDF extends Fragment {
+import java.io.File;
+
+public class FragmentPDF extends Fragment implements OnPageChangeListener,  OnLoadCompleteListener, OnDrawListener, OnErrorListener, OnPageScrollListener{
+    private SharedPreferences pdfReader;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -24,10 +36,47 @@ public class FragmentPDF extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
         String caminho = bundle.getString("caminho");
+        pdfReader = getContext().getSharedPreferences("PDFReader", Context.MODE_PRIVATE);
         PDFView pdfviewer = view.findViewById(R.id.pdfviewer);
+        pdfviewer.fromUri(Uri.parse(caminho))
+                .defaultPage(0)
+                .onPageChange(this)
+                .swipeHorizontal(false)
+                .enableAnnotationRendering(true)
+                .scrollHandle(null)
+                .onLoad(this)
+                .onDraw(this)
+                .enableSwipe(true)
+                .onError(this)
+                .enableDoubletap(true)
+                .onPageScroll(this)
+                .scrollHandle(null)
+                .spacing(10)
+                .load();
+    }
+    @Override
+    public void onPageChanged(int page, int pageCount) {
+        SharedPreferences.Editor edit = pdfReader.edit();
+        edit.putInt("pages",page);
+        edit.commit();
+    }
 
-        //Toast.makeText(getActivity().getApplicationContext(),caminho,Toast.LENGTH_LONG).show();
+    @Override
+    public void loadComplete(int nbPages) {
 
-        pdfviewer.fromUri(Uri.parse(caminho)).load();
+    }
+
+    @Override
+    public void onLayerDrawn(Canvas canvas, float pageWidth, float pageHeight, int displayedPage) {
+
+    }
+
+    @Override
+    public void onError(Throwable t) {
+
+    }
+
+    @Override
+    public void onPageScrolled(int page, float positionOffset) {
     }
 }
