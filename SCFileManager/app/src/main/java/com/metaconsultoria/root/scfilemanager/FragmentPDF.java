@@ -2,7 +2,6 @@ package com.metaconsultoria.root.scfilemanager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnDrawListener;
@@ -20,8 +18,6 @@ import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnPageScrollListener;
-
-import java.io.File;
 
 public class FragmentPDF extends Fragment implements OnPageChangeListener,  OnLoadCompleteListener, OnDrawListener, OnErrorListener, OnPageScrollListener{
     private SharedPreferences pdfReader;
@@ -51,7 +47,7 @@ public class FragmentPDF extends Fragment implements OnPageChangeListener,  OnLo
                 .enableDoubletap(true)
                 .onPageScroll(this)
                 .scrollHandle(null)
-                .spacing(10)
+                .spacing(20)
                 .load();
     }
     @Override

@@ -36,6 +36,7 @@ public class FragmentScanner extends Fragment implements ZXingScannerView.Result
         scannerViewLayout = fragmentRootView.findViewById(R.id.scanner_view_layout);
         return fragmentRootView;
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

@@ -20,7 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
@@ -29,8 +29,12 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private FragmentFileEx fragMenu = new FragmentFileEx();
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
     private MenuItem searchItem;
+    private NavigationView navigationView;
     private UsersDB db;
     private Funcionario fx;
+    private SearchView searchView;
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +55,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         fx=db.findByMatricula(matricula);
 
 
-        Toolbar toolbar =  findViewById(R.id.toolbar);
+        toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
@@ -60,8 +64,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
 
@@ -88,8 +93,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
         getMenuInflater().inflate(R.menu.menu_search, menu);
         searchItem = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Procurar...");
         return true;
     }
 
@@ -106,12 +112,15 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     @Override
     public void setpdffrag() {
+
         Bundle arguments = new Bundle();
         arguments.putString("caminho", fragMenu.file.toString());
         FragmentPDF fragment = new FragmentPDF();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragment).commit();
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+        toolbar.collapseActionView();
+        this.setTitle("Visualizador de PDF");
         searchItem.setVisible(false);
     }
 
@@ -127,6 +136,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this,"configuraç�es",Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -141,7 +151,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         if (id == R.id.nav_openQR) {
             this.abrirLeitorDeQR();
         } else if (id == R.id.nav_open_explorer) {
-            abrirexplorador(mainpath);
+            this.abrirexplorador(mainpath);
         } else if (id == R.id.nav_edit_window) {
             this.abrirEditorDeArquivos();
         } else if (id == R.id.nav_share) {
@@ -156,16 +166,19 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
     public void botaoLeitorDeQR(View view) {
-         this.abrirLeitorDeQR();
+        navigationView.setCheckedItem(R.id.nav_openQR);
+        this.abrirLeitorDeQR();
     }
 
     private void abrirLeitorDeQR(){
+        this.setTitle(R.string.scan_tile);
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         searchItem.setVisible(false);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, new FragmentScanner()).commit();
     }
 
     private void abrirexplorador(String Cpass){
+        this.setTitle(R.string.ex_title);
         fragMenu = new FragmentFileEx();
         Bundle arguments = new Bundle();
         arguments.putString("arqpath",Cpass);
@@ -179,7 +192,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
     private void abrirEditorDeArquivos(){
-
+        this.setTitle(R.string.arq_ed_title);
     }
 
     //permissoes
