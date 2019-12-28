@@ -38,21 +38,24 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(checkPermissionForReadExtertalStorage()){
+        if(checkPermissoes()){
         }else{
             try {
-                requestPermissionForReadExternalStorage();
+                requestPermissoes();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         setContentView(R.layout.activity_main_navigation_drawer);
-        Intent intentActivityMain = getIntent();
-        Bundle bundle = intentActivityMain.getExtras();
-        matricula = bundle.getString("nomeDeUsuario");
-        db = new UsersDB(this);
-        fx=db.findByMatricula(matricula);
+
+
+        //FUNCOES USADAS QUANDO TINHA AUTENTICACAO DE FUNCIONARIO
+        //Intent intentActivityMain = getIntent();
+        //Bundle bundle = intentActivityMain.getExtras();
+        //matricula = bundle.getString("nomeDeUsuario");
+        //db = new UsersDB(this);
+        //fx=db.findByMatricula(matricula);
 
 
         toolbar =  findViewById(R.id.toolbar);
@@ -87,9 +90,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         //
         getMenuInflater().inflate(R.menu.main_navigation_drawer, menu);
         TextView nome_field = (TextView) findViewById(R.id.nav_text_nome_usuario);
-        nome_field.setText(getString(R.string.nome_const)+fx.getNome());
+        nome_field.setText(getString(R.string.nome_const)/*+fx.getNome()*/);
         TextView matricula_field = (TextView) findViewById(R.id.nav_text_numero_de_matricula);
-        matricula_field.setText(getString(R.string.matricula_const)+fx.getMatricula());
+        matricula_field.setText(getString(R.string.matricula_const)/*+fx.getMatricula()*/);
 
         getMenuInflater().inflate(R.menu.menu_search, menu);
         searchItem = menu.findItem(R.id.search);
@@ -197,16 +200,20 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     //permissoes
 
-    public boolean checkPermissionForReadExtertalStorage() {
+    public boolean checkPermissoes() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int result = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE);
-            return result == PackageManager.PERMISSION_GRANTED;
+            int result_1 = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE);
+            int result_2 = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA);
+            int result_3 = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            return (result_1 == PackageManager.PERMISSION_GRANTED &&
+                    result_2 == PackageManager.PERMISSION_GRANTED &&
+                    result_3 == PackageManager.PERMISSION_GRANTED);
         }
         return false;
     }
-    public void requestPermissionForReadExternalStorage() throws Exception {
+    public void requestPermissoes() throws Exception {
         try {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0x3);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA}, 0x3);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
