@@ -25,7 +25,8 @@ import android.widget.Toast;
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener{
-    private String matricula;
+
+    //private String matricula;
     private FragmentFileEx fragMenu = new FragmentFileEx();
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
     private MenuItem searchItem;
@@ -89,11 +90,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         // ATENCAO: Os elementos do Navigation Drawer sao instaciados somente aqui n icluir eles no onCreate
         //
         getMenuInflater().inflate(R.menu.main_navigation_drawer, menu);
-        TextView nome_field = (TextView) findViewById(R.id.nav_text_nome_usuario);
-        nome_field.setText(getString(R.string.nome_const)/*+fx.getNome()*/);
-        TextView matricula_field = (TextView) findViewById(R.id.nav_text_numero_de_matricula);
-        matricula_field.setText(getString(R.string.matricula_const)/*+fx.getMatricula()*/);
-
         getMenuInflater().inflate(R.menu.menu_search, menu);
         searchItem = menu.findItem(R.id.search);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -151,13 +147,17 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if (id == R.id.nav_openQR) {
-            this.abrirLeitorDeQR();
-        } else if (id == R.id.nav_open_explorer) {
+        if (id == R.id.nav_arq_window) {
+            this.abrirArqPage();
+        }
+
+        /* else if (id == R.id.nav_open_explorer) {
             this.abrirexplorador(mainpath);
         } else if (id == R.id.nav_edit_window) {
             this.abrirEditorDeArquivos();
-        } else if (id == R.id.nav_share) {
+
+        }*/
+        else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
@@ -168,16 +168,16 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         return true;
     }
 
-    public void botaoLeitorDeQR(View view) {
-        navigationView.setCheckedItem(R.id.nav_openQR);
-        this.abrirLeitorDeQR();
-    }
+    //public void botaoLeitorDeQR(View view) {
+    //    navigationView.setCheckedItem(R.id.nav_openQR);
+    //    this.abrirLeitorDeQR();
+    //}
 
-    private void abrirLeitorDeQR(){
-        this.setTitle(R.string.scan_tile);
-        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
-        searchItem.setVisible(false);
-        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, new FragmentScanner()).commit();
+    private void abrirArqPage(){
+      this.setTitle(R.string.arq_title);
+      //  findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+      //  searchItem.setVisible(false);
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, new FragmentMainTabs()).commit();
     }
 
     private void abrirexplorador(String Cpass){

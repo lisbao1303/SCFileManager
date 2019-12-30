@@ -25,7 +25,11 @@
     <string name="button">Button</string>
     <string name="pesquisar">Pesquisar</string>
     <string name="hint_search" />
-    <string name="scan_tile">Scanner</string>
+    <string name="arq_title">Arquivo</string>
     <string name="ex_title">Explorador de Arquivos</string>
     <string name="arq_ed_title">Editor de Arquivos</string>
+    <string name="arq_window">Arquivo</string>
+
+
+
 </resources>
