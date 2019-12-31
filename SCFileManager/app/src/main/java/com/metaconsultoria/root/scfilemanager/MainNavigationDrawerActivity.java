@@ -35,6 +35,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private Funcionario fx;
     private SearchView searchView;
     private Toolbar toolbar;
+    private FragmentMainTabs fragMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +51,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main_navigation_drawer);
 
-
-        //FUNCOES USADAS QUANDO TINHA AUTENTICACAO DE FUNCIONARIO
-        //Intent intentActivityMain = getIntent();
-        //Bundle bundle = intentActivityMain.getExtras();
-        //matricula = bundle.getString("nomeDeUsuario");
-        //db = new UsersDB(this);
-        //fx=db.findByMatricula(matricula);
-
-
         toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -70,6 +62,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        fragMain=new FragmentMainTabs();
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
 
     }
 
@@ -88,7 +82,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // ATENCAO: Os elementos do Navigation Drawer sao instaciados somente aqui n icluir eles no onCreate
-        //
+
         getMenuInflater().inflate(R.menu.main_navigation_drawer, menu);
         getMenuInflater().inflate(R.menu.menu_search, menu);
         searchItem = menu.findItem(R.id.search);
@@ -177,7 +171,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
       this.setTitle(R.string.arq_title);
       //  findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
       //  searchItem.setVisible(false);
-        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, new FragmentMainTabs()).commit();
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
     }
 
     private void abrirexplorador(String Cpass){
