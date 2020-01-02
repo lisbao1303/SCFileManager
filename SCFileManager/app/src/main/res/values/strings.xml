@@ -31,8 +31,9 @@
     <string name="arq_window">Arquivo</string>
     <string name="tab_1_title">Leitor</string>
     <string name="tab_2_title">Gerenciador</string>
+    <string name="help_scanner">Aponte o aparelho para o codigo desejado</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment_1">Hello blank fragment 1</string>
     <string name="hello_blank_fragment_2">Hello blank fragment 2</string>
 

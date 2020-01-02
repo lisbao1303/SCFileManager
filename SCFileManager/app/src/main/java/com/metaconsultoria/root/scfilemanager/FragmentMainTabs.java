@@ -44,7 +44,7 @@ public class FragmentMainTabs extends Fragment
 
         mViewPager= (ViewPager) view.findViewById(R.id.viewPager_locate);
         mViewPager.setOffscreenPageLimit(1);
-        mViewPager.setAdapter(new MyTabAdapter(getContext(),getChildFragmentManager()));
+        mViewPager.setAdapter(new MyTabAdapter(getActivity(),getContext(),getChildFragmentManager()));
 
         mTabLayout= (TabLayout) view.findViewById(R.id.tabs_locate);
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_1_title));
@@ -52,6 +52,9 @@ public class FragmentMainTabs extends Fragment
 
         mTabLayout.addOnTabSelectedListener(this);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+
+        getActivity().findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+
         return view;
     }
 
@@ -69,7 +72,10 @@ public class FragmentMainTabs extends Fragment
     //interface das tabs
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        mViewPager.setCurrentItem(tab.getPosition());
+        int i=tab.getPosition();
+        if(i==0){getActivity().findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);}
+        else{getActivity().findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);}
+        mViewPager.setCurrentItem(i);
     }
 
     @Override

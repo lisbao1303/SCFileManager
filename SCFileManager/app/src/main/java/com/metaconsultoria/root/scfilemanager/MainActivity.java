@@ -16,13 +16,13 @@ public class MainActivity extends AppCompatActivity {
     private EditText text_password_object;
     private boolean isFirstChangeNome = true;
     private boolean isFirstChangePassword =true;
-    private UsersDB db;
+    private RacentFilesDB db;
     private Funcionario func;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db=new UsersDB(this);
+        db=new RacentFilesDB(this);
         if(db.findByMatricula("11711EMT002")==null){
             func= new Funcionario("Thiago de Souza Alves","11711EMT002","teste");
             db.init(func);

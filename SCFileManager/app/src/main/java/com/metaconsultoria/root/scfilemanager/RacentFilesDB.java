@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class UsersDB extends SQLiteOpenHelper {
+public class RacentFilesDB extends SQLiteOpenHelper {
     public static final String NOME_DO_BANCO = "bancoDeUsuarios.sqlite";
     private static final int VERSAO_DO_BANCO = 1;
     private Context cont;
 
-    UsersDB(Context contx){
+    RacentFilesDB(Context contx){
             super(contx,NOME_DO_BANCO,null, VERSAO_DO_BANCO);
             this.cont=contx;
     }

@@ -1,7 +1,6 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -31,7 +29,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
     private MenuItem searchItem;
     private NavigationView navigationView;
-    private UsersDB db;
+    private RacentFilesDB db;
     private Funcionario fx;
     private SearchView searchView;
     private Toolbar toolbar;
@@ -168,7 +166,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     //}
 
     private void abrirArqPage(){
-      this.setTitle(R.string.arq_title);
+      this.setTitle(R.string.title_activity_main_navigation_drawer);
       //  findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
       //  searchItem.setVisible(false);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
@@ -220,4 +218,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
 
+    public void onScannerClick(View view) {
+       Toast.makeText(this,R.string.help_scanner,Toast.LENGTH_LONG).show();
+    }
 }
