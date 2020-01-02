@@ -25,9 +25,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener{
 
     //private String matricula;
-    private FragmentFileEx fragMenu = new FragmentFileEx();
-    private String mainpath = Environment.getExternalStorageDirectory().getPath();
-    private MenuItem searchItem;
+    private FragmentFileEx mainFragmentFileEx;
+    private FragmentFileEx fragMenu;
+    public MenuItem searchItem;
     private NavigationView navigationView;
     private RecentFilesDB db;
     private MyArquive fx;
@@ -160,10 +160,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         return true;
     }
 
-    //public void botaoLeitorDeQR(View view) {
-    //    navigationView.setCheckedItem(R.id.nav_openQR);
-    //    this.abrirLeitorDeQR();
-    //}
+    public void botaoLeitorDeQR(View view) {
+          fragMain.performClick(0);
+          onScannerClick(findViewById(R.id.screen_area));
+    }
 
     private void abrirArqPage(){
       this.setTitle(R.string.title_activity_main_navigation_drawer);
@@ -173,17 +173,13 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
     private void abrirexplorador(String Cpass){
-        this.setTitle(R.string.ex_title);
-        fragMenu = new FragmentFileEx();
+
         Bundle arguments = new Bundle();
-        arguments.putString("arqpath",Cpass);
+        arguments.putString("arqpath", Cpass);
         arguments.putString("text",null);
-        fragMenu.setArguments(arguments);
-        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMenu).commit();
-        if(findViewById(R.id.floatingActionButton).getVisibility()==View.INVISIBLE){
-            findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
-        }
-        searchItem.setVisible(true);
+        mainFragmentFileEx.refresh(arguments);
+        fragMain.performClick(1);
+
     }
 
     private void abrirEditorDeArquivos(){
@@ -220,5 +216,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     public void onScannerClick(View view) {
        Toast.makeText(this,R.string.help_scanner,Toast.LENGTH_LONG).show();
+    }
+
+    public void setMainFragmentFileEx(FragmentFileEx frag){
+        this.mainFragmentFileEx=frag;
     }
 }

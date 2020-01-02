@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class FragmentTab2 extends Fragment {
+public class FragmentTab2 extends Fragment{
 
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
 
@@ -48,6 +48,8 @@ public class FragmentTab2 extends Fragment {
         arguments.putString("text",null);
         mfragment.setArguments(arguments);
         this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.file_ex_area,mfragment).commit();
+        ((MainNavigationDrawerActivity)getActivity()).setMainFragmentFileEx(mfragment);
 
     }
+
 }

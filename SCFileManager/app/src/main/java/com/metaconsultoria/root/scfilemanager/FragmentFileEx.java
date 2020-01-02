@@ -25,6 +25,7 @@ public class FragmentFileEx extends Fragment {
     ArrayList m_filesPathp = new ArrayList<String>();
     public String ultimodir = null;
     public Uri file;
+    private View mView;
 
     @Nullable
     @Override
@@ -35,9 +36,16 @@ public class FragmentFileEx extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        m_RootList = view.findViewById(R.id.rl_lvListRoot);
+        this.mView=view;
+        m_RootList = mView.findViewById(R.id.rl_lvListRoot);
         Bundle bundle = getArguments();
         m_root = bundle.getString("arqpath");
+        ultimodir = m_root;
+        getDirFromRoot(m_root,null);
+    }
+
+    public void refresh(Bundle data){
+        m_root = data.getString("arqpath");
         ultimodir = m_root;
         getDirFromRoot(m_root,null);
     }

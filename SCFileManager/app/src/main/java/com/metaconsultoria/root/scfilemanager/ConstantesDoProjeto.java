@@ -6,7 +6,7 @@ public class ConstantesDoProjeto {
     public static ConstantesDoProjeto getInstance() {
         return ourInstance;
     }
-
     private ConstantesDoProjeto() {
+
     }
 }

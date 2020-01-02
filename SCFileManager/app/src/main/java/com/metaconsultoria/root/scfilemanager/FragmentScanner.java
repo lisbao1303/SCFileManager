@@ -75,6 +75,7 @@ public class FragmentScanner extends Fragment implements ZXingScannerView.Result
             if(exists) {
                 FragmentFileEx.FragmentListener mListener = (FragmentFileEx.FragmentListener) getActivity();
                 mListener.Scanner(mainpath+result.getText());
+                scannerView.resumeCameraPreview(this);
             }else{
                 Toast.makeText(getContext().getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
                 scannerView.resumeCameraPreview(this);

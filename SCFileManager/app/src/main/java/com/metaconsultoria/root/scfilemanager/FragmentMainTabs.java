@@ -8,13 +8,14 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 public class FragmentMainTabs extends Fragment
         implements TabLayout.OnTabSelectedListener{
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-
+    private MyTabAdapter myTabAdapter;
 
     public FragmentMainTabs() {
         // Required empty public constructor
@@ -44,6 +45,7 @@ public class FragmentMainTabs extends Fragment
 
         mViewPager= (ViewPager) view.findViewById(R.id.viewPager_locate);
         mViewPager.setOffscreenPageLimit(1);
+        myTabAdapter= new MyTabAdapter(getActivity(),getContext(),getChildFragmentManager());
         mViewPager.setAdapter(new MyTabAdapter(getActivity(),getContext(),getChildFragmentManager()));
 
         mTabLayout= (TabLayout) view.findViewById(R.id.tabs_locate);
@@ -73,8 +75,15 @@ public class FragmentMainTabs extends Fragment
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         int i=tab.getPosition();
-        if(i==0){getActivity().findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);}
-        else{getActivity().findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);}
+        if(i==0){MainNavigationDrawerActivity activity =(MainNavigationDrawerActivity) getActivity();
+            activity.findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+            activity.searchItem.setVisible(false);
+        }
+        else{
+            MainNavigationDrawerActivity activity =(MainNavigationDrawerActivity) getActivity();
+            activity.findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
+            activity.searchItem.setVisible(true);
+        }
         mViewPager.setCurrentItem(i);
     }
 
@@ -86,5 +95,9 @@ public class FragmentMainTabs extends Fragment
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    public void performClick(int i){
+        mViewPager.setCurrentItem(i);
     }
 }
