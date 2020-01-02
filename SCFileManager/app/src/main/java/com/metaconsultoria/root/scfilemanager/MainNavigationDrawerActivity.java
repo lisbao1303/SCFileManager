@@ -29,8 +29,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
     private MenuItem searchItem;
     private NavigationView navigationView;
-    private RacentFilesDB db;
-    private Funcionario fx;
+    private RecentFilesDB db;
+    private MyArquive fx;
     private SearchView searchView;
     private Toolbar toolbar;
     private FragmentMainTabs fragMain;
