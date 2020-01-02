@@ -49,7 +49,6 @@ public class FragmentTab2 extends Fragment{
         mfragment.setArguments(arguments);
         this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.file_ex_area,mfragment).commit();
         ((MainNavigationDrawerActivity)getActivity()).setMainFragmentFileEx(mfragment);
-
     }
 
 }

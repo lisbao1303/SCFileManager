@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,9 +46,10 @@ public class FragmentFileEx extends Fragment {
     }
 
     public void refresh(Bundle data){
-        m_root = data.getString("arqpath");
-        ultimodir = m_root;
-        getDirFromRoot(m_root,null);
+        String mPath;
+        mPath = data.getString("arqpath");
+        ultimodir = mPath;
+        getDirFromRoot(mPath,null);
     }
 
     public void NewSearch(String text){
@@ -74,7 +76,7 @@ public class FragmentFileEx extends Fragment {
         ListAdapter m_listAdapter = null;
         if (procura == null) {
           if (m_file.isDirectory()) {
-            File[] m_filesArray = m_file.listFiles();
+              File[] m_filesArray = m_file.listFiles();
 
                 if (!p_rootPath.equals(m_root)) {
                     m_item.add("../");
@@ -212,6 +214,19 @@ public class FragmentFileEx extends Fragment {
                 }
             }
         }
+    }
+
+    public boolean upDir(){
+         if(ultimodir==null || ultimodir.equals(m_root)){return true;}
+         else{
+             String path = ultimodir.substring(0,ultimodir.lastIndexOf('/'));
+             Log.i("teste de path",path);
+             Bundle arguments = new Bundle();
+             arguments.putString("arqpath", path);
+             arguments.putString("text",null);
+             this.refresh(arguments);
+             return false;
+         }
     }
 
     public interface FragmentListener {

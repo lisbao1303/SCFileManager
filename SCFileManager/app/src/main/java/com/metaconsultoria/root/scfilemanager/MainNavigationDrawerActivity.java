@@ -71,9 +71,12 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if(fragMain.getCurentTab()==1){
+              if(mainFragmentFileEx.upDir()){super.onBackPressed();}
+        }else {
             super.onBackPressed();
         }
+
     }
 
     @Override

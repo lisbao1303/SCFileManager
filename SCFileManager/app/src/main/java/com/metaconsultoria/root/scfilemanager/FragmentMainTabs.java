@@ -100,4 +100,7 @@ public class FragmentMainTabs extends Fragment
     public void performClick(int i){
         mViewPager.setCurrentItem(i);
     }
+    public int getCurentTab(){
+        return mViewPager.getCurrentItem();
+    }
 }
