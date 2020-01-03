@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +26,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-                "create table if not exists recent_arquivos (id integer primary key autoincrement,nome text,data text,path text,lastuse text,lastuseLRU integer default 0,lastuseMRU integer default 0);"
+                "create table if not exists recent_arquivos (id integer primary key autoincrement,nome text,path text,lastuse text,lastuseLRU integer default 0,lastuseMRU integer default 0);"
         );
     }
 
@@ -35,29 +36,34 @@ public class RecentFilesDB extends SQLiteOpenHelper {
 
     public long save(MyArquive myArquive) {
         long id = myArquive.id;
-        SQLiteDatabase db = getWritableDatabase();
-        try {
 
-            MyArquive outra_coisa = findByPath(myArquive.getPath(), db);
-            if (myArquive.getPath().equals(outra_coisa.getPath())) {
-                return 0;
+            MyArquive outra_coisa = findByPath(myArquive.getPath());
+            if(outra_coisa!=null) {
+                if (myArquive.getPath().equals(outra_coisa.getPath())) {
+                    return 0;
+                }
             }
-
             ContentValues values = new ContentValues();
             values.put("nome", myArquive.getNome());
-            values.put("data", myArquive.getData());
             values.put("path", myArquive.getPath());
             values.put("lastuse", myArquive.getLastUse());
             if (id == 0) {
-                return db.insert("recent_arquivos", "", values);
+                SQLiteDatabase db = getWritableDatabase();
+                try {
+                    return db.insert("recent_arquivos", "", values);
+                }finally {
+                    db.close();
+                }
             } else {
                 String _id = String.valueOf(myArquive.id);
                 String[] whereArgs = new String[]{_id};
+                SQLiteDatabase db = getWritableDatabase();
+                try {
                 return db.update("recent_arquivos", values, "_id", whereArgs);
+                }finally {
+                    db.close();
+                }
             }
-        } finally {
-            db.close();
-        }
     }
 
 
@@ -71,7 +77,6 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                     do {
                         MyArquive fx = new MyArquive();
                         fx.setNome(c.getString(c.getColumnIndex("nome")));
-                        fx.setData(c.getString(c.getColumnIndex("data")));
                         fx.setPath(c.getString(c.getColumnIndex("path")));
                         fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
                         fx_vetor.add(fx);
@@ -90,12 +95,11 @@ public class RecentFilesDB extends SQLiteOpenHelper {
     public MyArquive findByPath(String path) {
         SQLiteDatabase db = getWritableDatabase();
         try {
-            Cursor c = db.query("recent_arquivos", null, "matricula='" + path + "'", null, null, null, null);
+            Cursor c = db.query("recent_arquivos", null, "path='" + path + "'", null, null, null, null);
             if (c.getCount() > 0) {
                 MyArquive fx = new MyArquive();
                 c.moveToFirst();
                 fx.setNome(c.getString(c.getColumnIndex("nome")));
-                fx.setData(c.getString(c.getColumnIndex("data")));
                 fx.setPath(c.getString(c.getColumnIndex("path")));
                 fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
                 return fx;
@@ -115,7 +119,6 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                 MyArquive fx = new MyArquive();
                 c.moveToFirst();
                 fx.setNome(c.getString(c.getColumnIndex("nome")));
-                fx.setData(c.getString(c.getColumnIndex("data")));
                 fx.setPath(c.getString(c.getColumnIndex("path")));
                 fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
                 return fx;
@@ -157,55 +160,67 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         }
     }
 
-    private int updateRowsByPath(String colunm,String  new_value, String path, SQLiteDatabase db) {
+    private int updateRowsByPath(String colunm,String  new_value, String path) {
 
         ContentValues values = new ContentValues();
         values.put(colunm, new_value);
         String selection = "path" + " LIKE ?";
         String[] selectionArgs = {path};
-
-        return db.update(
-                "recent_arquivos",
-                values,
-                selection,
-                selectionArgs);
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            return db.update(
+                    "recent_arquivos",
+                    values,
+                    selection,
+                    selectionArgs);
+        }finally {
+            db.close();
+        }
     }
 
-    private int updateRowsByPath(String colunm,int new_value, String path, SQLiteDatabase db) {
+    private int updateRowsByPath(String colunm,int new_value, String path) {
 
         ContentValues values = new ContentValues();
         values.put(colunm, new_value);
         String selection = "path" + " LIKE ?";
         String[] selectionArgs = {path};
-
-        return db.update(
-                "recent_arquivos",
-                values,
-                selection,
-                selectionArgs);
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            return db.update(
+                    "recent_arquivos",
+                    values,
+                    selection,
+                    selectionArgs);
+        }finally {
+            db.close();
+        }
     }
 
 
     private void refreshDataBase(String path){
-        SQLiteDatabase db= getWritableDatabase();
-        List<MyArquive> array= findAll();
+        List<MyArquive> array = findAll();
         String buffer;
         for(MyArquive iterador: array){
-            if(iterador.getPath().equals(path)){buffer = "0" + iterador.getLastUse();}
+            if(iterador.getPath().equals(path)){buffer = "1" + iterador.getLastUse();}
             else{buffer = "0" + iterador.getLastUse();}
             if(buffer.length()>64){
                 buffer=buffer.substring(0,63);
             }
-            updateRowsByPath("lastuse",buffer,iterador.getPath(),db);
-            updateRowsByPath("lastuseLRU",MyArquive.getComparableLastUseLRU(buffer),iterador.getPath(),db);
-            updateRowsByPath("lastuseMRU",MyArquive.getComparableLastUseMRU(buffer),iterador.getPath(),db);
+            updateRowsByPath("lastuse",buffer,iterador.getPath());
+            Log.i("Estado do arquivo",buffer);
+            updateRowsByPath("lastuseLRU",MyArquive.getComparableLastUseLRU(buffer),iterador.getPath());
+            updateRowsByPath("lastuseMRU",MyArquive.getComparableLastUseMRU(buffer),iterador.getPath());
         }
     }
 
     public void myCommit(MyArquive myArquive){
         if(findByPath(myArquive.getPath())==null){
+            Log.i("tentou_salvar",myArquive.getNome());
+
             save(myArquive);
+            Log.i("salvou",myArquive.getNome());
         }
+        Log.i("achou",myArquive.getNome());
         refreshDataBase(myArquive.getPath());
     }
 
@@ -220,7 +235,6 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                     do {
                         MyArquive fx = new MyArquive();
                         fx.setNome(c.getString(c.getColumnIndex("nome")));
-                        fx.setData(c.getString(c.getColumnIndex("data")));
                         fx.setPath(c.getString(c.getColumnIndex("path")));
                         fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
                         fx_vetor.add(fx);

@@ -5,7 +5,6 @@ import java.sql.Array;
 public class MyArquive implements Comparable<MyArquive> {
       public long id;
       private  String nome;
-      private  String data;
       private  String path;
       private  String lastuse;
 
@@ -14,23 +13,16 @@ public class MyArquive implements Comparable<MyArquive> {
             lastuse="0";
       }
 
-      MyArquive(String Nome, String data){
+      MyArquive(String Nome, String path){
           this.nome=Nome;
-          this.data=data;
-          id=0;
-      }
-
-      MyArquive(String Nome, String data, String path){
-          this.nome=Nome;
-          this.data=data;
           this.path=path;
+          lastuse="0";
           id=0;
       }
 
 
-      MyArquive(String nome, String data, String path, String lastuse){
+      MyArquive(String nome, String path, String lastuse){
         this.nome=nome;
-        this.data=data;
         this.path=path;
         this.lastuse=lastuse;
         id=0;
@@ -38,10 +30,6 @@ public class MyArquive implements Comparable<MyArquive> {
 
       public void setNome(String nome){
           this.nome=nome;
-      }
-
-      public void setData(String data){
-        this.data=data;
       }
 
       public void setPath(String path){
@@ -54,10 +42,6 @@ public class MyArquive implements Comparable<MyArquive> {
 
       public String getNome(){
           return this.nome;
-      }
-
-      public String getData(){
-          return this.data;
       }
 
       public String getPath(){

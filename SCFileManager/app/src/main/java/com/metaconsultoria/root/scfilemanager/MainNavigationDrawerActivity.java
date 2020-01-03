@@ -1,6 +1,7 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,7 +63,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         fragMain=new FragmentMainTabs();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
-
+        db = new RecentFilesDB(this);
     }
 
 
@@ -105,17 +106,14 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
     @Override
-    public void setpdffrag() {
-
-        Bundle arguments = new Bundle();
-        arguments.putString("caminho", fragMenu.file.toString());
-        FragmentPDF fragment = new FragmentPDF();
-        fragment.setArguments(arguments);
-        getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragment).commit();
-        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
-        toolbar.collapseActionView();
-        this.setTitle("Visualizador de PDF");
-        searchItem.setVisible(false);
+    public void setPdfActivity(MyArquive arq) {
+        db.myCommit(arq);
+        Bundle bundle = new Bundle();
+        bundle.putString("path", arq.getPath());
+        Intent intent = new Intent(this, PdfReaderActivity.class);
+        intent.putExtras(bundle);
+        //Toast.makeText(this,Integer.toString(db.findAll().size()),Toast.LENGTH_SHORT).show();
+        startActivity(intent);
     }
 
     @Override

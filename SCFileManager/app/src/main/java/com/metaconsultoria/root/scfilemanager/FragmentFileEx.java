@@ -133,7 +133,11 @@ public class FragmentFileEx extends Fragment {
                     } else {
                         if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")) {
                             FragmentListener mListener = (FragmentListener) getActivity();
-                            mListener.setpdffrag();
+                            MyArquive arq = new MyArquive(
+                                    file.getPath().substring(file.getPath().lastIndexOf('/')+1,file.getPath().lastIndexOf('.')),
+                                    file.toString()
+                            );
+                            mListener.setPdfActivity(arq);
                         }
                     }
                 }
@@ -186,7 +190,11 @@ public class FragmentFileEx extends Fragment {
                     } else {
                         if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")) {
                             FragmentListener mListener = (FragmentListener) getActivity();
-                            mListener.setpdffrag();
+                            MyArquive arq = new MyArquive(
+                                    file.getPath().substring(file.getPath().lastIndexOf('/')+1,file.getPath().lastIndexOf('.')),
+                                    file.toString()
+                            );
+                            mListener.setPdfActivity(arq);
                         }
                     }
                 }
@@ -230,7 +238,7 @@ public class FragmentFileEx extends Fragment {
     }
 
     public interface FragmentListener {
-        void setpdffrag();
+        void setPdfActivity(MyArquive arq);
         void Scanner(String qR);
     }
 }

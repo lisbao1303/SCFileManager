@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/ic_star_border_black_24dp"
+        android:title="@string/bottom_nav_item_1" />
+    <item
+        android:icon="@drawable/ic_comment_black_24dp"
+        android:title="@string/bottom_nav_item_2" />
+    <item
+        android:icon="@drawable/ic_add_circle_outline_black_24dp"
+        android:title="@string/bottom_nav_item_3" />
+</menu>
