@@ -39,7 +39,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
 
             MyArquive outra_coisa = findByPath(myArquive.getPath());
             if(outra_coisa!=null) {
-                if (myArquive.getPath().equals(outra_coisa.getPath())) {
+                if(myArquive.getPath().equals(outra_coisa.getPath())) {
                     return 0;
                 }
             }
@@ -94,25 +94,6 @@ public class RecentFilesDB extends SQLiteOpenHelper {
 
     public MyArquive findByPath(String path) {
         SQLiteDatabase db = getWritableDatabase();
-        try {
-            Cursor c = db.query("recent_arquivos", null, "path='" + path + "'", null, null, null, null);
-            if (c.getCount() > 0) {
-                MyArquive fx = new MyArquive();
-                c.moveToFirst();
-                fx.setNome(c.getString(c.getColumnIndex("nome")));
-                fx.setPath(c.getString(c.getColumnIndex("path")));
-                fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
-                return fx;
-            } else {
-                return null;
-            }
-        } finally {
-            db.close();
-        }
-    }
-
-    public MyArquive findByPath(String path, SQLiteDatabase db) {
-
         try {
             Cursor c = db.query("recent_arquivos", null, "path='" + path + "'", null, null, null, null);
             if (c.getCount() > 0) {
