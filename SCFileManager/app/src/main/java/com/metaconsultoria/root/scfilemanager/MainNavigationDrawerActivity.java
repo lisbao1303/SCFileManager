@@ -30,7 +30,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private FragmentFileEx fragMenu;
     public MenuItem searchItem;
     private NavigationView navigationView;
-    private RecentFilesDB db;
+    public RecentFilesDB db;
     private MyArquive fx;
     private SearchView searchView;
     private Toolbar toolbar;
@@ -112,7 +112,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         bundle.putString("path", arq.getPath());
         Intent intent = new Intent(this, PdfReaderActivity.class);
         intent.putExtras(bundle);
-        //Toast.makeText(this,Integer.toString(db.findAll().size()),Toast.LENGTH_SHORT).show();
         startActivity(intent);
     }
 
@@ -126,7 +125,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Toast.makeText(this,"configuraç�es",Toast.LENGTH_SHORT).show();
             return true;

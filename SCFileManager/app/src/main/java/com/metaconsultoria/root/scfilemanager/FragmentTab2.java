@@ -18,7 +18,7 @@ public class FragmentTab2 extends Fragment{
         // Required empty public constructor
     }
 
-    public static FragmentTab2 newInstance(String param1, String param2) {
+    public static FragmentTab2 newInstance() {
         FragmentTab2 fragment = new FragmentTab2();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -48,6 +48,9 @@ public class FragmentTab2 extends Fragment{
         arguments.putString("text",null);
         mfragment.setArguments(arguments);
         this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.file_ex_area,mfragment).commit();
+
+        RecentFilesFragment mFragmentRecent= new RecentFilesFragment();
+        this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.file_recent_area,mFragmentRecent).commit();
         ((MainNavigationDrawerActivity)getActivity()).setMainFragmentFileEx(mfragment);
     }
 

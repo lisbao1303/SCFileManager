@@ -1,6 +1,7 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.icu.text.SimpleDateFormat;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,18 @@ public class ListAdapter extends BaseAdapter{
     private List<String> m_item;
     private List<String> m_path;
     public ArrayList<Integer> m_selectedItem;
-    FragmentFileEx m_context;
+    Fragment m_context;
     Boolean m_isRoot;
 
     public ListAdapter(FragmentFileEx p_context, List<String> p_item, List<String> p_path, Boolean p_isRoot) {
+        m_context = p_context;
+        m_item = p_item;
+        m_path = p_path;
+        m_selectedItem = new ArrayList<>();
+        m_isRoot = p_isRoot;
+    }
+
+    public ListAdapter(RecentFilesFragment p_context, List<String> p_item, List<String> p_path, Boolean p_isRoot) {
         m_context = p_context;
         m_item = p_item;
         m_path = p_path;

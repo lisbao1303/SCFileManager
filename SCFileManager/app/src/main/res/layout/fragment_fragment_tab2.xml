@@ -28,6 +28,7 @@
                     android:text="Acessados Recentemente" />
             </android.support.v7.widget.CardView>
 
+
             <FrameLayout
                 android:id="@+id/file_recent_area"
                 android:layout_width="match_parent"
@@ -35,13 +36,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Em desenvolvimento"
-                    android:background="@android:color/darker_gray"/>
+
             </FrameLayout>
 
             <View
