@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 public class PdfReaderActivity extends AppCompatActivity {
         private String arqpath;
@@ -18,7 +19,7 @@ public class PdfReaderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_reader);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_2);
         setSupportActionBar(toolbar);
 
         db=new RecentFilesDB(this);

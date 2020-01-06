@@ -201,7 +201,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
             save(myArquive);
             Log.i("salvou",myArquive.getNome());
         }
-        Log.i("achou",myArquive.getNome());
+        Log.i("achou",myArquive.getPath());
         refreshDataBase(myArquive.getPath());
     }
 
