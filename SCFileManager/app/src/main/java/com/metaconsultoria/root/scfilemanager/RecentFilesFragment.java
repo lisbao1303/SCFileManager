@@ -38,38 +38,43 @@ public class RecentFilesFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void getListFromDB(){
-        ListAdapter m_listAdapter = null;
         myArquiveList=((MainNavigationDrawerActivity)getActivity()).db.mySelect(5);
-        ArrayList m_item = new ArrayList<String>();
-        ArrayList m_filesPath = new ArrayList<String>();
-        for(MyArquive now_arquive: myArquiveList){
+        if(myArquiveList==null){ }
+        else{
+            ListAdapter m_listAdapter = null;
+            ArrayList m_item = new ArrayList<String>();
+            ArrayList m_filesPath = new ArrayList<String>();
+            final ArrayList m_filesUri = new ArrayList<Uri>();
+
+            for(MyArquive now_arquive: myArquiveList){
             m_item.add(now_arquive.getNome());
-            m_filesPath.add(now_arquive.getPath());
-        }
-        m_listAdapter =new ListAdapter(this,m_item,m_filesPath,false);
-        m_ArqList.setAdapter(m_listAdapter);
-        final ArrayList teste = m_filesPath;
-        m_ArqList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                File m_isFile = new File(teste.get(position).toString());
-                int m_ultimoponto = m_isFile.getAbsolutePath().lastIndexOf(".");
-                String m_caminhofile = m_isFile.getAbsolutePath();
-                Uri file = Uri.parse(teste.get(position).toString());
-
-                    if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")) {
-                        Log.i("teste","teste");
-                        FragmentFileEx.FragmentListener mListener = (FragmentFileEx.FragmentListener) getActivity();
-                        MyArquive arq = new MyArquive(
-                                file.getPath().substring(file.getPath().lastIndexOf('/')+1,file.getPath().lastIndexOf('.')),
-                                file.toString()
-                        );
-                        mListener.setPdfActivity(arq);
-                    }
+            Uri file3= Uri.parse(now_arquive.getPath());
+            m_filesPath.add(file3.getPath());
+            m_filesUri.add(file3);
             }
-        });
+            m_listAdapter =new ListAdapter(this,m_item,m_filesPath,false);
+            m_ArqList.setAdapter(m_listAdapter);
+            final ArrayList teste = m_filesPath;
+            m_ArqList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    Uri file2 = (Uri)m_filesUri.get(position);
+
+                        if (file2.toString().substring(file2.toString().lastIndexOf('.')).equalsIgnoreCase(".pdf")) {
+
+                            Log.i("teste","teste");
+                            FragmentFileEx.FragmentListener mListener = (FragmentFileEx.FragmentListener) getActivity();
+                            MyArquive arq = new MyArquive(
+                                    file2.getPath().substring(file2.getPath().lastIndexOf('/')+1,file2.getPath().lastIndexOf('.')),
+                                    file2.toString()
+                            );
+                            mListener.setPdfActivity(arq);
+                        }
+                }
+            });
+        }
     }
 
 

@@ -77,12 +77,16 @@ public class FragmentMainTabs extends Fragment
         int i=tab.getPosition();
         if(i==0){MainNavigationDrawerActivity activity =(MainNavigationDrawerActivity) getActivity();
             activity.findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
-            activity.searchItem.setVisible(false);
+            if(activity.searchItem!=null){
+                activity.searchItem.setVisible(false);}
+            else{activity.setTabselected(i);}
         }
         else{
             MainNavigationDrawerActivity activity =(MainNavigationDrawerActivity) getActivity();
             activity.findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
-            activity.searchItem.setVisible(true);
+            if(activity.searchItem!=null){
+                activity.searchItem.setVisible(true);}
+            else{activity.setTabselected(i);}
         }
         mViewPager.setCurrentItem(i);
     }

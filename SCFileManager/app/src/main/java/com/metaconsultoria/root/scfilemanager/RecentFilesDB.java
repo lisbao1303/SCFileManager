@@ -188,7 +188,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                 buffer=buffer.substring(0,63);
             }
             updateRowsByPath("lastuse",buffer,iterador.getPath());
-            Log.i("Estado do arquivo",buffer);
+            Log.i("Estado do arquivo",String.valueOf(MyArquive.getComparableLastUseMRU(buffer)));
             updateRowsByPath("lastuseLRU",MyArquive.getComparableLastUseLRU(buffer),iterador.getPath());
             updateRowsByPath("lastuseMRU",MyArquive.getComparableLastUseMRU(buffer),iterador.getPath());
         }
@@ -196,12 +196,12 @@ public class RecentFilesDB extends SQLiteOpenHelper {
 
     public void myCommit(MyArquive myArquive){
         if(findByPath(myArquive.getPath())==null){
-            Log.i("tentou_salvar",myArquive.getNome());
+           // Log.i("tentou_salvar",myArquive.getNome());
 
             save(myArquive);
-            Log.i("salvou",myArquive.getNome());
+          //  Log.i("salvou",myArquive.getNome());
         }
-        Log.i("achou",myArquive.getPath());
+        //Log.i("achou",myArquive.getPath());
         refreshDataBase(myArquive.getPath());
     }
 
@@ -210,6 +210,8 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         try {
             Cursor c = db.query("recent_arquivos", null, null, null, null, null, "lastuseMRU", String.valueOf(number));
+            Log.i("teste","cursor deu certo");
+            if(c==null){return null;}
             if (c.getCount() > 0) {
                 List<MyArquive> fx_vetor = new ArrayList<MyArquive>();
                 if (c.moveToFirst()) {

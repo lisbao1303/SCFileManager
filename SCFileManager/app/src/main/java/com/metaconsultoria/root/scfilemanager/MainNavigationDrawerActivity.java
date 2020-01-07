@@ -21,20 +21,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.Serializable;
+
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener{
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener, Serializable{
 
     //private String matricula;
     private FragmentFileEx mainFragmentFileEx;
     private FragmentFileEx fragMenu;
-    public MenuItem searchItem;
+    public MenuItem searchItem ;
     private NavigationView navigationView;
     public RecentFilesDB db;
     private MyArquive fx;
     private SearchView searchView;
     private Toolbar toolbar;
     private FragmentMainTabs fragMain;
+    private int tabselected=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +62,18 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        db = new RecentFilesDB(this);
+    }
+
+    @Override
+    protected void onResume() {
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         fragMain=new FragmentMainTabs();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
-        db = new RecentFilesDB(this);
+        super.onResume();
+        fragMain.performClick(tabselected);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -83,7 +91,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        // ATENCAO: Os elementos do Navigation Drawer sao instaciados somente aqui n icluir eles no onCreate
+        // ATENCAO: Os elementos do Navigation Drawer sao instaciados somente aqui n incluir eles no onCreate
 
         getMenuInflater().inflate(R.menu.main_navigation_drawer, menu);
         getMenuInflater().inflate(R.menu.menu_search, menu);
@@ -92,6 +100,19 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Procurar...");
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("tab_selected",fragMain.getCurentTab());
+        super.onSaveInstanceState(outState);
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        int tab_select = savedInstanceState.getInt("tab_selected");
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -181,9 +202,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     }
 
-    private void abrirEditorDeArquivos(){
-        this.setTitle(R.string.arq_ed_title);
-    }
+
 
     //permissoes
 
@@ -219,5 +238,13 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     public void setMainFragmentFileEx(FragmentFileEx frag){
         this.mainFragmentFileEx=frag;
+    }
+
+    public void setTabselected(int tabselected) {
+        this.tabselected = tabselected;
+    }
+
+    public int getTabselected() {
+        return tabselected;
     }
 }
