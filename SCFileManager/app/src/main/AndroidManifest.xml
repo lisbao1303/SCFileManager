@@ -18,7 +18,9 @@
         <activity
             android:name=".PdfReaderActivity"
             android:label="@string/title_activity_pdf_reader"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".MainNavigationDrawerActivity"
             android:label="@string/title_activity_main_navigation_drawer"

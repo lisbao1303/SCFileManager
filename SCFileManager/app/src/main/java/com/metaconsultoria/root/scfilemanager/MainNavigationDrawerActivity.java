@@ -111,7 +111,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        int tab_select = savedInstanceState.getInt("tab_selected");
+        tabselected = savedInstanceState.getInt("tab_selected");
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -219,7 +219,11 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
     public void requestPermissoes() throws Exception {
         try {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA}, 0x3);
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA,
+            }, 0x3);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

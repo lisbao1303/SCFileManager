@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_open_with"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="@string/action_pdf_open_with"
+        android:icon="@drawable/ic_open_in_new_white_24dp"
         app:showAsAction="ifRoom"/>
 </menu>
