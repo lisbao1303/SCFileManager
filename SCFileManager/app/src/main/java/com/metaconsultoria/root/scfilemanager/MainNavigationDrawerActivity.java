@@ -252,3 +252,5 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         return tabselected;
     }
 }
+
+//TODO: sistema de pausa a aplicaçao ate receber a resposta do sistema de permissoes

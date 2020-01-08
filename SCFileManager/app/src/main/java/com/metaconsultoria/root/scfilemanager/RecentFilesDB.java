@@ -233,3 +233,5 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         }
     }
 }
+
+//TODO: sistema automatico de delecao de arquivos do database caso a referencia ao path seja nula

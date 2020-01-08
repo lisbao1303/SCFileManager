@@ -41,5 +41,5 @@
     <string name="bottom_nav_item_2">Comentarios</string>
     <string name="bottom_nav_item_3">Comentar</string>
     <string name="action_pdf_open_with">Abrir com outro aplicativo</string>
-    <string name="send_to">Abrir com outro aplicativo</string>
+    <string name="send_to">Abrir com:</string>
 </resources>

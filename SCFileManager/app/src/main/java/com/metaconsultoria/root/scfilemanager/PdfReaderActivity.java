@@ -59,30 +59,30 @@ public class PdfReaderActivity extends AppCompatActivity {
         Intent intent;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Uri ur = Uri.parse(arqpath);
-            File file=new File(Uri.parse(arqpath).getPath());
             File mfile = new File(getFilesDir().getPath());
             mfile.mkdir();
             File provider = new File(mfile.getPath(),"/storage");
             FileHandler.copyToProvider(ur.getPath(),provider.getPath());
             File shareFile=new File(provider.getPath()+"/"+arquivo.getNome()+".pdf");
 
-            Log.i("teste1",mfile.getPath());
-            Log.i("teste2",file.getPath());
-            Log.i("teste3",provider.getPath());
-            Log.i("teste4",shareFile.toString());
+
             Uri uri = FileProvider.getUriForFile(this, getPackageName()+".fileprovider", shareFile);
-            intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(uri,"application/pdf");
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Log.i("teste4",uri.toString());
-            intent =intent.createChooser(intent,"teste");
+
+            intent = new Intent(Intent.ACTION_VIEW)
+                .setDataAndType(uri,"application/pdf")
+                .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            intent =intent.createChooser(intent,getString(R.string.send_to));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.parse(arqpath), "application/pdf");
-            intent = Intent.createChooser(intent, "Open File");
+            intent = Intent.createChooser(intent, getString(R.string.send_to));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
     }
 }
+
+//TODO:sistema de Delecao de arquivos da pasta storage deixar um arquivo por vez
