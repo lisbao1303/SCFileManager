@@ -3,7 +3,7 @@
     <string name="login_name_text">N° de Matricula</string>
     <string name="login_password_text">Senha</string>
     <string name="ButtonLoginName">Entrar</string>
-    <string name="title_activity_main_navigation_drawer">Menu</string>
+    <string name="title_activity_main_navigation_drawer">SC File Manager</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>

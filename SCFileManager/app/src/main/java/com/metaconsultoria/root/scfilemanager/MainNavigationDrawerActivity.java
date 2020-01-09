@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,11 +20,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import java.io.Serializable;
 
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener, Serializable{
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     //private String matricula;
     private FragmentFileEx mainFragmentFileEx;
@@ -38,18 +36,19 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private Toolbar toolbar;
     private FragmentMainTabs fragMain;
     private int tabselected=0;
+    private boolean permissions=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         if(checkPermissoes()){
         }else{
             try {
                 requestPermissoes();
-            } catch (Exception e) {
+            } catch (Exception e){
                 e.printStackTrace();
             }
         }
+
 
         setContentView(R.layout.activity_main_navigation_drawer);
 
@@ -63,16 +62,19 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         toggle.syncState();
 
         db = new RecentFilesDB(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onResume() {
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        if(checkPermissoes()){
         fragMain=new FragmentMainTabs();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
         super.onResume();
-        fragMain.performClick(tabselected);
+        fragMain.performClick(tabselected);}
+        else{super.onResume();}
     }
 
     @Override
@@ -229,6 +231,23 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             throw e;
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 0x3: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    this.recreate();
+                } else {
+                    this.finish();
+                }
+            }
+
+        }
+    }
+
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {

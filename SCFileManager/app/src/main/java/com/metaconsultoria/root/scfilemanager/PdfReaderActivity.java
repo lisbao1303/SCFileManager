@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,10 +17,12 @@ import android.widget.Toast;
 
 import java.io.File;
 
-public class PdfReaderActivity extends AppCompatActivity {
+public class PdfReaderActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
         private String arqpath;
         private MyArquive arquivo;
         private RecentFilesDB db;
+        private BottomNavigationView navigationView;
+        private boolean isStared;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +32,16 @@ public class PdfReaderActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar_2);
         setSupportActionBar(toolbar);
 
+        navigationView =(BottomNavigationView) findViewById(R.id.pdf_bottom_nav);
+        navigationView.setOnNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
+        navigationView.getMenu().getItem(2).setChecked(true);
+        navigationView.getMenu().getItem(1).setChecked(true);
+
         db=new RecentFilesDB(this);
         arqpath = getIntent().getExtras().getString("path");
         arquivo=db.findByPath(arqpath);
+        setStared(arquivo.getStared());
 
         Bundle arguments= new Bundle();
         arguments.putString("caminho",arquivo.getPath());
@@ -43,6 +55,8 @@ public class PdfReaderActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_pdf_toobar,menu);
+        //navigationView.setNavigationItemSelectedListener(this);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -81,6 +95,35 @@ public class PdfReaderActivity extends AppCompatActivity {
             intent = Intent.createChooser(intent, getString(R.string.send_to));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        }
+    }
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int id=menuItem.getItemId();
+        if(id==R.id.bottom_nav_star){
+            if(arquivo.getStared()){
+                    arquivo.setStared(false);
+                    db.attStared(arquivo.getPath(),false);
+                    setStared(false);
+                }
+                else{
+                    arquivo.setStared(true);
+                    db.attStared(arquivo.getPath(),true);
+                    setStared(true);
+                }
+        }
+        if(id==R.id.bottom_nav_coment){Toast.makeText(this,"coment",Toast.LENGTH_SHORT).show();}
+        if(id==R.id.bottom_nav_new_coment){Toast.makeText(this,"+coment",Toast.LENGTH_SHORT).show();}
+        return false;
+    }
+
+    private void setStared(boolean state){
+        if(state) {
+            navigationView.getMenu().getItem(0).setIcon(R.drawable.ic_star_black_24dp);
+        }else{
+            navigationView.getMenu().getItem(0).setIcon(R.drawable.ic_star_border_black_24dp);
         }
     }
 }

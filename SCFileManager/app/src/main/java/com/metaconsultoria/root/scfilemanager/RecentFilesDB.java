@@ -26,7 +26,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-                "create table if not exists recent_arquivos (id integer primary key autoincrement,nome text,path text,lastuse text,lastuseLRU integer default 0,lastuseMRU integer default 0);"
+                "create table if not exists recent_arquivos (id integer primary key autoincrement,  nome text,path text,lastuse text,lastuseLRU integer default 0,lastuseMRU integer default 0 , isStared bit default 0);"
         );
     }
 
@@ -79,6 +79,8 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                         fx.setNome(c.getString(c.getColumnIndex("nome")));
                         fx.setPath(c.getString(c.getColumnIndex("path")));
                         fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
+                        if(c.getInt(c.getColumnIndex("isStared"))==0){fx.setStared(false);}
+                        if(c.getInt(c.getColumnIndex("isStared"))==1){fx.setStared(true);}
                         fx_vetor.add(fx);
                     } while (c.moveToNext());
                 }
@@ -102,6 +104,8 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                 fx.setNome(c.getString(c.getColumnIndex("nome")));
                 fx.setPath(c.getString(c.getColumnIndex("path")));
                 fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
+                if(c.getInt(c.getColumnIndex("isStared"))==0){fx.setStared(false);}
+                if(c.getInt(c.getColumnIndex("isStared"))==1){fx.setStared(true);}
                 return fx;
             } else {
                 return null;
@@ -220,6 +224,9 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                         fx.setNome(c.getString(c.getColumnIndex("nome")));
                         fx.setPath(c.getString(c.getColumnIndex("path")));
                         fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
+                        if(c.getInt(c.getColumnIndex("isStared"))==0){fx.setStared(false);}
+                        if(c.getInt(c.getColumnIndex("isStared"))==1){fx.setStared(true);}
+                        Log.i("testezinho de lei",String.valueOf(c.getInt(c.getColumnIndex("isStared"))));
                         fx_vetor.add(fx);
                     } while (c.moveToNext());
                 }
@@ -232,6 +239,12 @@ public class RecentFilesDB extends SQLiteOpenHelper {
             db.close();
         }
     }
+
+    public void attStared(String path,boolean isStar){
+        if(isStar){updateRowsByPath("isStared",1,path);}
+        else{updateRowsByPath("isStared",0,path);}
+    }
+
 }
 
 //TODO: sistema automatico de delecao de arquivos do database caso a referencia ao path seja nula
