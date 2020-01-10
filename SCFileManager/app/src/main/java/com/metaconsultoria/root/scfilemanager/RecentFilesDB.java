@@ -26,7 +26,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-                "create table if not exists recent_arquivos (id integer primary key autoincrement,  nome text,path text,lastuse text,lastuseLRU integer default 0,lastuseMRU integer default 0 , isStared bit default 0);"
+                "create table if not exists recent_arquivos (id integer primary key autoincrement,  nome text,path text,lastuse text,lastuseLRU integer default 0,lastuseMRU integer default 0 , isStared bit default 0, comentDB text);"
         );
     }
 
@@ -47,6 +47,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
             values.put("nome", myArquive.getNome());
             values.put("path", myArquive.getPath());
             values.put("lastuse", myArquive.getLastUse());
+            if(myArquive.getComentDB()!=null){values.put("comentDB",myArquive.getComentDB());}
             if (id == 0) {
                 SQLiteDatabase db = getWritableDatabase();
                 try {
@@ -75,12 +76,13 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                 List<MyArquive> fx_vetor = new ArrayList<MyArquive>();
                 if (c.moveToFirst()) {
                     do {
-                        MyArquive fx = new MyArquive();
+                        MyArquive fx = new MyArquive(c.getInt(c.getColumnIndex("id")));
                         fx.setNome(c.getString(c.getColumnIndex("nome")));
                         fx.setPath(c.getString(c.getColumnIndex("path")));
                         fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
                         if(c.getInt(c.getColumnIndex("isStared"))==0){fx.setStared(false);}
                         if(c.getInt(c.getColumnIndex("isStared"))==1){fx.setStared(true);}
+                        fx.setComentDB(c.getString(c.getColumnIndex("comentDB")));
                         fx_vetor.add(fx);
                     } while (c.moveToNext());
                 }
@@ -99,13 +101,14 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         try {
             Cursor c = db.query("recent_arquivos", null, "path='" + path + "'", null, null, null, null);
             if (c.getCount() > 0) {
-                MyArquive fx = new MyArquive();
                 c.moveToFirst();
+                MyArquive fx = new MyArquive(c.getInt(c.getColumnIndex("id")));
                 fx.setNome(c.getString(c.getColumnIndex("nome")));
                 fx.setPath(c.getString(c.getColumnIndex("path")));
                 fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
                 if(c.getInt(c.getColumnIndex("isStared"))==0){fx.setStared(false);}
                 if(c.getInt(c.getColumnIndex("isStared"))==1){fx.setStared(true);}
+                fx.setComentDB(c.getString(c.getColumnIndex("comentDB")));
                 return fx;
             } else {
                 return null;
@@ -192,7 +195,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                 buffer=buffer.substring(0,63);
             }
             updateRowsByPath("lastuse",buffer,iterador.getPath());
-            Log.i("Estado do arquivo",String.valueOf(MyArquive.getComparableLastUseMRU(buffer)));
+            Log.wtf("Estado do arquivo",String.valueOf(MyArquive.getComparableLastUseMRU(buffer)));
             updateRowsByPath("lastuseLRU",MyArquive.getComparableLastUseLRU(buffer),iterador.getPath());
             updateRowsByPath("lastuseMRU",MyArquive.getComparableLastUseMRU(buffer),iterador.getPath());
         }
@@ -214,19 +217,21 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         try {
             Cursor c = db.query("recent_arquivos", null, null, null, null, null, "lastuseMRU", String.valueOf(number));
-            Log.i("teste","cursor deu certo");
             if(c==null){return null;}
             if (c.getCount() > 0) {
                 List<MyArquive> fx_vetor = new ArrayList<MyArquive>();
                 if (c.moveToFirst()) {
                     do {
-                        MyArquive fx = new MyArquive();
+                        MyArquive fx = new MyArquive(c.getInt(c.getColumnIndex("id")));
                         fx.setNome(c.getString(c.getColumnIndex("nome")));
                         fx.setPath(c.getString(c.getColumnIndex("path")));
                         fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
                         if(c.getInt(c.getColumnIndex("isStared"))==0){fx.setStared(false);}
                         if(c.getInt(c.getColumnIndex("isStared"))==1){fx.setStared(true);}
-                        Log.i("testezinho de lei",String.valueOf(c.getInt(c.getColumnIndex("isStared"))));
+                        fx.setComentDB(c.getString(c.getColumnIndex("comentDB")));
+                       // if(c.getString(c.getColumnIndex("comentDB"))==null){Log.wtf("teste","is null");}
+                       // else{Log.i("tetezinho de Lai",c.getString(c.getColumnIndex("comentDB")));}
+                        Log.wtf("arquivoID",String.valueOf(c.getInt(c.getColumnIndex("id"))));
                         fx_vetor.add(fx);
                     } while (c.moveToNext());
                 }
@@ -243,6 +248,12 @@ public class RecentFilesDB extends SQLiteOpenHelper {
     public void attStared(String path,boolean isStar){
         if(isStar){updateRowsByPath("isStared",1,path);}
         else{updateRowsByPath("isStared",0,path);}
+    }
+
+    public void attComentDB(String path,String comentDB){
+        if(comentDB!=null){
+            updateRowsByPath("comentDB",comentDB,path);
+        }
     }
 
 }

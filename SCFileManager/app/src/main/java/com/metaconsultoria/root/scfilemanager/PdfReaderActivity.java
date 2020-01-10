@@ -8,9 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -22,7 +22,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         private MyArquive arquivo;
         private RecentFilesDB db;
         private BottomNavigationView navigationView;
-        private boolean isStared;
+        private NavigationView drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +32,8 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         Toolbar toolbar = findViewById(R.id.toolbar_2);
         setSupportActionBar(toolbar);
 
+        drawer =  findViewById(R.id.bottom_view);
+        //drawer.setVisibility(BottomNavigationView.INVISIBLE);
         navigationView =(BottomNavigationView) findViewById(R.id.pdf_bottom_nav);
         navigationView.setOnNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
@@ -48,7 +50,6 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         FragmentPDF fragment= new FragmentPDF();
         fragment.setArguments(arguments);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.pdf_screen_area,fragment).commit();
-
         this.setTitle(arquivo.getNome()+".pdf");
     }
 
@@ -114,7 +115,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
                     setStared(true);
                 }
         }
-        if(id==R.id.bottom_nav_coment){Toast.makeText(this,"coment",Toast.LENGTH_SHORT).show();}
+        if(id==R.id.bottom_nav_coment){drawer.setVisibility(BottomNavigationView.VISIBLE);}
         if(id==R.id.bottom_nav_new_coment){Toast.makeText(this,"+coment",Toast.LENGTH_SHORT).show();}
         return false;
     }

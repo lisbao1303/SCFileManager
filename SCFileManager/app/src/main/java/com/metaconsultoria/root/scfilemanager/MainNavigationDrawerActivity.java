@@ -44,6 +44,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         }else{
             try {
                 requestPermissoes();
+                while(checkPermissoes());
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -106,7 +107,12 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("tab_selected",fragMain.getCurentTab());
+        if(fragMain!=null) {
+            outState.putInt("tab_selected", fragMain.getCurentTab());
+        }else{
+            outState.putInt("tab_selected",0);
+        }
+
         super.onSaveInstanceState(outState);
     }
 

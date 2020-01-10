@@ -8,16 +8,22 @@ public class MyArquive implements Comparable<MyArquive> {
       private  String path;
       private  String lastuse;
       private  boolean isStared;
+      private  String comentDB;
 
       MyArquive(){
-            id=0;
-            lastuse="0";
+            this.id=0;
+            this.lastuse="0";
+      }
+
+      MyArquive(int Id){
+          this.id=id;
+          this.lastuse="0";
       }
 
       MyArquive(String Nome, String path){
           this.nome=Nome;
           this.path=path;
-          lastuse="0";
+          this.lastuse="0";
           id=0;
       }
 
@@ -37,6 +43,15 @@ public class MyArquive implements Comparable<MyArquive> {
         id=0;
     }
 
+    MyArquive(String nome, String path, String lastuse, boolean isStared, String comentDB){
+        this.nome=nome;
+        this.path=path;
+        this.lastuse=lastuse;
+        this.isStared=isStared;
+        this.comentDB=comentDB;
+        id=0;
+    }
+
 
       public void setNome(String nome){
           this.nome=nome;
@@ -51,8 +66,10 @@ public class MyArquive implements Comparable<MyArquive> {
     }
 
       public void setStared(boolean stared) {
-        isStared = stared;
+        this.isStared = stared;
     }
+
+      public void setComentDB(String comentDB){this.comentDB = comentDB;}
 
       public String getNome(){
           return this.nome;
@@ -67,6 +84,8 @@ public class MyArquive implements Comparable<MyArquive> {
     }
 
       public boolean getStared(){return isStared;}
+
+      public String getComentDB(){return comentDB;}
 
     public static int getComparableLastUseLRU(String lastuse) throws IllegalArgumentException{
           char[] array = lastuse.toCharArray();
