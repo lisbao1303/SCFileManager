@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.BottomNavigationView
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_bottom_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".PdfReaderActivity">
 
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/bottom_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_2"
@@ -25,31 +28,38 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_pdf_reader" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bottom_bar_layout"
+        >
+    <include
+        android:id="@+id/include2"
+        layout="@layout/content_pdf_reader"
+        />
+    </FrameLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/bottom_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         android:background="#00000000"
-        android:visibility="invisible"
-        >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <include layout="@layout/header_bottom_drawer_pdf_layout" />
 
-            <include layout="@layout/fragment_coment_screen_area"/>
+            <include layout="@layout/fragment_coment_screen_area" />
 
-    </LinearLayout>
+        </LinearLayout>
 
 
     </android.support.design.widget.NavigationView>
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</android.support.design.widget.BottomNavigationView>
+</android.support.constraint.ConstraintLayout>

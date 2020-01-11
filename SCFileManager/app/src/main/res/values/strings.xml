@@ -32,14 +32,12 @@
     <string name="tab_1_title">Leitor</string>
     <string name="tab_2_title">Gerenciador</string>
     <string name="help_scanner">Aponte o aparelho para o codigo desejado</string>
-
-
-    <string name="hello_blank_fragment_1">Hello blank fragment 1</string>
-    <string name="hello_blank_fragment_2">Hello blank fragment 2</string>
     <string name="title_activity_pdf_reader">Leitor PDF</string>
     <string name="bottom_nav_item_1">Favoritos</string>
     <string name="bottom_nav_item_2">Comentarios</string>
     <string name="bottom_nav_item_3">Comentar</string>
     <string name="action_pdf_open_with">Abrir com outro aplicativo</string>
     <string name="send_to">Abrir com:</string>
+    <string name="comentarios">Comentarios:</string>
+
 </resources>
