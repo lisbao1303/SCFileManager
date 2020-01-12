@@ -58,6 +58,8 @@
 
             <include layout="@layout/fragment_coment_screen_area" />
 
+
+
         </LinearLayout>
 
 
