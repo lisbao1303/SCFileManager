@@ -57,9 +57,6 @@
             <include layout="@layout/header_bottom_drawer_pdf_layout" />
 
 
-
-
-
         </LinearLayout>
 
 
