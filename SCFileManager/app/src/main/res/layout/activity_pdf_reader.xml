@@ -29,15 +29,16 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
+        android:id="@+id/pdf_reader_main_layout"
         android:layout_width="match_parent"
         android:layout_height="0px"
+        android:foreground="#00000000"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bottom_bar_layout"
-        >
-    <include
-        android:id="@+id/include2"
-        layout="@layout/content_pdf_reader"
-        />
+        app:layout_constraintTop_toBottomOf="@id/bottom_bar_layout">
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/content_pdf_reader" />
     </FrameLayout>
 
     <android.support.design.widget.NavigationView

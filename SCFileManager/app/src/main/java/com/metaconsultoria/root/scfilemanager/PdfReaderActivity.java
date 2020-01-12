@@ -1,28 +1,25 @@
 package com.metaconsultoria.root.scfilemanager;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.FileProvider;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.Toast;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import java.io.File;
 
@@ -32,6 +29,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         private RecentFilesDB db;
         private BottomNavigationView navigationView;
         private NavigationView drawer;
+        private FrameLayout fundo;
         private int shortAnimationDuration;
         private boolean isDrawerOpen =false;
 
@@ -47,7 +45,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
 
 
         drawer =  findViewById(R.id.bottom_view);
-        //drawer.setVisibility(BottomNavigationView.INVISIBLE);
+        fundo =(FrameLayout)findViewById(R.id.pdf_reader_main_layout);
 
         navigationView =(BottomNavigationView) findViewById(R.id.pdf_bottom_nav);
         navigationView.setOnNavigationItemSelectedListener(this);
@@ -93,13 +91,14 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
     @Override
     public void onBackPressed() {
         if (isDrawerOpen) {
-            closedrawer(drawer);
+            closedrawer(drawer,fundo);
             isDrawerOpen=false;
         } else{
             super.onBackPressed();
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id=menuItem.getItemId();
@@ -116,11 +115,13 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
                 }
         }
         if(id==R.id.bottom_nav_coment){
-            showdrawer(drawer);
+            ((ImageView)findViewById(R.id.imageView)).setImageDrawable(getDrawable(R.drawable.ic_comment_black_24dp));
+            showdrawer(drawer,fundo);
             isDrawerOpen=true;
         }
         if(id==R.id.bottom_nav_new_coment){
-            showdrawer(drawer);
+            ((ImageView)findViewById(R.id.imageView)).setImageDrawable(getDrawable(R.drawable.ic_add_circle_outline_black_24dp));
+            showdrawer(drawer,fundo);
             isDrawerOpen=true;
         }
         return false;
@@ -164,20 +165,20 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         }
     }
 
-
-    private void showdrawer(final View drawer){
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void showdrawer(final View drawer, final View fundo){
+        final ColorDrawable fadeColor=(ColorDrawable) getDrawable(R.color.black);
+        fadeColor.setAlpha(0);
         drawer.setAlpha(0f);
-        drawer.setVisibility(View.VISIBLE);
         ValueAnimator animator= ValueAnimator.ofFloat(0f,drawer.getMeasuredHeight());
         animator.setDuration(this.shortAnimationDuration);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator updatedAnimation) {
-                // You can use the animated value in a property that uses the
-                // same type as the animation. In this case, you can use the
-                // float value in the translationX property.
                 float animatedValue = (float)updatedAnimation.getAnimatedValue();
                 drawer.setAlpha((animatedValue/drawer.getMeasuredHeight())*100);
+                fadeColor.setAlpha((int)(animatedValue/drawer.getMeasuredHeight())*76);  //30% de 255 =76,5 cores sao definidas em hexa
+                fundo.setForeground(fadeColor);
                 Log.wtf("animando", "...");
                 drawer.setTranslationY(-animatedValue);
             }
@@ -185,19 +186,20 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         animator.start();
     }
 
-    private void closedrawer(final View drawer){
+    private void closedrawer(final View drawer,final View fundo){
+        final ColorDrawable fadeColor=(ColorDrawable) getDrawable(R.color.black);
+        fadeColor.setAlpha(0);
         drawer.setAlpha(1f);
-        drawer.setVisibility(View.VISIBLE);
         ValueAnimator animator= ValueAnimator.ofFloat(0f,drawer.getMeasuredHeight());
         animator.setDuration(this.shortAnimationDuration);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onAnimationUpdate(ValueAnimator updatedAnimation) {
-                // You can use the animated value in a property that uses the
-                // same type as the animation. In this case, you can use the
-                // float value in the translationX property.
                 float animatedValue = (float)updatedAnimation.getAnimatedValue();
                 drawer.setAlpha(100-(animatedValue/drawer.getMeasuredHeight())*100);
+                fadeColor.setAlpha(76-(int)(animatedValue/drawer.getMeasuredHeight())*76);  //30 % 255=76,5 cores sao definidas em hexa
+                fundo.setForeground(fadeColor);
                 Log.wtf("animando", "...");
                 drawer.setTranslationY(-drawer.getMeasuredHeight()+animatedValue);
             }
@@ -207,4 +209,5 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
 
 }
 
-//TODO:sistema de Delecao de arquivos da pasta storage deixar um arquivo por vez
+//TODO:sistema de Delecao de arquivos da pasta storage, deixar um arquivo por vez
+//TODO:escurecer tela em segundo plano e fazer cliques na parte escura esconder o drawer
