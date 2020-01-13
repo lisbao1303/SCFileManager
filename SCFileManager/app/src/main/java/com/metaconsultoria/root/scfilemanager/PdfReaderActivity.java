@@ -2,7 +2,6 @@ package com.metaconsultoria.root.scfilemanager;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -11,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +43,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        findViewById(R.id.nav_bottom_replace_location).getLayoutParams().height=(findViewById(R.id.pdf_reader_main_layout).getLayoutParams().height-findViewById(R.id.header_bottom_drawer_pdf_id).getLayoutParams().height)/2;
 
         drawer =  findViewById(R.id.bottom_view);
         fundo =(FrameLayout)findViewById(R.id.pdf_reader_main_layout);
@@ -72,6 +73,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_pdf_toobar,menu);
         //navigationView.setNavigationItemSelectedListener(this);
+        //findViewById(R.id.nav_bottom_replace_location).getLayoutParams().height=(findViewById(R.id.pdf_reader_main_layout).getLayoutParams().height-findViewById(R.id.header_bottom_drawer_pdf_id).getLayoutParams().height)/2;
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -116,13 +118,18 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         }
         if(id==R.id.bottom_nav_coment){
             ((ImageView)findViewById(R.id.imageView)).setImageDrawable(getDrawable(R.drawable.ic_comment_black_24dp));
+            ShowComentsFragment comFrag=new ShowComentsFragment();
+            this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
             showdrawer(drawer,fundo);
             isDrawerOpen=true;
         }
         if(id==R.id.bottom_nav_new_coment){
             ((ImageView)findViewById(R.id.imageView)).setImageDrawable(getDrawable(R.drawable.ic_add_circle_outline_black_24dp));
+            NewComentFragment comFrag=new NewComentFragment();
+            this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
             showdrawer(drawer,fundo);
             isDrawerOpen=true;
+            //Log.wtf("mano:", String.valueOf(findViewById(R.id.coment_new_screen).getMeasuredHeight()));
         }
         return false;
     }
@@ -166,21 +173,21 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void showdrawer(final View drawer, final View fundo){
+    private void showdrawer(final View drawer, final View fundo/*, Fragment frag*/){
         final ColorDrawable fadeColor=(ColorDrawable) getDrawable(R.color.black);
         fadeColor.setAlpha(0);
         drawer.setAlpha(0f);
-        ValueAnimator animator= ValueAnimator.ofFloat(0f,drawer.getMeasuredHeight());
+        ValueAnimator animator= ValueAnimator.ofFloat(0f,100);
         animator.setDuration(this.shortAnimationDuration);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator updatedAnimation) {
                 float animatedValue = (float)updatedAnimation.getAnimatedValue();
-                drawer.setAlpha((animatedValue/drawer.getMeasuredHeight())*100);
-                fadeColor.setAlpha((int)(animatedValue/drawer.getMeasuredHeight())*76);  //30% de 255 =76,5 cores sao definidas em hexa
+                drawer.setAlpha(animatedValue);
+                fadeColor.setAlpha((int)(animatedValue/100)*76);  //30% de 255 =76,5 cores sao definidas em hexa
                 fundo.setForeground(fadeColor);
                 Log.wtf("animando", "...");
-                drawer.setTranslationY(-animatedValue);
+                drawer.setTranslationY(-(animatedValue/100)*drawer.getMeasuredHeight());
             }
         });
         animator.start();
@@ -190,18 +197,18 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         final ColorDrawable fadeColor=(ColorDrawable) getDrawable(R.color.black);
         fadeColor.setAlpha(0);
         drawer.setAlpha(1f);
-        ValueAnimator animator= ValueAnimator.ofFloat(0f,drawer.getMeasuredHeight());
+        ValueAnimator animator= ValueAnimator.ofFloat(0f,100f);
         animator.setDuration(this.shortAnimationDuration);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onAnimationUpdate(ValueAnimator updatedAnimation) {
                 float animatedValue = (float)updatedAnimation.getAnimatedValue();
-                drawer.setAlpha(100-(animatedValue/drawer.getMeasuredHeight())*100);
-                fadeColor.setAlpha(76-(int)(animatedValue/drawer.getMeasuredHeight())*76);  //30 % 255=76,5 cores sao definidas em hexa
+                drawer.setAlpha(100-animatedValue);
+                fadeColor.setAlpha(76-(int)(animatedValue/100)*76);  //30 % 255=76,5 cores sao definidas em hexa
                 fundo.setForeground(fadeColor);
                 Log.wtf("animando", "...");
-                drawer.setTranslationY(-drawer.getMeasuredHeight()+animatedValue);
+                drawer.setTranslationY(-drawer.getMeasuredHeight()+(animatedValue/100)*drawer.getMeasuredHeight());
             }
         });
         animator.start();

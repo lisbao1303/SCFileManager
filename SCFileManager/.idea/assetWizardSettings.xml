@@ -65,7 +65,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/root/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/toggle/ic_star_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/root/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_insert_comment_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -75,7 +75,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_star_black_24dp" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_insert_comment_white_24dp" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="$PROJECT_DIR$/../../ArteAppSouza/souza-cruz.svg" />
                           </map>

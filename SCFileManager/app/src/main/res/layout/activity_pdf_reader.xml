@@ -54,7 +54,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@android:dimen/app_icon_size" />
             <include layout="@layout/header_bottom_drawer_pdf_layout" />
+
+            <FrameLayout
+                android:id="@+id/nav_bottom_replace_location"
+                android:layout_width="match_parent"
+                android:layout_height="500dp" />
+
 
 
         </LinearLayout>
