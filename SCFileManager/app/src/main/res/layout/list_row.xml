@@ -7,10 +7,11 @@
 
     <ImageView
         android:id="@+id/lr_ivFileIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentTop="true"
-        android:src="@drawable/ic_paste"
+        android:paddingStart="20dp"
+        android:src="@mipmap/file_folder_ic"
         android:clickable="false"
         android:focusable="false" />
 
@@ -20,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/lr_ivFileIcon"
+        android:paddingTop="20dp"
         android:text="TextView"
         android:clickable="false"
         android:focusable="false" />

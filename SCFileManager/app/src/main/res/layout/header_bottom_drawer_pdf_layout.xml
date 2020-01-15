@@ -20,7 +20,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:contentDescription="@string/nav_header_desc"
-        app:srcCompat="@drawable/ic_comment_black_24dp" />
+        app:srcCompat="@drawable/ic_comment_black_24dp"/>
 
 
 </LinearLayout>

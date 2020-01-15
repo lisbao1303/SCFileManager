@@ -81,12 +81,12 @@ public class ListAdapter extends BaseAdapter{
         int m_lastIndex = m_file.getAbsolutePath().lastIndexOf(".");
         String m_filepath = m_file.getAbsolutePath();
         if (m_file.isDirectory())
-            return R.drawable.ic_paste;
+            return R.mipmap.file_folder_ic;
         else {
             if (m_filepath.substring(m_lastIndex).equalsIgnoreCase(".pdf")) {
-                return R.drawable.ic_pdf;
+                return R.mipmap.file_pdf_ic;
             } else {
-                return R.drawable.ic_file;
+                return R.mipmap.file_ic;
             }
         }
     }

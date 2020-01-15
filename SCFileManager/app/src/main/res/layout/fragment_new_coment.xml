@@ -21,17 +21,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:text="Comentar:"
+            android:text="@string/nav_bottom_comentar"
             android:textSize="20sp"
-            android:textColor="@android:color/black"/>
+            android:textColor="@color/colorPrimary"/>
     </FrameLayout>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/editText_name_new_coment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="Nome:"
+        android:hint="@string/new_coment_name_hint"
         />
 
     <android.support.design.widget.TextInputLayout
@@ -43,17 +43,21 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Comentario ..." />
+            android:hint="@string/new_coment_coment_hint"
+            android:id="@+id/editText_coment_new_coment"
+            />
     </android.support.design.widget.TextInputLayout>
 
 
-    <ImageButton
+    <Button
         android:id="@+id/imageButton"
-        style="@style/Widget.AppCompat.ImageButton"
-        android:layout_width="100dp"
+
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:backgroundTint="@color/colorPrimary"
-        android:src="@drawable/ic_insert_comment_white_24dp" />
+        android:backgroundTint="@color/amarelo"
+        android:text="Salvar"/>
 
+
+    <!--TODO: Trocar as Strings pro arquivo de traducoes-->
 </LinearLayout>

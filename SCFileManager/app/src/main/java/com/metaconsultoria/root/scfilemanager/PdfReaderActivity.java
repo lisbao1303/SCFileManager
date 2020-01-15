@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -25,8 +26,8 @@ import java.io.File;
 
 public class PdfReaderActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
         private String arqpath;
-        private MyArquive arquivo;
-        private RecentFilesDB db;
+        public MyArquive arquivo;
+        public RecentFilesDB db;
         private BottomNavigationView navigationView;
         private NavigationView drawer;
         private FrameLayout fundo;
@@ -59,6 +60,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         db=new RecentFilesDB(this);
         arqpath = getIntent().getExtras().getString("path");
         arquivo=db.findByPath(arqpath);
+        Log.wtf("arquivoID",String.valueOf(arquivo.id));
         setStared(arquivo.getStared());
 
         Bundle arguments= new Bundle();
@@ -126,9 +128,12 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         if(id==R.id.bottom_nav_new_coment){
             ((ImageView)findViewById(R.id.imageView)).setImageDrawable(getDrawable(R.drawable.ic_add_circle_outline_black_24dp));
             NewComentFragment comFrag=new NewComentFragment();
+            comFrag.setDb(db);
+            comFrag.setArq(arquivo);
             this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
             showdrawer(drawer,fundo);
             isDrawerOpen=true;
+
             //Log.wtf("mano:", String.valueOf(findViewById(R.id.coment_new_screen).getMeasuredHeight()));
         }
         return false;
@@ -186,7 +191,6 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
                 drawer.setAlpha(animatedValue);
                 fadeColor.setAlpha((int)(animatedValue/100)*76);  //30% de 255 =76,5 cores sao definidas em hexa
                 fundo.setForeground(fadeColor);
-                Log.wtf("animando", "...");
                 drawer.setTranslationY(-(animatedValue/100)*drawer.getMeasuredHeight());
             }
         });
@@ -207,7 +211,6 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
                 drawer.setAlpha(100-animatedValue);
                 fadeColor.setAlpha(76-(int)(animatedValue/100)*76);  //30 % 255=76,5 cores sao definidas em hexa
                 fundo.setForeground(fadeColor);
-                Log.wtf("animando", "...");
                 drawer.setTranslationY(-drawer.getMeasuredHeight()+(animatedValue/100)*drawer.getMeasuredHeight());
             }
         });
@@ -217,4 +220,5 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
 }
 
 //TODO:sistema de Delecao de arquivos da pasta storage, deixar um arquivo por vez
+
 //TODO:escurecer tela em segundo plano e fazer cliques na parte escura esconder o drawer

@@ -39,6 +39,16 @@
     <string name="action_pdf_open_with">Abrir com outro aplicativo</string>
     <string name="send_to">Abrir com:</string>
     <string name="comentarios">Comentarios:</string>
+    <string name="erro_coment_1">Campo de Nome Obrigatorio</string>
+    <string name="erro_coment_2">Campo de Comentario Vazio</string>
+    <string name="coment_acepted">Comentario Salvo</string>
+    <string name="nav_bottom_comentarios">Comentarios:</string>
+    <string name="nav_bottom_comentar">Comentar:</string>
+    <string name="new_coment_name_hint">Nome:</string>
+    <string name="new_coment_coment_hint">Comentario …</string>
+    <string name="favoritos">Favoritos</string>
+    <string name="configuracoes">Configuraçoes</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

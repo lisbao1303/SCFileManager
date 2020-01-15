@@ -13,7 +13,7 @@
         android:id="@+id/tabs_locate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F91B3FCE"
+        android:background="@color/colorTabs"
         app:tabIndicatorColor="#FFFFFF"
         app:tabSelectedTextColor="#FFFFFF"
         app:tabTextColor="#FFFFFF">

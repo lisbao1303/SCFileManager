@@ -2,29 +2,35 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    tools:showIn="navigation_view"
+    >
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:enabled="true"
+         >
         <item
             android:id="@+id/nav_arq_window"
             android:icon="@drawable/ic_folder_open_black_24dp"
-            android:title="@string/arq_window" />
-        <!--
-        <item
-            android:id="@+id/nav_openQR"
-            android:icon="@drawable/ic_qr_code"
-            android:title="@string/leitor_qr" />
+            android:title="@string/arq_window"
+            android:checkable="true"
+            android:checked="true"
+            />
+
         <item
             android:id="@+id/nav_open_explorer"
-            android:icon="@drawable/ic_search_black_24dp"
-            android:title="@string/pesquisador_ar" />
+            android:icon="@drawable/ic_star_black_24dp"
+            android:title="@string/favoritos"
+            android:checkable="true"/>
+
         <item
             android:id="@+id/nav_edit_window"
-            android:icon="@drawable/ic_folder_open_black_24dp"
-            android:title="@string/editor_ar" />
-        -->
-    </group>
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/configuracoes"
+            android:checkable="true"
+            />
 
+    </group>
+    <!--
     <item android:title="@string/edit_version">
         <menu>
             <item
@@ -37,5 +43,5 @@
                 android:title="Send" />
         </menu>
     </item>
-
+-->
 </menu>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,9 +16,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -49,8 +52,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
-
-
         setContentView(R.layout.activity_main_navigation_drawer);
 
         toolbar =  findViewById(R.id.toolbar);
@@ -95,15 +96,16 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // ATENCAO: Os elementos do Navigation Drawer sao instaciados somente aqui n incluir eles no onCreate
-
         getMenuInflater().inflate(R.menu.main_navigation_drawer, menu);
         getMenuInflater().inflate(R.menu.menu_search, menu);
         searchItem = menu.findItem(R.id.search);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Procurar...");
+
         return true;
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -155,7 +157,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Toast.makeText(this,"configuraç�es",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"configuraçoes",Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -166,9 +168,11 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        item.setChecked(true);
         int id = item.getItemId();
         if (id == R.id.nav_arq_window) {
             this.abrirArqPage();
+            return true;
         }
 
         /* else if (id == R.id.nav_open_explorer) {
@@ -176,12 +180,13 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_edit_window) {
             this.abrirEditorDeArquivos();
 
-        }*/
+        }
         else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
-        }
+        }*/
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

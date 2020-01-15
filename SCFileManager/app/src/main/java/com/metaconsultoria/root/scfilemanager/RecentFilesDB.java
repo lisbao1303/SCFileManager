@@ -26,7 +26,14 @@ public class RecentFilesDB extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-                "create table if not exists recent_arquivos (id integer primary key autoincrement,  nome text,path text,lastuse text,lastuseLRU integer default 0,lastuseMRU integer default 0 , isStared bit default 0, comentDB text);"
+                "create table if not exists recent_arquivos (id integer primary key autoincrement," +
+                        "nome text," +
+                        "path text," +
+                        "lastuse text," +
+                        "lastuseLRU integer default 0," +
+                        "lastuseMRU integer default 0 ," +
+                        " isStared bit default 0," +
+                        " comentDB text);"
         );
     }
 
@@ -47,7 +54,6 @@ public class RecentFilesDB extends SQLiteOpenHelper {
             values.put("nome", myArquive.getNome());
             values.put("path", myArquive.getPath());
             values.put("lastuse", myArquive.getLastUse());
-            if(myArquive.getComentDB()!=null){values.put("comentDB",myArquive.getComentDB());}
             if (id == 0) {
                 SQLiteDatabase db = getWritableDatabase();
                 try {
@@ -76,13 +82,13 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                 List<MyArquive> fx_vetor = new ArrayList<MyArquive>();
                 if (c.moveToFirst()) {
                     do {
-                        MyArquive fx = new MyArquive(c.getInt(c.getColumnIndex("id")));
+                        MyArquive fx = new MyArquive();
+                        fx.id=c.getLong(c.getColumnIndex("id"));
                         fx.setNome(c.getString(c.getColumnIndex("nome")));
                         fx.setPath(c.getString(c.getColumnIndex("path")));
                         fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
                         if(c.getInt(c.getColumnIndex("isStared"))==0){fx.setStared(false);}
                         if(c.getInt(c.getColumnIndex("isStared"))==1){fx.setStared(true);}
-                        fx.setComentDB(c.getString(c.getColumnIndex("comentDB")));
                         fx_vetor.add(fx);
                     } while (c.moveToNext());
                 }
@@ -102,13 +108,13 @@ public class RecentFilesDB extends SQLiteOpenHelper {
             Cursor c = db.query("recent_arquivos", null, "path='" + path + "'", null, null, null, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
-                MyArquive fx = new MyArquive(c.getInt(c.getColumnIndex("id")));
+                MyArquive fx = new MyArquive();
+                fx.id=c.getLong(c.getColumnIndex("id"));
                 fx.setNome(c.getString(c.getColumnIndex("nome")));
                 fx.setPath(c.getString(c.getColumnIndex("path")));
                 fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
                 if(c.getInt(c.getColumnIndex("isStared"))==0){fx.setStared(false);}
                 if(c.getInt(c.getColumnIndex("isStared"))==1){fx.setStared(true);}
-                fx.setComentDB(c.getString(c.getColumnIndex("comentDB")));
                 return fx;
             } else {
                 return null;
@@ -222,15 +228,13 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                 List<MyArquive> fx_vetor = new ArrayList<MyArquive>();
                 if (c.moveToFirst()) {
                     do {
-                        MyArquive fx = new MyArquive(c.getInt(c.getColumnIndex("id")));
+                        MyArquive fx = new MyArquive();
+                        fx.id=c.getLong(c.getColumnIndex("id"));
                         fx.setNome(c.getString(c.getColumnIndex("nome")));
                         fx.setPath(c.getString(c.getColumnIndex("path")));
                         fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
                         if(c.getInt(c.getColumnIndex("isStared"))==0){fx.setStared(false);}
                         if(c.getInt(c.getColumnIndex("isStared"))==1){fx.setStared(true);}
-                        fx.setComentDB(c.getString(c.getColumnIndex("comentDB")));
-                       // if(c.getString(c.getColumnIndex("comentDB"))==null){Log.wtf("teste","is null");}
-                       // else{Log.i("tetezinho de Lai",c.getString(c.getColumnIndex("comentDB")));}
                         Log.wtf("arquivoID",String.valueOf(c.getInt(c.getColumnIndex("id"))));
                         fx_vetor.add(fx);
                     } while (c.moveToNext());
@@ -254,6 +258,53 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         if(comentDB!=null){
             updateRowsByPath("comentDB",comentDB,path);
         }
+    }
+
+
+    //A partir deste local estao declaradas as funcoes de criacao e manipulacao das tabelas de comentarios
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private void createNewComentDB (MyArquive mainRow){
+        SQLiteDatabase db= getWritableDatabase();
+        try{
+        db.execSQL(
+                "create table if not exists tab"+String.valueOf(mainRow.id)+" (coment_id integer primary key autoincrement," +
+                        "nome text," +
+                        "data_hr text," +
+                        "coment text," +
+                        "id integer not null," +
+                        "constraint recent_arquivos_id_fk foreign key (id) references recent_arquivos (id));"
+        ); }finally {
+            db.close();
+        }
+    }
+
+    private long insertComent(MyComent newComent,MyArquive toArquive){
+
+        ContentValues values = new ContentValues();
+        values.put("nome", newComent.getName());
+        values.put("data_hr", newComent.getData_hr());
+        values.put("coment", newComent.getComent());
+        values.put("id", toArquive.id);
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            Log.wtf("Salvou comentario",String.valueOf(toArquive.id));
+            Log.wtf("Nome:",newComent.getName());
+            Log.wtf("Data:",newComent.getData_hr());
+            Log.wtf("Coment",newComent.getComent());
+            return db.insert("tab"+String.valueOf(toArquive.id), "", values);
+        }finally {
+            db.close();
+        }
+    }
+
+    public void saveComent(MyComent newComent,MyArquive toArquive){
+        createNewComentDB(toArquive);
+        insertComent(newComent,toArquive);
     }
 
 }

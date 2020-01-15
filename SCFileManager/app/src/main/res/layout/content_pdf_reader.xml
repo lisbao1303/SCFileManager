@@ -35,6 +35,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="9"
-            app:menu="@menu/menu_bottom_pdf_activity"/>
+            app:menu="@menu/menu_bottom_pdf_activity"
+            app:itemIconTint="@color/colorPrimary"
+            app:itemTextColor="@color/colorPrimary"
+            />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
