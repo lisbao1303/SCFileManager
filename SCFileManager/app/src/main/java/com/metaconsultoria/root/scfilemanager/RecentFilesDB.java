@@ -307,6 +307,51 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         insertComent(newComent,toArquive);
     }
 
+    public List<MyComent> findAllComent(MyArquive arq) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            Cursor c = db.query("tab"+String.valueOf(arq.id), null, null, null, null, null, null);
+            if (c.getCount() > 0) {
+                List<MyComent> fx_vetor = new ArrayList<MyComent>();
+                if (c.moveToFirst()) {
+                    do {
+                        MyComent fx = new MyComent();
+                        fx.setId(c.getLong(c.getColumnIndex("coment_id")));
+                        fx.setName(c.getString(c.getColumnIndex("nome")));
+                        fx.setComent(c.getString(c.getColumnIndex("coment")));
+                        fx.setData_hr(c.getString(c.getColumnIndex("data_hr")));
+                        fx_vetor.add(fx);
+                    } while (c.moveToNext());
+                }
+                return fx_vetor;
+            } else {
+                return null;
+            }
+        } finally {
+            db.close();
+        }
+    }
+
+    public MyComent findByComentId(MyArquive arq,int id) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            Cursor c = db.query("tab"+String.valueOf(arq.id), null, "id=" +String.valueOf(id), null, null, null, null);
+            if (c.getCount() > 0) {
+                c.moveToFirst();
+                MyComent fx = new MyComent();
+                fx.setId(c.getLong(c.getColumnIndex("coment_id")));
+                fx.setName(c.getString(c.getColumnIndex("nome")));
+                fx.setComent(c.getString(c.getColumnIndex("coment")));
+                fx.setData_hr(c.getString(c.getColumnIndex("data_hr")));
+                return fx;
+            } else {
+                return null;
+            }
+        } finally {
+            db.close();
+        }
+    }
+
 }
 
 //TODO: sistema automatico de delecao de arquivos do database caso a referencia ao path seja nula

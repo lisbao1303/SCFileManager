@@ -24,6 +24,8 @@ public class ShowComentsFragment extends Fragment implements ComentAdapter.Comen
     protected RecyclerView recyclerView;
     private List<MyComent> coments;
     private LinearLayoutManager layoutManager;
+    private RecentFilesDB db;
+    private MyArquive arq;
 
     public ShowComentsFragment() {
         // Required empty public constructor
@@ -45,13 +47,7 @@ public class ShowComentsFragment extends Fragment implements ComentAdapter.Comen
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        coments=new ArrayList<MyComent>();
-        coments.add(new MyComent("nome1","texto1","00/00/00"));
-        coments.add(new MyComent("nome2","texto1","00/00/00"));
-        coments.add(new MyComent("nome2","texto1","00/00/00"));
-        coments.add(new MyComent("nome2","texto1","00/00/00"));
-        coments.add(new MyComent("nome2","texto1","00/00/00"));
-        coments.add(new MyComent("nome2","texto1","00/00/00"));
+        coments=db.findAllComent(arq);
         recyclerView.setAdapter(new ComentAdapter(getContext(),coments,this));
     }
 
@@ -63,5 +59,21 @@ public class ShowComentsFragment extends Fragment implements ComentAdapter.Comen
     @Override
     public void onClickComent(View view, int idx) {
 
+    }
+
+    public RecentFilesDB getDb() {
+        return db;
+    }
+
+    public void setDb(RecentFilesDB db) {
+        this.db = db;
+    }
+
+    public MyArquive getArq() {
+        return arq;
+    }
+
+    public void setArq(MyArquive arq) {
+        this.arq = arq;
     }
 }

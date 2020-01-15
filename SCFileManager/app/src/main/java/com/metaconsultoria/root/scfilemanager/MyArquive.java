@@ -1,6 +1,8 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyArquive implements Comparable<MyArquive> {
       public long id;
@@ -13,6 +15,7 @@ public class MyArquive implements Comparable<MyArquive> {
             this.id=0;
             this.lastuse="0";
       }
+
 
       MyArquive(int Id){
           this.id=id;

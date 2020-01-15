@@ -121,6 +121,8 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         if(id==R.id.bottom_nav_coment){
             ((ImageView)findViewById(R.id.imageView)).setImageDrawable(getDrawable(R.drawable.ic_comment_black_24dp));
             ShowComentsFragment comFrag=new ShowComentsFragment();
+            comFrag.setArq(arquivo);
+            comFrag.setDb(db);
             this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
             showdrawer(drawer,fundo);
             isDrawerOpen=true;

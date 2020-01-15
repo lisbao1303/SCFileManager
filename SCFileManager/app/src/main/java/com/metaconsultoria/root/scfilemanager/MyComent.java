@@ -6,6 +6,9 @@ public class MyComent {
         private String data_hr;
         private String coment;
 
+        MyComent(){
+        }
+
         MyComent(long id){
             this.id=id;
         }
