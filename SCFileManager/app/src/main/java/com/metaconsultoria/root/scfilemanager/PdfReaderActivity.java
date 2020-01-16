@@ -51,9 +51,6 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
 
         navigationView =(BottomNavigationView) findViewById(R.id.pdf_bottom_nav);
         navigationView.setOnNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(true);
-        navigationView.getMenu().getItem(2).setChecked(true);
-        navigationView.getMenu().getItem(1).setChecked(true);
         shortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
 

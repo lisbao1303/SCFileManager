@@ -3,6 +3,5 @@
     android:id="@+id/rl_lvListRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:footerDividersEnabled="false"
-    android:headerDividersEnabled="false"
+    android:divider="@android:color/transparent"
     />
