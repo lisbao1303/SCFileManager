@@ -1,6 +1,6 @@
 package com.metaconsultoria.root.scfilemanager;
 
-import android.icu.text.SimpleDateFormat;
+
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,21 +82,20 @@ public class ListAdapter extends BaseAdapter{
         int m_lastIndex = m_file.getAbsolutePath().lastIndexOf(".");
         String m_filepath = m_file.getAbsolutePath();
         if (m_file.isDirectory())
-            return R.mipmap.file_folder_ic;
+                return R.drawable.ic_file_ic;
         else {
             if (m_filepath.substring(m_lastIndex).equalsIgnoreCase(".pdf")) {
-                return R.mipmap.file_pdf_ic;
+                return R.drawable.ic_file_pdf_ic;
             } else {
-                return R.mipmap.file_ic;
+                return R.drawable.ic_file_unknow_ic_;
             }
         }
     }
+
     String getLastDate(int p_pos) {
         File m_file = new File(m_path.get(p_pos));
         SimpleDateFormat m_dateFormat = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            m_dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        }
+        m_dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return m_dateFormat.format(m_file.lastModified());
     }
 }

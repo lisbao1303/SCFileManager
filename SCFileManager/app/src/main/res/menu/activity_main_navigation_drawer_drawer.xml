@@ -2,12 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view"
-    >
+    tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single"
-        android:enabled="true"
-         >
+        android:enabled="true">
+
         <item
             android:id="@+id/nav_arq_window"
             android:icon="@drawable/ic_folder_open_black_24dp"
@@ -17,31 +16,38 @@
             />
 
         <item
-            android:id="@+id/nav_open_explorer"
+            android:id="@+id/nav_fav_explorer"
             android:icon="@drawable/ic_star_black_24dp"
             android:title="@string/favoritos"
             android:checkable="true"/>
 
         <item
-            android:id="@+id/nav_edit_window"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/configuracoes"
-            android:checkable="true"
-            />
+            android:id="@+id/nav_add_qr_code"
+            android:icon="@drawable/ic_qr_code"
+            android:title="@string/qr_code_generator"
+            android:checkable="true"/>
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="@string/about"
+            android:checkable="true"/>
 
-    </group>
-    <!--
-    <item android:title="@string/edit_version">
+
+    <item android:title="@string/restrict_acess">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_edit_window"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="@string/configuracoes"
+                android:checkable="true"
+                />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_user_manager"
+                android:icon="@drawable/ic_account_circle_black_24dp"
+                android:title="@string/account_manager"
+                android:checkable="true"
+                />
         </menu>
     </item>
--->
+    </group>
 </menu>

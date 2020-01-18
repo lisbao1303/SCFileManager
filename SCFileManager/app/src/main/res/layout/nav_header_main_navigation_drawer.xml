@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
     android:orientation="vertical"
@@ -9,8 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    >
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
     <!--TODO:Trocar a imagem de Fundo Por aqui porra-->
 
     <ImageView
@@ -20,8 +20,8 @@
         android:layout_height="100dp"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@drawable/ic_icone_sc" />
-
+        app:srcCompat="@drawable/ic_iconesc_white"
+        />
     <TextView
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"

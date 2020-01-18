@@ -218,7 +218,6 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         refreshDataBase(myArquive.getPath());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public List<MyArquive> mySelect(int number){
         SQLiteDatabase db = getWritableDatabase();
         try {
@@ -268,7 +267,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void createNewComentDB (MyArquive mainRow){
+    public void createNewComentDB (MyArquive mainRow){
         SQLiteDatabase db= getWritableDatabase();
         try{
         db.execSQL(

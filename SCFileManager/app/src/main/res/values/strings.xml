@@ -13,7 +13,7 @@
     <string name="leitor_qr">Leitor de QR Code</string>
     <string name="pesquisador_ar">Explorador de Arquivos</string>
     <string name="editor_ar">Editor de Arquivos</string>
-    <string name="edit_version">Versao de Edicao</string>
+    <string name="restrict_acess">Aceso Restrito</string>
     <string name="matricula_const">Matricula: </string>
     <string name="nome_const">Nome: </string>
     <string name="todo">TODO</string>
@@ -48,6 +48,11 @@
     <string name="new_coment_coment_hint">Comentario …</string>
     <string name="favoritos">Favoritos</string>
     <string name="configuracoes">Configuraçoes</string>
+    <string name="coment_null_1">Nenhum comentario adicionado ainda:</string>
+    <string name="coment_null_2">Adicionar Comentario</string>
+    <string name="qr_code_generator">Gerar QR Code</string>
+    <string name="about">Sobre</string>
+    <string name="account_manager">Gerenciar Contas</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

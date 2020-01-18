@@ -76,7 +76,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="scalingPercent" value="56" />
+                                                <entry key="scalingPercent" value="60" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -86,8 +86,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="$PROJECT_DIR$/../../ArteAppSouza/file-ic.png" />
-                                      <entry key="foregroundLayerName" value="ic_souzacruz" />
+                                      <entry key="backgroundAssetType" value="COLOR" />
+                                      <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="foregroundImage" value="$PROJECT_DIR$/../../ArteAppSouza/souza-cruz.svg" />
+                                      <entry key="outputName" value="ic_souza_app" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -116,6 +118,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
+                                                <entry key="paddingPercent" value="5" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -127,10 +130,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="cropped" value="true" />
-                                      <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="$PROJECT_DIR$/../../ArteAppSouza/file-pdf-ic.png" />
-                                      <entry key="outputName" value="file_pdf_ic" />
+                                      <entry key="imageAsset" value="$PROJECT_DIR$/../../ArteAppSouza/souza-cruz.svg" />
+                                      <entry key="outputName" value="ic_souza_maior" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -159,11 +160,6 @@
                             </entry>
                           </map>
                         </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
-                          </map>
-                        </option>
                       </PersistentState>
                     </value>
                   </entry>
@@ -187,7 +183,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/root/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_mode_edit_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/root/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/toggle/ic_star_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -197,9 +193,12 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_mode_edit_black_24dp" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="height" value="45" />
+                            <entry key="outputName" value="ic_qr_code_scan" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="$PROJECT_DIR$/../../ArteAppSouza/Icone Meta Souza.svg" />
+                            <entry key="sourceFile" value="$PROJECT_DIR$/../../ArteAppSouza/qr-code-scan.svg" />
+                            <entry key="width" value="45" />
                           </map>
                         </option>
                       </PersistentState>

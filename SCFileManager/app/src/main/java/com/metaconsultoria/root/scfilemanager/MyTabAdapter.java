@@ -21,7 +21,7 @@ public class MyTabAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int i) {
         if(i==0){
-          return new FragmentTab1();
+            return new FragmentTab1();
         }
         if(i==1){
             return new FragmentTab2();

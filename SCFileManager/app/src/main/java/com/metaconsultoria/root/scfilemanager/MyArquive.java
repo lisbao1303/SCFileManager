@@ -1,6 +1,10 @@
 package com.metaconsultoria.root.scfilemanager;
 
+import android.net.Uri;
+
+import java.io.File;
 import java.sql.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +99,24 @@ public class MyArquive implements Comparable<MyArquive> {
             if(array[i]!='0' && array[i]!='1'){throw new IllegalArgumentException("String com valores nao binarios");}
         }
         return soma;
+    }
+
+    public String getData_Hr(){
+          String m_path = Uri.parse(this.getPath()).getPath();
+          File  m_file = new File(m_path);
+          return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(m_file.lastModified());
+    }
+
+    public String getData(){
+        String m_path = Uri.parse(this.getPath()).getPath();
+        File  m_file = new File(m_path);
+        return new SimpleDateFormat("dd/MM/yyyy").format(m_file.lastModified());
+    }
+
+    public String getHora(){
+        String m_path = Uri.parse(this.getPath()).getPath();
+        File  m_file = new File(m_path);
+        return new SimpleDateFormat("HH:mm:ss").format(m_file.lastModified());
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,14 +33,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private FragmentFileEx mainFragmentFileEx;
     private FragmentFileEx fragMenu;
     public MenuItem searchItem ;
-    private NavigationView navigationView;
     public RecentFilesDB db;
-    private MyArquive fx;
-    private SearchView searchView;
-    private Toolbar toolbar;
+    private MenuItem configItem;
     private FragmentMainTabs fragMain;
     private int tabselected=0;
-    private boolean permissions=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +49,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navigation_drawer);
 
-        toolbar =  findViewById(R.id.toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
@@ -64,12 +62,11 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         toggle.syncState();
 
         db = new RecentFilesDB(this);
-        super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onResume() {
-        navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         if(checkPermissoes()){
         fragMain=new FragmentMainTabs();
@@ -77,6 +74,14 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         super.onResume();
         fragMain.performClick(tabselected);}
         else{super.onResume();}
+    }
+
+
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
     }
 
     @Override
@@ -98,8 +103,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         // ATENCAO: Os elementos do Navigation Drawer sao instaciados somente aqui n incluir eles no onCreate
         getMenuInflater().inflate(R.menu.main_navigation_drawer, menu);
         getMenuInflater().inflate(R.menu.menu_search, menu);
+        configItem = menu.findItem(R.id.action_settings);
         searchItem = menu.findItem(R.id.search);
-        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Procurar...");
 
@@ -157,7 +163,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Toast.makeText(this,"configuraçoes",Toast.LENGTH_SHORT).show();
+            ((NavigationView)findViewById(R.id.nav_view)).setCheckedItem(R.id.nav_edit_window);
+            abrirEditPage();
             return true;
         }
 
@@ -172,15 +179,12 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.nav_arq_window) {
             this.abrirArqPage();
-            return true;
-        }
+        }  else if (id == R.id.nav_edit_window) {
+            this.abrirEditPage();
+        } else if (id == R.id.nav_fav_explorer) {
+            this.abrirFavoritos();
 
-        /* else if (id == R.id.nav_open_explorer) {
-            this.abrirexplorador(mainpath);
-        } else if (id == R.id.nav_edit_window) {
-            this.abrirEditorDeArquivos();
-
-        }
+        }/*
         else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -199,10 +203,31 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
     private void abrirArqPage(){
-      this.setTitle(R.string.title_activity_main_navigation_drawer);
-      //  findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
-      //  searchItem.setVisible(false);
+        this.setTitle(R.string.title_activity_main_navigation_drawer);
+        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+        if(tabselected==0){searchItem.setVisible(false);}
+        else{searchItem.setVisible(true);}
+        configItem.setVisible(true);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
+    }
+
+    private void abrirEditPage(){
+        EditScreen config= new EditScreen();
+        this.setTitle(R.string.configuracoes);
+        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+        searchItem.setVisible(false);
+        configItem.setVisible(false);
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, config).commit();
+    }
+
+    private void abrirFavoritos(){
+        StaredFragment fav= new StaredFragment();
+        fav.setDb(db);
+        this.setTitle("favoritos");
+        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+        searchItem.setVisible(false);
+        configItem.setVisible(false);
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fav).commit();
     }
 
     private void abrirexplorador(String Cpass){
@@ -228,7 +253,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
                     result_2 == PackageManager.PERMISSION_GRANTED &&
                     result_3 == PackageManager.PERMISSION_GRANTED);
         }
-        return false;
+        return true;
     }
     public void requestPermissoes() throws Exception {
         try {
@@ -283,4 +308,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 }
 
-//TODO: sistema de pausa a aplicaçao ate receber a resposta do sistema de permissoes
+//TODO: corrigir imagens q ficaram bugadas na Api antiga
+//TODO: trocar a cor do faded da activity do pdf
+//TODO: Acertar cor da Activity principal e fonte
+//TODO: trocar imagem do pdf em tempo de execucao

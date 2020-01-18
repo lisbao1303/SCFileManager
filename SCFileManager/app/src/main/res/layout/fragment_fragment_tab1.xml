@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,18 +9,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:onClick="onScannerClick"
-        android:padding="10dp"
+        app:contentPadding="10dp"
+        android:layout_margin="10dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="5dp"
-        app:cardUseCompatPadding="true">
-
-        <fragment
+        app:cardElevation="5dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <fragment
             android:id="@+id/fragment"
             android:name="com.metaconsultoria.root.scfilemanager.FragmentScanner"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true" />
-
+            android:layout_height="match_parent" />
+        </FrameLayout>
     </android.support.v7.widget.CardView>
 
 
