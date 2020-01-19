@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +58,7 @@ public class StaredFragment extends Fragment implements StaredAdapter.StaredOnCl
     }
 
     public void onClickStared(View view, int idx) {
-
+        ((MainNavigationDrawerActivity)getActivity()).setPdfActivity(stareds.get(idx));
     }
 
 }
