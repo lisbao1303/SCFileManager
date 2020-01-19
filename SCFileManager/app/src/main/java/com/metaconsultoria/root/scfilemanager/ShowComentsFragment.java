@@ -36,6 +36,7 @@ public class ShowComentsFragment extends Fragment implements ComentAdapter.Comen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        db= new RecentFilesDB(getContext());
         coments=db.findAllComent(arq);
         if(coments==null){
             return  inflater.inflate(R.layout.fragment_show_coments_null, container, false);
@@ -64,14 +65,6 @@ public class ShowComentsFragment extends Fragment implements ComentAdapter.Comen
     @Override
     public void onClickComent(View view, int idx) {
 
-    }
-
-    public RecentFilesDB getDb() {
-        return db;
-    }
-
-    public void setDb(RecentFilesDB db) {
-        this.db = db;
     }
 
     public MyArquive getArq() {

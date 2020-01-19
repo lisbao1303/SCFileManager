@@ -52,6 +52,7 @@ public class NewComentFragment extends Fragment {
                 if(!name.equals("") && !name.equals(getString(R.string.new_coment_name_hint))) {
                     if(!text.equals("") && !text.equals(getString(R.string.new_coment_coment_hint))){
                         MyComent coment = new MyComent(name, text, NewComentFragment.utilGetDate());
+                        db=new RecentFilesDB(getContext());
                         db.saveComent(coment, arq);
                         getActivity().onBackPressed();
                         Toast.makeText(getActivity(),R.string.coment_acepted,Toast.LENGTH_SHORT).show();
@@ -92,14 +93,6 @@ public class NewComentFragment extends Fragment {
 
     public void setFragHeight(int fragHeight) {
         this.fragHeight = fragHeight;
-    }
-
-    public RecentFilesDB getDb() {
-        return db;
-    }
-
-    public void setDb(RecentFilesDB db) {
-        this.db = db;
     }
 
     public MyArquive getArq() {

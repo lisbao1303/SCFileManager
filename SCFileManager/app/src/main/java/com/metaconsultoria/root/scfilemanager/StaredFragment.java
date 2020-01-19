@@ -48,7 +48,8 @@ public class StaredFragment extends Fragment implements StaredAdapter.StaredOnCl
 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        stareds=db.mySelect(15);
+        db=new RecentFilesDB(getContext());
+        stareds=db.selectStareds();
         if(stareds!=null) {recyclerView.setAdapter(new StaredAdapter(getContext(),stareds,this));}
     }
 
@@ -61,11 +62,4 @@ public class StaredFragment extends Fragment implements StaredAdapter.StaredOnCl
 
     }
 
-    public RecentFilesDB getDb() {
-        return db;
-    }
-
-    public void setDb(RecentFilesDB db) {
-        this.db = db;
-    }
 }

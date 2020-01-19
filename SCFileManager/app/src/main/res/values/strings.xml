@@ -53,6 +53,10 @@
     <string name="qr_code_generator">Gerar QR Code</string>
     <string name="about">Sobre</string>
     <string name="account_manager">Gerenciar Contas</string>
+    <string name="string_entrar">ENTRAR</string>
+    <string name="string_senha">Senha</string>
+    <string name="string_matricula">Matricula</string>
+    <string name="string_usuario_ou_senha_incorretos">Usuario ou Senha incorretos</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

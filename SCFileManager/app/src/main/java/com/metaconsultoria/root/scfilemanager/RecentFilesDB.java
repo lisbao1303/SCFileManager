@@ -259,6 +259,35 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         }
     }
 
+    public List<MyArquive> selectStareds(){
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            Cursor c = db.query("recent_arquivos", null, "isStared=1", null, null, null, "nome", null);
+            if(c==null){return null;}
+            if (c.getCount() > 0) {
+                List<MyArquive> fx_vetor = new ArrayList<MyArquive>();
+                if (c.moveToFirst()) {
+                    do {
+                        MyArquive fx = new MyArquive();
+                        fx.id=c.getLong(c.getColumnIndex("id"));
+                        fx.setNome(c.getString(c.getColumnIndex("nome")));
+                        fx.setPath(c.getString(c.getColumnIndex("path")));
+                        fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
+                        if(c.getInt(c.getColumnIndex("isStared"))==0){fx.setStared(false);}
+                        if(c.getInt(c.getColumnIndex("isStared"))==1){fx.setStared(true);}
+                        Log.wtf("arquivoID",String.valueOf(c.getInt(c.getColumnIndex("id"))));
+                        fx_vetor.add(fx);
+                    } while (c.moveToNext());
+                }
+                return fx_vetor;
+            } else {
+                return null;
+            }
+        } finally {
+            db.close();
+        }
+    }
+
 
     //A partir deste local estao declaradas as funcoes de criacao e manipulacao das tabelas de comentarios
     //////////////////////////////////////////////////////////////////////////////////////////////////////

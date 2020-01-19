@@ -120,14 +120,12 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
             ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_comment_black_24dp);
             ShowComentsFragment comFrag=new ShowComentsFragment();
             comFrag.setArq(arquivo);
-            comFrag.setDb(db);
             this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
             showdrawer(drawer,fundo);
         }
         if(id==R.id.bottom_nav_new_coment){
             ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
             NewComentFragment comFrag=new NewComentFragment();
-            comFrag.setDb(db);
             comFrag.setArq(arquivo);
             this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
             showdrawer(drawer,fundo);

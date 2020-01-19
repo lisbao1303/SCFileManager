@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -14,14 +13,11 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -35,6 +31,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public MenuItem searchItem ;
     public RecentFilesDB db;
     private MenuItem configItem;
+    private MenuItem listCardItem;
     private FragmentMainTabs fragMain;
     private int tabselected=0;
 
@@ -104,6 +101,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main_navigation_drawer, menu);
         getMenuInflater().inflate(R.menu.menu_search, menu);
         configItem = menu.findItem(R.id.action_settings);
+        listCardItem = menu.findItem(R.id.action_list_mode);
         searchItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(this);
@@ -202,31 +200,38 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
           onScannerClick(findViewById(R.id.screen_area));
     }
 
+    // metodo de selecao do drawer
     private void abrirArqPage(){
         this.setTitle(R.string.title_activity_main_navigation_drawer);
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         if(tabselected==0){searchItem.setVisible(false);}
         else{searchItem.setVisible(true);}
         configItem.setVisible(true);
+        listCardItem.setVisible(false);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
     }
 
+
+    // metodo de selecao do drawer
     private void abrirEditPage(){
         EditScreen config= new EditScreen();
         this.setTitle(R.string.configuracoes);
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         searchItem.setVisible(false);
         configItem.setVisible(false);
+        listCardItem.setVisible(false);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, config).commit();
     }
 
+
+    // metodo de selecao do drawer
     private void abrirFavoritos(){
         StaredFragment fav= new StaredFragment();
-        fav.setDb(db);
         this.setTitle("favoritos");
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         searchItem.setVisible(false);
-        configItem.setVisible(false);
+        configItem.setVisible(true);
+        listCardItem.setVisible(true);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fav).commit();
     }
 
