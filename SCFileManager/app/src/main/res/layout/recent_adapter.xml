@@ -31,7 +31,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/file_pdf_ic" />
+                app:srcCompat="@mipmap/file_pdf_ic"/>
 
             <TextView
                 android:id="@+id/card_stared_nome"
@@ -47,7 +47,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/card_stared_data"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.508"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
                 android:id="@+id/card_stared_data"
