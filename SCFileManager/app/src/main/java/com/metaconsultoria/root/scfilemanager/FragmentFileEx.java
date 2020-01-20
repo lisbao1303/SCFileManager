@@ -27,7 +27,6 @@ public class FragmentFileEx extends Fragment  {
     private String ultimodir;
     private Uri file;
     private View mView;
-    private Boolean embusca;
     private File m_file;
     private ListAdapter m_listAdapter = null;
     private StorageAccess task;
@@ -65,8 +64,7 @@ public class FragmentFileEx extends Fragment  {
     }
 
     public void NewSearch(String text){
-        listfiles.m_itemp = new ArrayList<String>();
-        listfiles.m_pathp = new ArrayList<String>();
+        listfiles = new Listedfiles();
         m_filesp = new ArrayList<String>();
         m_filesPathp = new ArrayList<String>();
         if(text!=null && text.length()!=0) {
@@ -80,8 +78,7 @@ public class FragmentFileEx extends Fragment  {
 
     //// Obtendo os arquivos da memória
     private void getDirFromRoot(String p_rootPath) {
-        listfiles.m_itemp = new ArrayList<String>();
-        listfiles.m_pathp = new ArrayList<String>();
+        listfiles = new Listedfiles();
         m_filesp = new ArrayList<String>();
         m_filesPathp = new ArrayList<String>();
         m_file = new File(p_rootPath);
@@ -101,7 +98,6 @@ public class FragmentFileEx extends Fragment  {
         }
         @Override
         protected Listedfiles doInBackground(String... strings) {
-            embusca = true;
             if (procura == null) {
                 if (m_file.isDirectory()) {
                     File[] m_filesArray = m_file.listFiles();
@@ -163,7 +159,6 @@ public class FragmentFileEx extends Fragment  {
                     listfiles.m_pathp.add(m_AddPath);
                 }
             }
-            embusca = false;
             return listfiles;
         }
 
