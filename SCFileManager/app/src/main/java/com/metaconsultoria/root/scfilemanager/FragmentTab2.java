@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 public class FragmentTab2 extends Fragment{
 
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
-
+    public FragmentFileEx mfragment;
     public FragmentTab2() {
         // Required empty public constructor
     }
@@ -28,6 +28,7 @@ public class FragmentTab2 extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (getArguments() != null) {
         }
     }
@@ -42,16 +43,17 @@ public class FragmentTab2 extends Fragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        FragmentFileEx mfragment = new FragmentFileEx();
-        Bundle arguments = new Bundle();
-        arguments.putString("arqpath",mainpath);
-        arguments.putString("text",null);
-        mfragment.setArguments(arguments);
-        this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.file_ex_area,mfragment).commit();
+        if(savedInstanceState==null) {
+            mfragment = new FragmentFileEx();
+            Bundle arguments = new Bundle();
+            arguments.putString("arqpath", mainpath);
+            arguments.putString("text", null);
+            mfragment.setArguments(arguments);
+            this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.file_ex_area, mfragment).commit();
 
-        RecentFilesFragment mFragmentRecent= new RecentFilesFragment();
-        this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.file_recent_area,mFragmentRecent).commit();
-        ((MainNavigationDrawerActivity)getActivity()).setMainFragmentFileEx(mfragment);
+            RecentFilesFragment mFragmentRecent = new RecentFilesFragment();
+            this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.file_recent_area, mFragmentRecent).commit();
+            ((MainNavigationDrawerActivity) getActivity()).setMainFragmentFileEx(mfragment);
+        }
     }
-
 }
