@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ public class FragmentMainTabs extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (getArguments() != null) {
 
         }
@@ -42,20 +44,19 @@ public class FragmentMainTabs extends Fragment
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_fragment_main_tabs, container, false);
+            mViewPager = (ViewPager) view.findViewById(R.id.viewPager_locate);
+            mViewPager.setOffscreenPageLimit(1);
+            myTabAdapter = new MyTabAdapter(getActivity(), getContext(), getChildFragmentManager());
+            mViewPager.setAdapter(myTabAdapter);
 
-        mViewPager= (ViewPager) view.findViewById(R.id.viewPager_locate);
-        mViewPager.setOffscreenPageLimit(1);
-        myTabAdapter= new MyTabAdapter(getActivity(),getContext(),getChildFragmentManager());
-        mViewPager.setAdapter(new MyTabAdapter(getActivity(),getContext(),getChildFragmentManager()));
+            mTabLayout = (TabLayout) view.findViewById(R.id.tabs_locate);
+            mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_1_title));
+            mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_2_title));
 
-        mTabLayout= (TabLayout) view.findViewById(R.id.tabs_locate);
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_1_title));
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_2_title));
+            mTabLayout.addOnTabSelectedListener(this);
+            mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
-        mTabLayout.addOnTabSelectedListener(this);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-
-        getActivity().findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+            getActivity().findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
 
         return view;
     }
@@ -98,7 +99,6 @@ public class FragmentMainTabs extends Fragment
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-
     }
 
     public void performClick(int i){

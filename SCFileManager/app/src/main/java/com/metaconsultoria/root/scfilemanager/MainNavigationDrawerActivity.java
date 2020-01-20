@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -15,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,16 +29,17 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     //private String matricula;
     private FragmentFileEx mainFragmentFileEx;
-    private FragmentFileEx fragMenu;
     public MenuItem searchItem ;
     public RecentFilesDB db;
     private MenuItem configItem;
     private MenuItem listCardItem;
     private FragmentMainTabs fragMain;
     private int tabselected=0;
+    private Bundle instance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        instance = savedInstanceState;
         if(checkPermissoes()){
         }else{
             try {
@@ -47,29 +50,32 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             }
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_navigation_drawer);
+            setContentView(R.layout.activity_main_navigation_drawer);
 
-        Toolbar toolbar =  findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
 
-        db = new RecentFilesDB(this);
+            db = new RecentFilesDB(this);
+
     }
 
     @Override
     protected void onResume() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        if(checkPermissoes()){
-        fragMain=new FragmentMainTabs();
-        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
+
+        if(checkPermissoes()&& instance==null){
+                fragMain = new FragmentMainTabs();
+                this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
         super.onResume();
-        fragMain.performClick(tabselected);}
+        fragMain.performClick(tabselected);
+       }
         else{super.onResume();}
     }
 
@@ -136,7 +142,11 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange (String newText){
-        fragMenu.NewSearch(newText);
+        LayoutInflater inflaterfrag = getLayoutInflater();
+        View frag2 = inflaterfrag.inflate(R.layout.fragment_fragment_tab2,null);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentFileEx fragex = (FragmentFileEx) fm.findFragmentById(R.id.file_ex_area);
+        fragex.NewSearch(newText);
         return false;
     }
 
