@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_pdf"
+        android:orderInCategory="100"
+        android:title="@string/action_pdf_open_with"
+        android:icon="@drawable/ic_picture_as_pdf_black_24dp"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_print"
+        android:orderInCategory="100"
+        android:title="@string/action_pdf_open_with"
+        android:icon="@drawable/ic_print_black_24dp"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_send"
+        android:orderInCategory="100"
+        android:title="@string/action_pdf_open_with"
+        android:icon="@drawable/ic_open_in_new_white_24dp"
+        app:showAsAction="ifRoom"/>
+</menu>

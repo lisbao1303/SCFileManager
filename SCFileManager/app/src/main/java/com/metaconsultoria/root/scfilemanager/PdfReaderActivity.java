@@ -85,6 +85,9 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         if(i==R.id.action_open_with){
             openWith();
         }
+        if(i==R.id.action_inspect_qr){
+            inspectQR();
+        }
         if(i==android.R.id.home){
             this.onBackPressed();
         }
@@ -169,6 +172,14 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
+    }
+
+    public void inspectQR(){
+        Bundle bundle = new Bundle();
+        bundle.putString("path",arquivo.getPath());
+        Intent intent = new Intent(this, QRCodePreview.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     private void showdrawer(final View drawer, final View fundo/*, Fragment frag*/){

@@ -181,11 +181,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             this.abrirEditPage();
         } else if (id == R.id.nav_fav_explorer) {
             this.abrirFavoritos();
-
-        }/*
-        else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        }
+        else if (id == R.id.nav_add_qr_code) {
+        }/* else if (id == R.id.nav_send) {
 
         }*/
 
@@ -234,6 +232,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         listCardItem.setVisible(true);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fav).commit();
     }
+
 
     private void abrirexplorador(String Cpass){
 

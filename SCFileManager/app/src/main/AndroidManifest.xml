@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.metaconsultoria.root.scfilemanager">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -16,11 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".QRCodePreview"
+            android:label="@string/title_activity_qrcode_preview"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.metaconsultoria.root.scfilemanager.fileprovider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
@@ -29,9 +34,7 @@
         <activity
             android:name=".PdfReaderActivity"
             android:label="@string/title_activity_pdf_reader"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".MainNavigationDrawerActivity"
             android:label="@string/title_activity_main_navigation_drawer"
