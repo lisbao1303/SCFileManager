@@ -63,6 +63,12 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
             db = new RecentFilesDB(this);
 
+            FuncDB fdb= new FuncDB(this);
+            Funcionario fx = new Funcionario();
+            fx.setNome("thiago");
+            fx.setMatricula("11711EMT002");
+            fx.setSenha("teste");
+            fdb.save(fx);
     }
 
     @Override

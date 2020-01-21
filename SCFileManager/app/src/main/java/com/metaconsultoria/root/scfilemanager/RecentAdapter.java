@@ -34,7 +34,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
         if(c!=null) {
             staredViewHolder.name.setText(c.getNome());
             staredViewHolder.data_hr.setText(c.getData());
-            staredViewHolder.imagem.setImageResource(R.drawable.ic_file_pdf_ic);
+            staredViewHolder.imagem.setImageResource(R.mipmap.file_pdf_ic_hd);
 
             if (staredOnClickListener != null) {
                 staredViewHolder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -56,12 +56,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         int m_lastIndex = m_file.getAbsolutePath().lastIndexOf(".");
         String m_filepath = m_file.getAbsolutePath();
         if (m_file.isDirectory())
-            return R.mipmap.file_folder_ic;
+            return R.mipmap.file_folder_ic_hd;
         else {
             if (m_filepath.substring(m_lastIndex).equalsIgnoreCase(".pdf")) {
-                return R.mipmap.file_pdf_ic;
+                return R.mipmap.file_pdf_ic_hd;
             } else {
-                return R.drawable.ic_file_unknow_ic_;
+                return R.mipmap.file_ic_hd;
             }
         }
     }

@@ -30,12 +30,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/file_pdf_ic" />
+                app:srcCompat="@mipmap/file_folder_ic_hd" />
 
             <TextView
                 android:id="@+id/card_stared_nome"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="8dp"

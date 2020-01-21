@@ -34,8 +34,8 @@ public class QRCodePreview extends AppCompatActivity {
 
         ImageView localQR= findViewById(R.id.imageView_Previw_QR_Code);
         Bitmap bitmap =QRCodeGenerator.generateQRCodeImage(arq.getPath(),500,500);
-        Bitmap bit= BitmapFactory.decodeResource(getResources(),R.mipmap.cropped_logo_meta);
-        bit = Bitmap.createScaledBitmap(bit, 130, 130, true);
+        Bitmap bit= BitmapFactory.decodeResource(getResources(),R.mipmap.souza_qr_code_neg_round);
+        bit = Bitmap.createScaledBitmap(bit, 130, 90, true);
         bitmap= QRCodeGenerator.addCenterOverlay(bit,bitmap);
         localQR.setImageBitmap(bitmap);
 

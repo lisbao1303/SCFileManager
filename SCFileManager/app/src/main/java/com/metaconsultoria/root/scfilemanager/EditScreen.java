@@ -58,8 +58,12 @@ public class EditScreen extends Fragment implements View.OnClickListener{
     }
 
     private boolean autenticateElevatedUser(String matricula, String senha){
-
-        return true;
+        FuncDB fdb=new FuncDB(getContext());
+        Funcionario func = fdb.findByMatricula(matricula);
+        if(func!=null){
+            if(func.getSenha().equals(senha)){return true;}
+        }
+        return false;
     }
 
 }
