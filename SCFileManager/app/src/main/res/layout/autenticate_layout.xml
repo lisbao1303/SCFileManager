@@ -121,7 +121,7 @@
         android:backgroundTint="@color/colorAccent"
         android:text="@string/string_entrar"
         android:textSize="20sp"
-        android:translationY="-20dp"
+        android:translationY="-15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

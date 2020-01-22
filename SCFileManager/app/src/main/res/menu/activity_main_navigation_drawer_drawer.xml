@@ -23,7 +23,7 @@
 
         <item
             android:id="@+id/nav_add_qr_code"
-            android:icon="@drawable/ic_qr_code"
+            android:icon="@drawable/ic_add_new_qr_codes_souza"
             android:title="@string/qr_code_generator"
             android:checkable="true"/>
         <item

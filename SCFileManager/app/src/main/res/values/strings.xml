@@ -55,12 +55,21 @@
     <string name="account_manager">Gerenciar Contas</string>
     <string name="string_entrar">ENTRAR</string>
     <string name="string_senha">Senha</string>
+    <string name="string_confirm_senha">Confirmar Senha</string>
     <string name="string_matricula">Matricula</string>
+    <string name="string_nome">Nome</string>
+    <string name="string_email">Email para Restauraçao</string>
+    <string name="string_add">Add</string>
+    <string name="string_cancel">Cancel</string>
     <string name="string_usuario_ou_senha_incorretos">Usuario ou Senha incorretos</string>
+    <string name="string_cadastrar_usuario">Cadastrar Novo Funcionario</string>
+    <string name="string_cadastrar_usuario_erro_1">O Campo: "</string>
+    <string name="string_cadastrar_usuario_erro_2">" deve ser preenchido</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_qrcode_preview">QRCodePreview</string>
+    <string name="title_activity_new_func">ActivityNewFunc</string>
 
 </resources>

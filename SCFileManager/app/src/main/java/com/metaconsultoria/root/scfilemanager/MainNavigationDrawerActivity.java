@@ -1,10 +1,12 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +18,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,10 +29,12 @@ import android.widget.Toast;
 public class MainNavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
+    static final int NEW_USER_REQUEST = 1;
     //private String matricula;
     private FragmentFileEx mainFragmentFileEx;
     public MenuItem searchItem ;
     public RecentFilesDB db;
+    public boolean inline = false;
     private MenuItem configItem;
     private MenuItem listCardItem;
     private FragmentMainTabs fragMain;
@@ -64,12 +67,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
             db = new RecentFilesDB(this);
 
-            FuncDB fdb= new FuncDB(this);
-            Funcionario fx = new Funcionario();
-            fx.setNome("thiago");
-            fx.setMatricula("11711EMT002");
-            fx.setSenha("teste");
-            fdb.save(fx);
     }
 
     @Override
@@ -82,6 +79,14 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
                 this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
         super.onResume();
         fragMain.performClick(tabselected);
+        FuncDB fdb = new FuncDB(this);
+        if(fdb.findAll()==null){
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isFirst",true);
+            Intent intent = new Intent(this, ActivityNewFunc.class);
+            intent.putExtras(bundle);
+            startActivityForResult(intent,NEW_USER_REQUEST);
+        }
        }
         else{super.onResume();}
     }
@@ -92,6 +97,16 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     protected void onStop() {
 
         super.onStop();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode==NEW_USER_REQUEST){
+            if(resultCode== Activity.RESULT_OK){
+
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -142,6 +157,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+
     @Override
     public boolean onQueryTextSubmit (String query){
         return false;
@@ -182,6 +198,17 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             abrirEditPage();
             return true;
         }
+        if (id== R.id.action_list_mode){
+            inline=!inline;
+            if(inline){
+                item.setIcon(R.drawable.ic_view_module_black_24dp);
+
+            }
+            else {
+                item.setIcon(R.drawable.ic_view_list_black_24dp);
+            }
+            abrirFavoritos();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -200,6 +227,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             this.abrirFavoritos();
         }
         else if (id == R.id.nav_add_qr_code) {
+            //Snackbar.make(item.getActionView(),"An Error Occurred!", Snackbar.LENGTH_LONG).show();
         }/* else if (id == R.id.nav_send) {
 
         }*/
@@ -328,8 +356,3 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         return tabselected;
     }
 }
-
-//TODO: corrigir imagens q ficaram bugadas na Api antiga
-//TODO: trocar a cor do faded da activity do pdf
-//TODO: Acertar cor da Activity principal e fonte
-//TODO: trocar imagem do pdf em tempo de execucao

@@ -34,7 +34,9 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
         if(c!=null) {
             staredViewHolder.name.setText(c.getNome());
             staredViewHolder.data_hr.setText(c.getData());
-            staredViewHolder.imagem.setImageResource(R.mipmap.file_pdf_ic_hd);
+            staredViewHolder.imagem.setImageResource(getImageFileTipeIcon(c));
+            if(c.getStared()){staredViewHolder.star.setImageResource(R.drawable.ic_star_black_24dp);}
+            else{staredViewHolder.star.setImageResource(R.drawable.ic_star_border_black_24dp);}
 
             if (staredOnClickListener != null) {
                 staredViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -59,15 +61,25 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
         public TextView name;
         public TextView data_hr;
         public ImageView imagem;
+        public ImageView star;
         public RecentViewHolder(@NonNull View itemView) {
             super(itemView);
             name =(TextView) itemView.findViewById(R.id.card_stared_nome);
             data_hr =(TextView) itemView.findViewById(R.id.card_stared_data);
             imagem =(ImageView) itemView.findViewById(R.id.card_stared_imageView);
+            star =(ImageView) itemView.findViewById(R.id.card_stared_button);
         }
     }
 
     public interface RecentOnClickListener{
         public void onClickStared(View view,int idx);
+    }
+
+    private int getImageFileTipeIcon (MyArquive arq){
+        int lastpoint= arq.getPath().lastIndexOf('.');
+        if (arq.getPath().substring(lastpoint).equalsIgnoreCase(".pdf")) {
+            return R.mipmap.file_pdf_ic_hd;
+        }
+        return 0;
     }
 }
