@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.apache.commons.io.FileUtils;
 
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
@@ -160,13 +161,19 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextSubmit (String query){
+        if(query!=null && query.length()!=0) {
+            Toast.makeText(this.getApplicationContext(),"Procurando...",Toast.LENGTH_LONG).show();
+        }else{
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentFileEx fragex = (FragmentFileEx) fm.findFragmentById(R.id.file_ex_area);
+            //fragex.Canceltask();
+        }
+
         return false;
     }
 
     @Override
     public boolean onQueryTextChange (String newText){
-        LayoutInflater inflaterfrag = getLayoutInflater();
-        View frag2 = inflaterfrag.inflate(R.layout.fragment_fragment_tab2,null);
         FragmentManager fm = getSupportFragmentManager();
         FragmentFileEx fragex = (FragmentFileEx) fm.findFragmentById(R.id.file_ex_area);
         fragex.NewSearch(newText);

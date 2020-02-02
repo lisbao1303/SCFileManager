@@ -13,25 +13,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import org.apache.commons.io.FileSystemUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.FileFileFilter;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 
 
 public class FragmentFileEx extends Fragment  {
     private RecyclerView m_RootList;
-    private Listedfiles listfiles = new Listedfiles();
-    private ArrayList m_filesp = new ArrayList<String>();
-    private ArrayList m_filesPathp = new ArrayList<String>();
     private String m_root =null;
     private String ultimodir;
+    private Listedfiles clickablelist;
     private Uri file;
     private View mView;
-    private File m_file;
     private ListAdapter m_listAdapter = null;
-    private StorageAccess task;
+    private StorageAccess[] task = new StorageAccess[100];
     private ProgressBar progress;
     private String procura = null;
+    int teste = 1;
 
     @Override
     public void onCreate( Bundle savedInstanceState) {
@@ -52,7 +63,7 @@ public class FragmentFileEx extends Fragment  {
         if(ultimodir==null) {
             ultimodir = m_root;
         }
-        getDirFromRoot(ultimodir);
+        getDirFromRoot(ultimodir,null);
         return mView;
     }
 
@@ -60,35 +71,34 @@ public class FragmentFileEx extends Fragment  {
         String mPath;
         mPath = data.getString("arqpath");
         ultimodir = mPath;
-        getDirFromRoot(mPath);
+        getDirFromRoot(mPath,null);
     }
 
     public void NewSearch(String text){
-        listfiles = new Listedfiles();
-        m_filesp = new ArrayList<String>();
-        m_filesPathp = new ArrayList<String>();
         if(text!=null && text.length()!=0) {
-            getDirFromRoot(ultimodir);
             procura = text;
+            getDirFromRoot(ultimodir,procura);
         }else{
             procura = null;
-            getDirFromRoot(ultimodir);
+            getDirFromRoot(ultimodir,null);
         }
     }
-
+    public void Canceltask(int i){
+        if(task[i] != null) {
+            task[i].cancel(true);
+        }
+    }
     //// Obtendo os arquivos da memória
-    private void getDirFromRoot(String p_rootPath) {
-        listfiles = new Listedfiles();
-        m_filesp = new ArrayList<String>();
-        m_filesPathp = new ArrayList<String>();
-        m_file = new File(p_rootPath);
+    private void getDirFromRoot(String p_rootPath, String search) {
         m_listAdapter = null;
         m_RootList.setAdapter(m_listAdapter);
-        if(task != null){
-            task.cancel(true);
+        Canceltask(teste-1);
+        task[teste] = new StorageAccess();
+        task[teste].execute(p_rootPath, search);
+        if(teste==99){
+            teste = 1;
         }
-        task = new StorageAccess();
-        task.execute(p_rootPath);
+        teste++;
     }
     private class StorageAccess extends AsyncTask<String,Void,Listedfiles>{
         @Override
@@ -98,7 +108,14 @@ public class FragmentFileEx extends Fragment  {
         }
         @Override
         protected Listedfiles doInBackground(String... strings) {
-            if (procura == null) {
+            File m_file = new File(strings[0]);
+            Listedfiles listfiles = new Listedfiles();
+            ArrayList m_filesp = new ArrayList<String>();
+            ArrayList m_filesPathp = new ArrayList<String>();
+            if (strings[1] == null) {
+                if (isCancelled()){
+                    return null;
+                }
                 if (m_file.isDirectory()) {
                     File[] m_filesArray = m_file.listFiles();
                     if (!ultimodir.equals(m_root)) {
@@ -133,19 +150,26 @@ public class FragmentFileEx extends Fragment  {
                     }
                 }
             }else{
-                File[] m_filesArray = m_file.listFiles();
-                Arrays.sort(m_filesArray);
-                for (int i = 0; i < m_filesArray.length; i++) {
-                    File file = m_filesArray[i];
-                    final boolean contains = file.getName().toLowerCase().contains(procura.toLowerCase());
+                if (isCancelled()){
+                    return null;
+                }
+               Collection m_filesArray = FileUtils.listFilesAndDirs(m_file, TrueFileFilter.INSTANCE,  TrueFileFilter.INSTANCE);
+                if (isCancelled()){
+                    return null;
+                }
+               for (Iterator iterator = m_filesArray.iterator(); iterator.hasNext();) {
+                    File file = (File) iterator.next();
+                   if (isCancelled()){
+                       return null;
+                   }
+                    final boolean contains = file.getName().toLowerCase().contains(strings[1].toLowerCase());
 
                     if (file.isDirectory()) {
                         if(contains){
                             listfiles.m_itemp.add(file.getName());
                             listfiles.m_pathp.add(file.getPath());
                         }
-                        getDirFromRootSEC(file.toString(), procura);
-                    } else {
+                    }else{
                         if(contains) {
                             m_filesp.add(file.getName());
                             m_filesPathp.add(file.getPath());
@@ -154,9 +178,15 @@ public class FragmentFileEx extends Fragment  {
                 }
                 for (Object m_AddFile : m_filesp) {
                     listfiles.m_itemp.add(m_AddFile);
+                    if (isCancelled()){
+                        return null;
+                    }
                 }
                 for (Object m_AddPath : m_filesPathp) {
                     listfiles.m_pathp.add(m_AddPath);
+                    if (isCancelled()){
+                        return null;
+                    }
                 }
             }
             return listfiles;
@@ -164,36 +194,15 @@ public class FragmentFileEx extends Fragment  {
 
         @Override
         protected void onCancelled() {
-            task = null;
+            //task = null;
             super.onCancelled();
         }
 
         @Override
         protected void onPostExecute(Listedfiles filesarray) {
-            super.onPostExecute(filesarray);
-            task = null;
+            //task = null;
+            Toast.makeText(getContext().getApplicationContext(),"teste "+teste,Toast.LENGTH_SHORT).show();
             changelistview(filesarray);
-        }
-    }
-    public void getDirFromRootSEC (String R2Path, String procura){
-        File m_file = new File(R2Path);
-        File[] m_filesArray = m_file.listFiles();
-        Arrays.sort(m_filesArray);
-        for (int i = 0; i < m_filesArray.length; i++) {
-            File file = m_filesArray[i];
-            final boolean contains = file.getName().toLowerCase().contains(procura.toLowerCase());
-            if (file.isDirectory()) {
-                if(contains){
-                    listfiles.m_itemp.add(file.getName());
-                    listfiles.m_pathp.add(file.getPath());
-                }
-                getDirFromRootSEC(file.toString(), procura);
-            } else {
-                if(contains) {
-                    m_filesp.add(file.getName());
-                    m_filesPathp.add(file.getPath());
-                }
-            }
         }
     }
 
@@ -204,6 +213,7 @@ public class FragmentFileEx extends Fragment  {
             Toast.makeText(getContext().getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
         }
         m_RootList.setAdapter(m_listAdapter);
+        clickablelist = list;
         progress.setVisibility(View.INVISIBLE);
     }
 
@@ -218,13 +228,13 @@ public class FragmentFileEx extends Fragment  {
 
             @Override
             public void onClickitem(View view, int idx) {
-                File m_isFile = new File(listfiles.m_pathp.get(idx).toString());
+                File m_isFile = new File(clickablelist.m_pathp.get(idx).toString());
                 int m_ultimoponto = m_isFile.getAbsolutePath().lastIndexOf(".");
                 String m_caminhofile = m_isFile.getAbsolutePath();
                 file = Uri.fromFile(m_isFile);
                 if (m_isFile.isDirectory()) {
                     ultimodir= m_isFile.toString();
-                    getDirFromRoot(m_isFile.toString());
+                    getDirFromRoot(m_isFile.toString(),null);
                 } else {
                     if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")) {
                         FragmentListener mListener = (FragmentListener) getActivity();
