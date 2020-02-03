@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/RelativeLayout1"
     android:layout_width="wrap_content"
@@ -11,41 +11,71 @@
         android:id="@+id/lr_ivFileIcon"
         android:layout_width="80dp"
         android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:paddingStart="20dp"
-        app:srcCompat="@mipmap/file_folder_ic"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:clickable="false"
-        android:focusable="false" />
+        android:focusable="false"
+        android:paddingStart="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/file_folder_ic" />
 
     <TextView
         android:id="@+id/lr_tvFileName"
-        android:layout_width="wrap_content"
+        android:layout_width="0px"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/lr_ivFileIcon"
-        android:paddingTop="20dp"
-        android:text="TextView"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:clickable="false"
-        android:focusable="false" />
+        android:focusable="false"
+        android:paddingTop="20dp"
+        android:text="@string/textviewfile1"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_generateQr"
+        app:layout_constraintStart_toEndOf="@+id/lr_ivFileIcon"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lr_tvdate"
-        android:layout_width="wrap_content"
+        android:layout_width="0px"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lr_tvFileName"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/lr_ivFileIcon"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:clickable="false"
         android:focusable="false"
-        android:text="TextView" />
+        android:text="@string/textviewfile1"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_generateQr"
+        app:layout_constraintStart_toEndOf="@+id/lr_ivFileIcon"
+        app:layout_constraintTop_toBottomOf="@+id/lr_tvFileName" />
 
     <View
         android:id="@+id/divider2"
         android:layout_width="wrap_content"
         android:layout_height="1dp"
-        android:layout_below="@+id/lr_ivFileIcon"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="?android:attr/listDivider" />
+        android:background="?android:attr/listDivider"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</RelativeLayout>
+    <ImageView
+        android:id="@+id/imageView_generateQr"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        android:clickable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_add_new_qr_codes_souza" />
+
+</android.support.constraint.ConstraintLayout>

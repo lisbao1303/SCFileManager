@@ -2,33 +2,29 @@ package com.metaconsultoria.root.scfilemanager;
 
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder> {
     private final Listedfiles list;
     private final Context m_context;
     private ListOnClickListener listOnClickListener;
+    private final boolean isGenerator;
 
-    public interface ListOnClickListener{
-        void onClickitem(View view,int idx);
-    }
-    public ListAdapter(Context p_context,Listedfiles list, ListOnClickListener listOnClickListener) {
+    public ListAdapter(Context p_context, Listedfiles list, ListOnClickListener listOnClickListener, @NonNull boolean isGenerator) {
         this.m_context = p_context;
         this.list = list;
         this.listOnClickListener=listOnClickListener;
+        this.isGenerator=isGenerator;
     }
+
     @Override
     public ListViewHolder onCreateViewHolder( ViewGroup viewGroup, int i) {
         View view;
@@ -41,17 +37,28 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         listViewHolder.m_tvFileName.setText((String) list.m_itemp.get(i));
         listViewHolder.m_ivIcon.setImageResource(setFileImageType(new File( (String) list.m_pathp.get(i))));
         listViewHolder.m_tvDate.setText(list.getLastDate(i));
+        if(isGenerator) {
+            listViewHolder.imageViewGenerate.setVisibility(ImageView.VISIBLE);
+            listViewHolder.imageViewGenerate.setClickable(true);
+            listViewHolder.imageViewGenerate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listOnClickListener.onAddQRClick(v,i);
+                }
+            });
+        }
         if(listOnClickListener!=null){
             listViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                                                            @Override
                                                            public void onClick(View v) {
-                                                               listOnClickListener.onClickitem(v,i);
+                                                               listOnClickListener.onClickList(v,i);
                                                            }
                                                        }
 
             );
         }
     }
+
     private int setFileImageType(File m_file) {
         int m_lastIndex = m_file.getAbsolutePath().lastIndexOf(".");
         String m_filepath = m_file.getAbsolutePath();
@@ -76,12 +83,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         public ImageView m_ivIcon;
         public TextView m_tvFileName;
         public TextView m_tvDate;
+        public ImageView imageViewGenerate;
         public ListViewHolder( View view) {
             super(view);
             m_tvFileName = (TextView) view.findViewById(R.id.lr_tvFileName);
             m_tvDate = (TextView) view.findViewById(R.id.lr_tvdate);
             m_ivIcon = (ImageView) view.findViewById(R.id.lr_ivFileIcon);
+            imageViewGenerate = (ImageView) view.findViewById(R.id.imageView_generateQr);
         }
+    }
+
+    public interface ListOnClickListener{
+        public void onClickList(View view,int idx);
+        public void onAddQRClick(View view,int idx);
     }
 
 }

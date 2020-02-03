@@ -99,6 +99,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         if (isDrawerOpen) {
             closedrawer(drawer,fundo);
         } else{
+            Log.wtf("teste",String.valueOf(ConstantesDoProjeto.getInstance().isProtect()));
             super.onBackPressed();
         }
     }

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class FragmentFileEx extends Fragment  {
+public class FragmentFileEx extends Fragment implements ListAdapter.ListOnClickListener {
     private RecyclerView m_RootList;
     private Listedfiles listfiles = new Listedfiles();
     private ArrayList m_filesp = new ArrayList<String>();
@@ -32,6 +32,7 @@ public class FragmentFileEx extends Fragment  {
     private StorageAccess task;
     private ProgressBar progress;
     private String procura = null;
+    private boolean isGenerator;
 
     @Override
     public void onCreate( Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class FragmentFileEx extends Fragment  {
         progress.setVisibility(View.VISIBLE);
         Bundle bundle = getArguments();
         m_root = bundle.getString("arqpath");
+        isGenerator = bundle.getBoolean("isGenerator");
         if(ultimodir==null) {
             ultimodir = m_root;
         }
@@ -90,6 +92,43 @@ public class FragmentFileEx extends Fragment  {
         task = new StorageAccess();
         task.execute(p_rootPath);
     }
+
+
+
+    @Override
+    public void onClickList(View view, int idx) {
+            if(view == mView.findViewById(R.id.imageView_generateQr)){
+                Toast.makeText(getContext(),"calma, papai ta aqui",Toast.LENGTH_SHORT);
+            }else{
+                File m_isFile = new File(listfiles.m_pathp.get(idx).toString());
+                int m_ultimoponto = m_isFile.getAbsolutePath().lastIndexOf(".");
+                String m_caminhofile = m_isFile.getAbsolutePath();
+                file = Uri.fromFile(m_isFile);
+                if (m_isFile.isDirectory()) {
+                    ultimodir= m_isFile.toString();
+                    getDirFromRoot(m_isFile.toString());
+                } else {
+                    if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")) {
+                        FragmentListener mListener = (FragmentListener) getActivity();
+                        MyArquive arq = new MyArquive(
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1, file.getPath().lastIndexOf('.')),
+                                file.toString()
+                        );
+                        mListener.setPdfActivity(arq);
+                    }
+                }
+
+
+
+        }
+    }
+
+    @Override
+    public void onAddQRClick(View v,int idx){
+        Toast.makeText(getContext(),"Ainda bem q o papi ta aq",Toast.LENGTH_SHORT).show();
+    }
+
+
     private class StorageAccess extends AsyncTask<String,Void,Listedfiles>{
         @Override
         protected void onPreExecute() {
@@ -175,6 +214,8 @@ public class FragmentFileEx extends Fragment  {
             changelistview(filesarray);
         }
     }
+
+
     public void getDirFromRootSEC (String R2Path, String procura){
         File m_file = new File(R2Path);
         File[] m_filesArray = m_file.listFiles();
@@ -199,7 +240,7 @@ public class FragmentFileEx extends Fragment  {
 
     private void changelistview(Listedfiles list){
         if(list.m_itemp.toArray().length>0) {
-            m_listAdapter = new ListAdapter(getActivity(), list,onClickitem());
+            m_listAdapter = new ListAdapter(getActivity(), list,this,isGenerator);
         }else{
             Toast.makeText(getContext().getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
         }
@@ -213,32 +254,7 @@ public class FragmentFileEx extends Fragment  {
         progress.setVisibility(View.INVISIBLE);
     }
 
-    private ListAdapter.ListOnClickListener onClickitem(){
-        return new ListAdapter.ListOnClickListener(){
 
-            @Override
-            public void onClickitem(View view, int idx) {
-                File m_isFile = new File(listfiles.m_pathp.get(idx).toString());
-                int m_ultimoponto = m_isFile.getAbsolutePath().lastIndexOf(".");
-                String m_caminhofile = m_isFile.getAbsolutePath();
-                file = Uri.fromFile(m_isFile);
-                if (m_isFile.isDirectory()) {
-                    ultimodir= m_isFile.toString();
-                    getDirFromRoot(m_isFile.toString());
-                } else {
-                    if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")) {
-                        FragmentListener mListener = (FragmentListener) getActivity();
-                        MyArquive arq = new MyArquive(
-                                file.getPath().substring(file.getPath().lastIndexOf('/')+1,file.getPath().lastIndexOf('.')),
-                                file.toString()
-                        );
-                        mListener.setPdfActivity(arq);
-                    }
-                }
-
-            }
-        };
-    }
     public boolean upDir(){
         if(ultimodir==null || ultimodir.equals(m_root)){return true;}
         else{

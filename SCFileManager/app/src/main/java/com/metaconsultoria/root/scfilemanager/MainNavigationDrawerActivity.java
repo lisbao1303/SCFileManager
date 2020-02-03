@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +19,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -227,7 +229,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             this.abrirFavoritos();
         }
         else if (id == R.id.nav_add_qr_code) {
-            //Snackbar.make(item.getActionView(),"An Error Occurred!", Snackbar.LENGTH_LONG).show();
+            this.abrirAddQr();
         }/* else if (id == R.id.nav_send) {
 
         }*/
@@ -276,6 +278,22 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         configItem.setVisible(true);
         listCardItem.setVisible(true);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fav).commit();
+    }
+
+    // metodo de selecao do drawer
+    private void abrirAddQr(){
+        FragmentFileEx mfragment = new FragmentFileEx();
+        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+        searchItem.setVisible(false);
+        configItem.setVisible(true);
+        listCardItem.setVisible(false);
+
+        Bundle arguments = new Bundle();
+        arguments.putString("arqpath", Environment.getExternalStorageDirectory().getPath());
+        arguments.putString("text", null);
+        arguments.putBoolean("isGenerator",true);
+        mfragment.setArguments(arguments);
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, mfragment).commit();
     }
 
 
