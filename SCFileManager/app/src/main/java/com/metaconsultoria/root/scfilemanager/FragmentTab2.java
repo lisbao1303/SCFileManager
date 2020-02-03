@@ -48,6 +48,7 @@ public class FragmentTab2 extends Fragment{
             Bundle arguments = new Bundle();
             arguments.putString("arqpath", mainpath);
             arguments.putString("text", null);
+            arguments.putBoolean("isGenerator",false);
             mfragment.setArguments(arguments);
             this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.file_ex_area, mfragment).commit();
 
