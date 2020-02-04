@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 
-public class FragmentFileEx extends Fragment  {
+public class FragmentFileEx extends Fragment implements View.OnClickListener {
     private RecyclerView m_RootList;
     private String m_root =null;
     private String ultimodir;
@@ -100,6 +100,12 @@ public class FragmentFileEx extends Fragment  {
         }
         teste++;
     }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
     private class StorageAccess extends AsyncTask<String,Void,Listedfiles>{
         @Override
         protected void onPreExecute() {
