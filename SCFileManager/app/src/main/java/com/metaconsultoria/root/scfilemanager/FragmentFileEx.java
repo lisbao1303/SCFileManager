@@ -231,7 +231,7 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener {
 
     private ListAdapter.ListOnClickListener onClickitem(){
         return new ListAdapter.ListOnClickListener(){
-
+///
             @Override
             public void onClickitem(View view, int idx) {
                 File m_isFile = new File(clickablelist.m_pathp.get(idx).toString());
