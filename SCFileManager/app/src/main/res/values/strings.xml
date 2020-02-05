@@ -65,6 +65,7 @@
     <string name="string_cadastrar_usuario">Cadastrar Novo Funcionario</string>
     <string name="string_cadastrar_usuario_erro_1">O Campo: "</string>
     <string name="string_cadastrar_usuario_erro_2">" deve ser preenchido</string>
+    <string name="string_caminho_add_qr_view">Caminho:/…</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

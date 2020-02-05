@@ -2,15 +2,15 @@ package com.metaconsultoria.root.scfilemanager;
 
 
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class FragmentAddQR extends Fragment {
 
 
@@ -26,4 +26,16 @@ public class FragmentAddQR extends Fragment {
         return inflater.inflate(R.layout.fragment_fragment_add_qr, container, false);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        FragmentFileEx mfragment = new FragmentFileEx();
+        Bundle arguments = new Bundle();
+        arguments.putString("arqpath", Environment.getExternalStorageDirectory().getPath());
+        arguments.putString("text", null);
+        arguments.putBoolean("isGenerator",true);
+        mfragment.setArguments(arguments);
+
+        this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace_add_qr_fragment, mfragment).commit();
+    }
 }

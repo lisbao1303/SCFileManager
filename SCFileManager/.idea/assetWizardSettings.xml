@@ -217,7 +217,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/root/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_view_module_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/root/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_help_outline_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -227,7 +227,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_view_module_black_24dp" />
+                            <entry key="outputName" value="ic_help_outline_black_24dp" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="$PROJECT_DIR$/../../ArteAppSouza/ADD NEW QR codes souza.svg" />
                           </map>

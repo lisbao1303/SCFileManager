@@ -289,17 +289,24 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     // metodo de selecao do drawer
     private void abrirAddQr(){
+
+        /*
         FragmentFileEx mfragment = new FragmentFileEx();
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         searchItem.setVisible(false);
         configItem.setVisible(true);
         listCardItem.setVisible(false);
-
         Bundle arguments = new Bundle();
         arguments.putString("arqpath", Environment.getExternalStorageDirectory().getPath());
         arguments.putString("text", null);
         arguments.putBoolean("isGenerator",true);
         mfragment.setArguments(arguments);
+        */
+
+        FragmentAddQR mfragment=  new FragmentAddQR();
+        searchItem.setVisible(false);
+        configItem.setVisible(true);
+        listCardItem.setVisible(false);
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, mfragment).commit();
     }
 
