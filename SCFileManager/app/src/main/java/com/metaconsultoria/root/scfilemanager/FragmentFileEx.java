@@ -237,7 +237,7 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
         @Override
         protected void onPostExecute(Listedfiles filesarray) {
             //task = null;
-            Toast.makeText(getContext().getApplicationContext(),"teste "+teste,Toast.LENGTH_SHORT).show();
+            Log.wtf("teste ",String.valueOf(teste));
             changelistview(filesarray);
         }
     }
@@ -246,7 +246,7 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
         if(list.m_itemp.toArray().length>0) {
             m_listAdapter = new ListAdapter(getActivity(), list,this,isGenerator);
         }else{
-            Toast.makeText(getContext().getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
         }
         m_RootList.setAdapter(m_listAdapter);
         clickablelist = list;
