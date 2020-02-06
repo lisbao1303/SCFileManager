@@ -20,7 +20,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/file_folder_ic" />
+        app:srcCompat="@mipmap/normal_func_ic" />
 
     <TextView
         android:id="@+id/func_nome"
@@ -71,11 +71,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="8dp"
-        android:visibility="invisible"
         android:clickable="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_add_new_qr_codes_souza" />
+        app:srcCompat="@drawable/ic_remove_circle_outline_black_24dp" />
 
 </android.support.constraint.ConstraintLayout>

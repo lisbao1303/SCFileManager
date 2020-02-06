@@ -1,5 +1,6 @@
 package com.metaconsultoria.root.scfilemanager;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -114,7 +115,7 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
                     if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")) {
                         FragmentListener mListener = (FragmentListener) getActivity();
                         MyArquive arq = new MyArquive(
-                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1, file.getPath().lastIndexOf('.')),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
                                 file.toString()
                         );
                         mListener.setPdfActivity(arq);
@@ -128,7 +129,13 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
 
     @Override
     public void onAddQRClick(View v,int idx){
-        Toast.makeText(getContext(),"Ainda bem q o papi ta aq",Toast.LENGTH_SHORT).show();
+        File m_isFile = new File(clickablelist.m_pathp.get(idx).toString());
+        file = Uri.fromFile(m_isFile);
+        Bundle bundle = new Bundle();
+        bundle.putString("path",file.toString());
+        Intent intent = new Intent(getActivity(), QRCodePreview.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override

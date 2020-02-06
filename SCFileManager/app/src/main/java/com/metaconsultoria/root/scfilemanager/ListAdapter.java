@@ -86,8 +86,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         public ImageView imageViewGenerate;
         public ListViewHolder( View view) {
             super(view);
-            m_tvFileName = (TextView) view.findViewById(R.id.lr_tvFileName);
-            m_tvDate = (TextView) view.findViewById(R.id.lr_tvdate);
+            m_tvFileName = (TextView) view.findViewById(R.id.func_nome);
+            m_tvDate = (TextView) view.findViewById(R.id.func_matricula);
             m_ivIcon = (ImageView) view.findViewById(R.id.lr_ivFileIcon);
             imageViewGenerate = (ImageView) view.findViewById(R.id.imageView_generateQr);
         }

@@ -14,8 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class QRCodePreview extends AppCompatActivity {
-        private RecentFilesDB db;
-        private MyArquive arq;
+        private MyFileDirectory arq;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +27,8 @@ public class QRCodePreview extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         String path=getIntent().getExtras().getString("path");
-        db = new RecentFilesDB(this);
-        arq = db.findByPath(path);
+
+        arq= new MyFileDirectory(path);
 
 
         ImageView localQR= findViewById(R.id.imageView_Previw_QR_Code);

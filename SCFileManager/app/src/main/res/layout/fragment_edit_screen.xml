@@ -106,12 +106,13 @@
 
         <TextView
             android:id="@+id/textViewEditHide2"
-            android:layout_width="wrap_content"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:text="Apaga todos os dados extras salvos pelo aplicativo como arquivos recentemente usados e comentarios"
             android:textColor="@android:color/tertiary_text_light"
+            android:gravity="start"
             android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/dividerEditVert2"
             app:layout_constraintStart_toStartOf="parent"

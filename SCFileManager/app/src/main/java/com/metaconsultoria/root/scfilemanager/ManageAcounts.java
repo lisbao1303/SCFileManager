@@ -9,14 +9,19 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.zip.Inflater;
 
-public class EditScreen extends Fragment implements View.OnClickListener{
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class ManageAcounts extends Fragment implements View.OnClickListener{
     private LayoutInflater inflater;
     private ViewGroup container;
     private View vi;
 
 
-    public EditScreen() {
+    public ManageAcounts() {
         // Required empty public constructor
     }
 
@@ -25,6 +30,7 @@ public class EditScreen extends Fragment implements View.OnClickListener{
         container.removeAllViews();
         super.onStop();
     }
+
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -44,7 +50,9 @@ public class EditScreen extends Fragment implements View.OnClickListener{
             String senha = ((EditText)vi.findViewById(R.id.editText_senha)).getText().toString();
             if(autenticateElevatedUser(matricula,senha)){
                 container.removeAllViews();
-                getLayoutInflater().inflate(R.layout.fragment_edit_screen,container,true);
+                getLayoutInflater().inflate(R.layout.fragment_manage_acounts,container,true);
+                this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.func_frag_area,new AccountList()).commit();
+
             }else{
                 Toast.makeText(getContext(),R.string.string_usuario_ou_senha_incorretos,Toast.LENGTH_SHORT).show();
             }
@@ -61,5 +69,6 @@ public class EditScreen extends Fragment implements View.OnClickListener{
         }
         return false;
     }
+
 
 }

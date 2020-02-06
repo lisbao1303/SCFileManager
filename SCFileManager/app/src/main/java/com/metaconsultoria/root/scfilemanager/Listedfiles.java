@@ -3,8 +3,6 @@ package com.metaconsultoria.root.scfilemanager;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 public class Listedfiles {
     public ArrayList m_itemp = new ArrayList<String>();

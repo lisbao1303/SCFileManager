@@ -237,9 +237,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_add_qr_code) {
             this.abrirAddQr();
-        }/* else if (id == R.id.nav_send) {
-
-        }*/
+        } else if (id == R.id.nav_user_manager) {
+            this.abrirAcountMan();
+        }
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -279,7 +279,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     // metodo de selecao do drawer
     private void abrirFavoritos(){
         StaredFragment fav= new StaredFragment();
-        this.setTitle("favoritos");
+        this.setTitle("Favoritos");
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         searchItem.setVisible(false);
         configItem.setVisible(true);
@@ -290,19 +290,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     // metodo de selecao do drawer
     private void abrirAddQr(){
 
-        /*
-        FragmentFileEx mfragment = new FragmentFileEx();
-        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
-        searchItem.setVisible(false);
-        configItem.setVisible(true);
-        listCardItem.setVisible(false);
-        Bundle arguments = new Bundle();
-        arguments.putString("arqpath", Environment.getExternalStorageDirectory().getPath());
-        arguments.putString("text", null);
-        arguments.putBoolean("isGenerator",true);
-        mfragment.setArguments(arguments);
-        */
-
+        this.setTitle("Gerador de QR");
         FragmentAddQR mfragment=  new FragmentAddQR();
         searchItem.setVisible(false);
         configItem.setVisible(true);
@@ -319,6 +307,16 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         mainFragmentFileEx.refresh(arguments);
         fragMain.performClick(1);
 
+    }
+
+    private void abrirAcountMan(){
+        ManageAcounts config= new ManageAcounts();
+        this.setTitle("Gerenciar Usuarios");
+        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+        searchItem.setVisible(false);
+        configItem.setVisible(true);
+        listCardItem.setVisible(false);
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, config).commit();
     }
 
 
