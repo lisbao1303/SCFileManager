@@ -33,6 +33,7 @@
         android:focusable="false"
         android:paddingTop="20dp"
         android:text="@string/textviewfile1"
+        android:textStyle="bold"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@+id/imageView_generateQr"
         app:layout_constraintStart_toEndOf="@+id/lr_ivFileIcon"
@@ -65,7 +66,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView_generateQr"
+        android:id="@+id/imageView_remove"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="8dp"

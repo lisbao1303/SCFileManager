@@ -32,7 +32,6 @@ import org.apache.commons.io.FileUtils;
 public class MainNavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
-    static final int NEW_USER_REQUEST = 1;
     //private String matricula;
     private FragmentFileEx mainFragmentFileEx;
     public MenuItem searchItem ;
@@ -88,7 +87,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             bundle.putBoolean("isFirst",true);
             Intent intent = new Intent(this, ActivityNewFunc.class);
             intent.putExtras(bundle);
-            startActivityForResult(intent,NEW_USER_REQUEST);
+            startActivityForResult(intent,ConstantesDoProjeto.NEW_USER_REQUEST);
         }
        }
         else{super.onResume();}
@@ -104,9 +103,11 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode==NEW_USER_REQUEST){
+        if(requestCode==ConstantesDoProjeto.NEW_USER_REQUEST){
             if(resultCode== Activity.RESULT_OK){
 
+            }else{
+                Toast.makeText(this,"Usuario nao salvo",Toast.LENGTH_SHORT).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

@@ -32,10 +32,16 @@ public class FuncAdapter extends RecyclerView.Adapter<FuncAdapter.FuncViewHolder
     public void onBindViewHolder(@NonNull final FuncAdapter.FuncViewHolder staredViewHolder, final int i) {
         Funcionario c = funcs.get(i);
         if(c!=null) {
-            staredViewHolder.nome.setText(c.getNome());
-            staredViewHolder.matricula.setText(c.getMatricula());
+            staredViewHolder.nome.setText(context.getText(R.string.nome_const)+ c.getNome());
+            staredViewHolder.matricula.setText(context.getText(R.string.matricula_const)+c.getMatricula());
 
             if (funcListener != null) {
+                staredViewHolder.removeView.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        funcListener.onClickRemove(v, i);
+                    }
+                });
                 staredViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                                                                  @Override
                                                                  public void onClick(View v) {
@@ -59,14 +65,17 @@ public class FuncAdapter extends RecyclerView.Adapter<FuncAdapter.FuncViewHolder
     public static class FuncViewHolder extends RecyclerView.ViewHolder{
         public TextView nome;
         public TextView matricula;
+        public ImageView removeView;
         public FuncViewHolder(@NonNull View itemView) {
             super(itemView);
             nome =(TextView) itemView.findViewById(R.id.func_nome);
             matricula =(TextView) itemView.findViewById(R.id.func_matricula);
-        }
+            removeView=(ImageView) itemView.findViewById(R.id.imageView_remove);
+         }
     }
 
     public interface FuncOnClickListener{
         public void onClickFunc(View v,int id);
+        public void onClickRemove(View v, int id);
     }
 }
