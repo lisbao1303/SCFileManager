@@ -104,7 +104,7 @@ public class FuncDB extends SQLiteOpenHelper {
         }
     }
 
-    public int deleteByPath(String matricula) {
+    public int deleteByMatricula(String matricula) {
         SQLiteDatabase db = getWritableDatabase();
         try {
             return db.delete(FuncDB.TABLE_OF_FUNC_NAME, "matricula=?", new String[]{matricula});

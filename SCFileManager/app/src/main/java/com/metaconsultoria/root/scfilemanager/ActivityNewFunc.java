@@ -3,18 +3,13 @@ package com.metaconsultoria.root.scfilemanager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ActivityNewFunc extends AppCompatActivity implements View.OnClickListener {
     private boolean isFirstAcess;
@@ -120,4 +115,12 @@ public class ActivityNewFunc extends AppCompatActivity implements View.OnClickLi
         return getString(R.string.string_cadastrar_usuario_erro_1)+add+getString(R.string.string_cadastrar_usuario_erro_2);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int i=item.getItemId();
+        if(i==android.R.id.home){
+            this.onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

@@ -41,6 +41,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private MenuItem listCardItem;
     private FragmentMainTabs fragMain;
     private int tabselected=0;
+    private int navDrawerSelected;
     private Bundle instance = null;
 
     @Override
@@ -77,10 +78,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if(checkPermissoes()&& instance==null){
+                if(!setMainFrag(navDrawerSelected)){
                 fragMain = new FragmentMainTabs();
-                this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
+                this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();}
         super.onResume();
-        fragMain.performClick(tabselected);
         FuncDB fdb = new FuncDB(this);
         if(fdb.findAll()==null){
             Bundle bundle = new Bundle();
@@ -90,15 +91,37 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             startActivityForResult(intent,ConstantesDoProjeto.NEW_USER_REQUEST);
         }
        }
-        else{super.onResume();}
+        else{
+            super.onResume();
+        }
     }
 
-
+    private boolean setMainFrag(int id){
+        if (id == R.id.nav_arq_window) {
+            this.abrirArqPage();
+            return true;
+        }  else if (id == R.id.nav_edit_window) {
+            this.abrirEditPage();
+            return true;
+        } else if (id == R.id.nav_fav_explorer) {
+            this.abrirFavoritos();
+            return true;
+        } else if (id == R.id.nav_add_qr_code) {
+            this.abrirAddQr();
+            return true;
+        } else if (id == R.id.nav_user_manager) {
+            this.abrirAcountMan();
+            return true;
+        }else {
+            Log.wtf("nao achor","nd");
+            return false;
+        }
+    }
 
     @Override
-    protected void onStop() {
-
-        super.onStop();
+    protected void onPause() {
+        navDrawerSelected=((NavigationView)findViewById(R.id.nav_view)).getCheckedItem().getItemId();
+        super.onPause();
     }
 
     @Override
@@ -147,6 +170,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         if(fragMain!=null) {
             outState.putInt("tab_selected", fragMain.getCurentTab());
+            outState.putInt("nav_drawer_selected",((NavigationView)findViewById(R.id.nav_view)).getCheckedItem().getItemId());
         }else{
             outState.putInt("tab_selected",0);
         }
@@ -158,6 +182,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         tabselected = savedInstanceState.getInt("tab_selected");
+        navDrawerSelected = savedInstanceState.getInt("nav_drawer_selected");
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -212,7 +237,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             inline=!inline;
             if(inline){
                 item.setIcon(R.drawable.ic_view_module_black_24dp);
-
             }
             else {
                 item.setIcon(R.drawable.ic_view_list_black_24dp);
@@ -235,8 +259,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             this.abrirEditPage();
         } else if (id == R.id.nav_fav_explorer) {
             this.abrirFavoritos();
-        }
-        else if (id == R.id.nav_add_qr_code) {
+        } else if (id == R.id.nav_add_qr_code) {
             this.abrirAddQr();
         } else if (id == R.id.nav_user_manager) {
             this.abrirAcountMan();
@@ -293,6 +316,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
         this.setTitle("Gerador de QR");
         FragmentAddQR mfragment=  new FragmentAddQR();
+        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         searchItem.setVisible(false);
         configItem.setVisible(true);
         listCardItem.setVisible(false);

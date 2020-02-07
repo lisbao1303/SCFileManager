@@ -23,7 +23,7 @@ public class AccountList extends Fragment implements FuncAdapter.FuncOnClickList
     private LinearLayoutManager layoutManager;
     private RecyclerView recyclerView;
     private List<Funcionario> funcs;
-    private FuncDB funcDB;
+    private FuncAdapter funcAdapter;
 
     public AccountList() {
         // Required empty public constructor
@@ -34,7 +34,7 @@ public class AccountList extends Fragment implements FuncAdapter.FuncOnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        funcDB=new FuncDB(getContext());
+        FuncDB funcDB=new FuncDB(getContext());
         funcs=funcDB.findAll();
 
         View v= inflater.inflate(R.layout.fragment_account_list, container, false);
@@ -48,7 +48,8 @@ public class AccountList extends Fragment implements FuncAdapter.FuncOnClickList
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        recyclerView.setAdapter(new FuncAdapter(getContext(),funcs,this));
+        funcAdapter= new FuncAdapter(getContext(),funcs,this);
+        recyclerView.setAdapter(funcAdapter);
     }
 
     @Override
@@ -62,6 +63,10 @@ public class AccountList extends Fragment implements FuncAdapter.FuncOnClickList
 
     @Override
     public void onClickRemove(View v, int id) {
-        Toast.makeText(getContext(),"hj o pai ta chato",Toast.LENGTH_SHORT).show();
+        Funcionario func = funcs.get(id);
+        FuncDB funcDB= new FuncDB(getContext());
+        funcDB.deleteByMatricula(func.getMatricula());
+        funcs.remove(id);
+        funcAdapter.notifyItemRemoved(id);
     }
 }

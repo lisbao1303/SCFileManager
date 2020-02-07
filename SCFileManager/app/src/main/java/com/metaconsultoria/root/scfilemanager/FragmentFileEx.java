@@ -112,7 +112,7 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
                     ultimodir= m_isFile.toString();
                     getDirFromRoot(m_isFile.toString(),null);
                 } else {
-                    if (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")) {
+                    if (m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pdf")) {
                         FragmentListener mListener = (FragmentListener) getActivity();
                         MyArquive arq = new MyArquive(
                                 file.getPath().substring(file.getPath().lastIndexOf('/') + 1),

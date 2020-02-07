@@ -85,7 +85,7 @@ public class ManageAcounts extends Fragment implements View.OnClickListener, Act
                         }
                     })
                     .setNegativeButton(android.R.string.no, null)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setIcon(R.drawable.ic_close_black_24dp)
                     .show();
         }
 
