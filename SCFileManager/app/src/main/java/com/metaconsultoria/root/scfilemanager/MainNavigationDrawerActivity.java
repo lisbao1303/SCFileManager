@@ -47,8 +47,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         instance = savedInstanceState;
-        if(checkPermissoes()){
-        }else{
+        if(!checkPermissoes()){
             try {
                 requestPermissoes();
                 while(checkPermissoes());
@@ -57,19 +56,23 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             }
         }
         super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main_navigation_drawer);
+        setContentView(R.layout.activity_main_navigation_drawer);
 
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-            db = new RecentFilesDB(this);
-
+        db = new RecentFilesDB(this);
+        if(instance!=null) {
+            tabselected = instance.getInt("tab_selected");
+        }
+        Log.wtf("resolvendo rotacao:",this.getClass().getName());
+        Thread.dumpStack();
     }
 
     @Override
@@ -79,6 +82,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
         if(checkPermissoes()&& instance==null){
                 if(!setMainFrag(navDrawerSelected)){
+                    Log.wtf("teste","maroto");
                 fragMain = new FragmentMainTabs();
                 this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();}
         super.onResume();
@@ -92,35 +96,24 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         }
        }
         else{
-            super.onResume();
+                if(instance!=null && navDrawerSelected==R.id.nav_arq_window){
+                    fragMain=(FragmentMainTabs) this.getSupportFragmentManager().findFragmentById(R.id.screen_area);
+                }
+                super.onResume();
         }
     }
 
-    private boolean setMainFrag(int id){
-        if (id == R.id.nav_arq_window) {
-            this.abrirArqPage();
-            return true;
-        }  else if (id == R.id.nav_edit_window) {
-            this.abrirEditPage();
-            return true;
-        } else if (id == R.id.nav_fav_explorer) {
-            this.abrirFavoritos();
-            return true;
-        } else if (id == R.id.nav_add_qr_code) {
-            this.abrirAddQr();
-            return true;
-        } else if (id == R.id.nav_user_manager) {
-            this.abrirAcountMan();
-            return true;
-        }else {
-            Log.wtf("nao achor","nd");
-            return false;
-        }
-    }
+
 
     @Override
     protected void onPause() {
+        if(fragMain!=null) {
+            tabselected=fragMain.getCurentTab();
+        }else{
+            tabselected=0;
+        }
         navDrawerSelected=((NavigationView)findViewById(R.id.nav_view)).getCheckedItem().getItemId();
+
         super.onPause();
     }
 
@@ -162,6 +155,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Procurar...");
 
+        if(instance!=null){
+            refreshToolbar(navDrawerSelected);
+        }
+
         return true;
     }
 
@@ -170,11 +167,11 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         if(fragMain!=null) {
             outState.putInt("tab_selected", fragMain.getCurentTab());
-            outState.putInt("nav_drawer_selected",((NavigationView)findViewById(R.id.nav_view)).getCheckedItem().getItemId());
         }else{
             outState.putInt("tab_selected",0);
         }
 
+        outState.putInt("nav_drawer_selected",((NavigationView)findViewById(R.id.nav_view)).getCheckedItem().getItemId());
         super.onSaveInstanceState(outState);
     }
 
@@ -252,23 +249,64 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         item.setChecked(true);
-        int id = item.getItemId();
-        if (id == R.id.nav_arq_window) {
-            this.abrirArqPage();
-        }  else if (id == R.id.nav_edit_window) {
-            this.abrirEditPage();
-        } else if (id == R.id.nav_fav_explorer) {
-            this.abrirFavoritos();
-        } else if (id == R.id.nav_add_qr_code) {
-            this.abrirAddQr();
-        } else if (id == R.id.nav_user_manager) {
-            this.abrirAcountMan();
-        }
+        setMainFrag(item.getItemId());
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    private boolean setMainFrag(int id){
+        if (id == R.id.nav_arq_window) {
+            this.abrirArqPage();
+            this.attToolbarArqPage();
+            Log.wtf("teste","maroto");
+            return true;
+        }  else if (id == R.id.nav_edit_window) {
+            this.attToolbarEditPage();
+            this.abrirEditPage();
+            return true;
+        } else if (id == R.id.nav_fav_explorer) {
+            Log.wtf("teste","maroto");
+            this.attToolbarFavoritos();
+            this.abrirFavoritos();
+            return true;
+        } else if (id == R.id.nav_add_qr_code) {
+            this.abrirAddQr();
+            this.attToolbarAddQr();
+            return true;
+        } else if (id == R.id.nav_user_manager) {
+            this.abrirAcountMan();
+            this.attToolbarAcountMan();
+            return true;
+        }else {
+            Log.wtf("nao achor","nd");
+            return false;
+        }
+    }
+
+    private boolean refreshToolbar(int id){
+        if (id == R.id.nav_arq_window) {
+            this.attToolbarArqPage();
+            return true;
+        }  else if (id == R.id.nav_edit_window) {
+            this.attToolbarEditPage();
+            return true;
+        } else if (id == R.id.nav_fav_explorer) {
+            this.attToolbarFavoritos();
+            return true;
+        } else if (id == R.id.nav_add_qr_code) {
+            this.attToolbarAddQr();
+            return true;
+        } else if (id == R.id.nav_user_manager) {
+            this.attToolbarAcountMan();
+            return true;
+        }else {
+            Log.wtf("nao achor","nd");
+            return false;
+        }
     }
 
     public void botaoLeitorDeQR(View view) {
@@ -277,52 +315,74 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
     // metodo de selecao do drawer
-    private void abrirArqPage(){
+    private void attToolbarArqPage(){
         this.setTitle(R.string.title_activity_main_navigation_drawer);
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         if(tabselected==0){searchItem.setVisible(false);}
         else{searchItem.setVisible(true);}
         configItem.setVisible(true);
         listCardItem.setVisible(false);
+    }
+
+    private void abrirArqPage(){
+        if(fragMain==null){fragMain=new FragmentMainTabs();}
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
     }
 
-
-    // metodo de selecao do drawer
-    private void abrirEditPage(){
-        EditScreen config= new EditScreen();
+    private void attToolbarEditPage(){
         this.setTitle(R.string.configuracoes);
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         searchItem.setVisible(false);
         configItem.setVisible(false);
         listCardItem.setVisible(false);
+    }
+
+    // metodo de selecao do drawer
+    private void abrirEditPage(){
+        EditScreen config= new EditScreen();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, config).commit();
     }
 
-
-    // metodo de selecao do drawer
-    private void abrirFavoritos(){
-        StaredFragment fav= new StaredFragment();
+    private void attToolbarFavoritos(){
         this.setTitle("Favoritos");
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         searchItem.setVisible(false);
         configItem.setVisible(true);
         listCardItem.setVisible(true);
-        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fav).commit();
     }
 
     // metodo de selecao do drawer
-    private void abrirAddQr(){
+    private void abrirFavoritos(){
+        StaredFragment fav= new StaredFragment();
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fav).commit();
+    }
 
+    private void attToolbarAddQr(){
         this.setTitle("Gerador de QR");
-        FragmentAddQR mfragment=  new FragmentAddQR();
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
         searchItem.setVisible(false);
         configItem.setVisible(true);
         listCardItem.setVisible(false);
+    }
+
+    // metodo de selecao do drawer
+    private void abrirAddQr(){
+        FragmentAddQR mfragment=  new FragmentAddQR();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, mfragment).commit();
     }
 
+    private void attToolbarAcountMan(){
+        this.setTitle("Gerenciar Usuarios");
+        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+        searchItem.setVisible(false);
+        configItem.setVisible(true);
+        listCardItem.setVisible(false);
+    }
+
+    private void abrirAcountMan(){
+        ManageAcounts config= new ManageAcounts();
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, config).commit();
+    }
 
     private void abrirexplorador(String Cpass){
 
@@ -334,15 +394,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     }
 
-    private void abrirAcountMan(){
-        ManageAcounts config= new ManageAcounts();
-        this.setTitle("Gerenciar Usuarios");
-        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
-        searchItem.setVisible(false);
-        configItem.setVisible(true);
-        listCardItem.setVisible(false);
-        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, config).commit();
-    }
+
+
+
 
 
 

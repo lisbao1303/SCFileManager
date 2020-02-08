@@ -2,6 +2,8 @@ package com.metaconsultoria.root.scfilemanager;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ public class EditScreen extends Fragment implements View.OnClickListener{
     private LayoutInflater inflater;
     private ViewGroup container;
     private View vi;
+    private boolean isElevated;
 
 
     public EditScreen() {
@@ -21,19 +24,28 @@ public class EditScreen extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public void onStop() {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
         container.removeAllViews();
-        super.onStop();
+        super.onDestroy();
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        this.inflater=inflater;
-        this.container=container;
-        vi= inflater.inflate(R.layout.autenticate_layout, container, false);
-        vi.findViewById(R.id.button).setOnClickListener(this);
+        this.inflater = inflater;
+        this.container = container;
+        if(savedInstanceState==null || savedInstanceState.getBoolean("is_elevated")==false){
+            vi = inflater.inflate(R.layout.autenticate_layout, container, false);
+            vi.findViewById(R.id.button).setOnClickListener(this);
+        }else{
+            vi = inflater.inflate(R.layout.fragment_edit_screen, container, false);
+        }
         return vi;
     }
 
@@ -53,11 +65,17 @@ public class EditScreen extends Fragment implements View.OnClickListener{
 
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean("is_elevated",isElevated);
+        super.onSaveInstanceState(outState);
+    }
+
     private boolean autenticateElevatedUser(String matricula, String senha){
         FuncDB fdb=new FuncDB(getContext());
         Funcionario func = fdb.findByMatricula(matricula);
         if(func!=null){
-            if(func.getSenha().equals(senha)){return true;}
+            if(func.getSenha().equals(senha)){return isElevated=true;}
         }
         return false;
     }

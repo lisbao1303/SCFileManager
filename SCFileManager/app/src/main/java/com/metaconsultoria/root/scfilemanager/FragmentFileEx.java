@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,8 +44,21 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
 
     @Override
     public void onCreate( Bundle savedInstanceState) {
+        if(savedInstanceState!=null){
+            this.ultimodir=savedInstanceState.getString("diretorio");
+        }
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString("diretorio",ultimodir);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -62,6 +77,13 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
         }
         getDirFromRoot(ultimodir,null);
         return mView;
+    }
+
+    @Override
+    public void onStart() {
+        Log.wtf("resolvendo rotacao:",this.getClass().getName());
+        Thread.dumpStack();
+        super.onStart();
     }
 
     public void refresh(Bundle data){

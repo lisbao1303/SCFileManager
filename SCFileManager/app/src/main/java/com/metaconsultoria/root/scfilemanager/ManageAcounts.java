@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ public class ManageAcounts extends Fragment implements View.OnClickListener, Act
     private LayoutInflater inflater;
     private ViewGroup container;
     private View vi;
+    private boolean isElevated=false;
 
 
     public ManageAcounts() {
@@ -32,11 +34,24 @@ public class ManageAcounts extends Fragment implements View.OnClickListener, Act
     }
 
     @Override
-    public void onStop() {
+    public void onDestroy() {
         container.removeAllViews();
-        super.onStop();
+        super.onDestroy();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        if(isElevated){
+            this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.func_frag_area,new AccountList()).commit();
+        }
+        super.onResume();
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -44,8 +59,17 @@ public class ManageAcounts extends Fragment implements View.OnClickListener, Act
         // Inflate the layout for this fragment
         this.inflater=inflater;
         this.container=container;
-        vi= inflater.inflate(R.layout.autenticate_layout, container, false);
-        vi.findViewById(R.id.button).setOnClickListener(this);
+        if(savedInstanceState!=null){
+            isElevated=savedInstanceState.getBoolean("is_elevated");
+        }
+        if(!isElevated){
+            vi = inflater.inflate(R.layout.autenticate_layout, container, false);
+            vi.findViewById(R.id.button).setOnClickListener(this);
+        }else{
+            vi=inflater.inflate(R.layout.fragment_manage_acounts,container,false);
+            vi.findViewById(R.id.floatingActionButtonAdd).setOnClickListener(this);
+            vi.findViewById(R.id.floatingActionButtonRemoveaAct).setOnClickListener(this);
+        }
         return vi;
     }
 
@@ -92,6 +116,12 @@ public class ManageAcounts extends Fragment implements View.OnClickListener, Act
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean("is_elevated",isElevated);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode==ConstantesDoProjeto.NEW_USER_REQUEST){
             if(resultCode== Activity.RESULT_OK){
@@ -107,7 +137,7 @@ public class ManageAcounts extends Fragment implements View.OnClickListener, Act
         FuncDB fdb=new FuncDB(getContext());
         Funcionario func = fdb.findByMatricula(matricula);
         if(func!=null){
-            if(func.getSenha().equals(senha)){return true;}
+            if(func.getSenha().equals(senha)){return isElevated=true;}
         }
         return false;
     }

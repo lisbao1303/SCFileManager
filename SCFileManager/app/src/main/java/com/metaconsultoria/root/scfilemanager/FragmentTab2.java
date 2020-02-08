@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 
 public class FragmentTab2 extends Fragment{
-
+    private Bundle instance;
     private String mainpath = Environment.getExternalStorageDirectory().getPath();
     public FragmentFileEx mfragment;
     public FragmentTab2() {
@@ -28,6 +29,7 @@ public class FragmentTab2 extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance =savedInstanceState;
         setRetainInstance(true);
         if (getArguments() != null) {
         }
@@ -56,5 +58,11 @@ public class FragmentTab2 extends Fragment{
             this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.file_recent_area, mFragmentRecent).commit();
             ((MainNavigationDrawerActivity) getActivity()).setMainFragmentFileEx(mfragment);
         }
+    }
+
+    @Override
+    public void onStart() {
+        Log.wtf("here it is","porra");
+        super.onStart();
     }
 }
