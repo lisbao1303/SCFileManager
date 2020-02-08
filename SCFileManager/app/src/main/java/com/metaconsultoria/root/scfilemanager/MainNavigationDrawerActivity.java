@@ -380,8 +380,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     }
 
     private void abrirAcountMan(){
+        if(navDrawerSelected!=R.id.nav_user_manager){
         ManageAcounts config= new ManageAcounts();
-        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, config).commit();
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, config).commit();}
     }
 
     private void abrirexplorador(String Cpass){

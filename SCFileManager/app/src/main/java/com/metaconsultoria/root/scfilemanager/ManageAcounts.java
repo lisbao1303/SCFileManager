@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +42,15 @@ public class ManageAcounts extends Fragment implements View.OnClickListener, Act
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        setRetainInstance(true);
         super.onCreate(savedInstanceState);
+        if(savedInstanceState!=null){
+            isElevated=savedInstanceState.getBoolean("is_elevated");
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -59,9 +67,7 @@ public class ManageAcounts extends Fragment implements View.OnClickListener, Act
         // Inflate the layout for this fragment
         this.inflater=inflater;
         this.container=container;
-        if(savedInstanceState!=null){
-            isElevated=savedInstanceState.getBoolean("is_elevated");
-        }
+        Log.wtf("que","loucura");
         if(!isElevated){
             vi = inflater.inflate(R.layout.autenticate_layout, container, false);
             vi.findViewById(R.id.button).setOnClickListener(this);
