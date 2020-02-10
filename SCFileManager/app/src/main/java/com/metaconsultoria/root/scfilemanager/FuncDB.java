@@ -28,7 +28,8 @@ public class FuncDB extends SQLiteOpenHelper {
                         "nome text," +
                         "matricula text not null," +
                         "restauracao text," +
-                        "senha text not null);"
+                        "senha text not null," +
+                        "generated_by text);"
         );
     }
 
@@ -58,6 +59,29 @@ public class FuncDB extends SQLiteOpenHelper {
         }
     }
 
+    public long save(Funcionario func, Funcionario generator) {
+        if(!func.isSaveble()){return -1;}
+        Funcionario pesquisa = findByMatricula(func.getMatricula());
+        if (pesquisa != null) {
+            if (func.getMatricula().equals(pesquisa.getMatricula())) {
+                return pesquisa.id;
+            }
+        }
+        ContentValues values = new ContentValues();
+        values.put("nome", func.getNome());
+        values.put("matricula", func.getMatricula());
+        values.put("restauracao", func.getRestauracao());
+        values.put("senha", func.getSenha());
+        values.put("generated_by",generator.generate());
+
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            return db.insert(FuncDB.TABLE_OF_FUNC_NAME, "", values);
+        } finally {
+            db.close();
+        }
+    }
+
     public List<Funcionario> findAll() {
         SQLiteDatabase db = getWritableDatabase();
         try {
@@ -71,6 +95,7 @@ public class FuncDB extends SQLiteOpenHelper {
                         fx.setMatricula(c.getString(c.getColumnIndex("matricula")));
                         fx.setRestauracao(c.getString(c.getColumnIndex("restauracao")));
                         fx.setSenha(c.getString(c.getColumnIndex("senha")));
+                        fx.setGeneratedBy(c.getString(c.getColumnIndex("generated_by")));
                         fx_vetor.add(fx);
                     } while (c.moveToNext());
                 }
@@ -95,7 +120,35 @@ public class FuncDB extends SQLiteOpenHelper {
                 fx.setMatricula(c.getString(c.getColumnIndex("matricula")));
                 fx.setRestauracao(c.getString(c.getColumnIndex("restauracao")));
                 fx.setSenha(c.getString(c.getColumnIndex("senha")));
+                fx.setGeneratedBy(c.getString(c.getColumnIndex("generated_by")));
                 return fx;
+            } else {
+                return null;
+            }
+        } finally {
+            db.close();
+        }
+    }
+
+    public List<Funcionario> findGeneratedBy(String matricula) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            Cursor c = db.query(FuncDB.TABLE_OF_FUNC_NAME, null, "generated_by like '%" +matricula+ "%'", null, null, null, null);
+            if (c.getCount() > 0) {
+                List<Funcionario> fx_vetor = new ArrayList<Funcionario>();
+                if (c.moveToFirst()) {
+                    do {
+                        Funcionario fx = new Funcionario(c.getLong(c.getColumnIndex("id")));
+                        fx.setNome(c.getString(c.getColumnIndex("nome")));
+                        fx.setMatricula(c.getString(c.getColumnIndex("matricula")));
+                        fx.setRestauracao(c.getString(c.getColumnIndex("restauracao")));
+                        fx.setSenha(c.getString(c.getColumnIndex("senha")));
+                        fx.setGeneratedBy(c.getString(c.getColumnIndex("generated_by")));
+                        fx_vetor.add(fx);
+                    } while (c.moveToNext());
+                }
+                Collections.sort(fx_vetor);
+                return fx_vetor;
             } else {
                 return null;
             }
@@ -156,6 +209,7 @@ public class FuncDB extends SQLiteOpenHelper {
         values.put("nome", func.getNome());
         values.put("restauracao", func.getRestauracao());
         values.put("senha", func.getSenha());
+        values.put("generated_by",func.generate());
 
         String selection = "matricula" + " LIKE ?";
         String[] selectionArgs = {func.getMatricula()};

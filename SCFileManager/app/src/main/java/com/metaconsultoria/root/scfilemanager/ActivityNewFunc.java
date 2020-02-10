@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 public class ActivityNewFunc extends AppCompatActivity implements View.OnClickListener {
     private boolean isFirstAcess;
+    private Funcionario generator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +23,8 @@ public class ActivityNewFunc extends AppCompatActivity implements View.OnClickLi
         setSupportActionBar(toolbar);
         setTitle(R.string.string_cadastrar_usuario);
 
-        Intent intent= getIntent();
-        isFirstAcess =intent.getExtras().getBoolean("isFirst");
+        Bundle bundle= getIntent().getExtras();
+        isFirstAcess =bundle.getBoolean("isFirst");
 
         ((Button)findViewById(R.id.button_add)).setOnClickListener(this);
         View cancel = ((Button)findViewById(R.id.button_cancel));
@@ -35,6 +36,8 @@ public class ActivityNewFunc extends AppCompatActivity implements View.OnClickLi
         }else{
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            FuncDB fdb = new FuncDB(this);
+            generator=fdb.findByMatricula(bundle.getString("generator"));
         }
     }
 
@@ -61,8 +64,11 @@ public class ActivityNewFunc extends AppCompatActivity implements View.OnClickLi
                 fx.setMatricula(matricula);
                 fx.setSenha(senha);
                 fx.setRestauracao(restauracao);
-                fdb.save(fx);
-
+                if(isFirstAcess) {
+                    fdb.save(fx);
+                }else{
+                    fdb.save(fx,generator);
+                }
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("matricula", matricula);
                 setResult(Activity.RESULT_OK,returnIntent);

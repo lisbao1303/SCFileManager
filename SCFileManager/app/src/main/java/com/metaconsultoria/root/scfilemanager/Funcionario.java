@@ -6,6 +6,7 @@ public class Funcionario implements Comparable<Funcionario>{
     private String Matricula;
     private String Restauracao;
     private String Senha;
+    private String GeneratedBy;
 
     public Funcionario(){
         this.id=-1;
@@ -52,6 +53,28 @@ public class Funcionario implements Comparable<Funcionario>{
             return true;
         }else{
             return false;
+        }
+    }
+
+    public String getGeneratedBy() {
+        return GeneratedBy;
+    }
+
+    public void setGeneratedBy(String generatedBy) {
+        GeneratedBy = generatedBy;
+    }
+
+    public String generate(){
+        return this.getMatricula()+","+getGeneratedBy();
+    }
+
+    public String getFirstName(){
+        int index=getNome().indexOf(' ');
+        if(index>0){
+            return getNome().substring(0,index);
+        }
+        else{
+            return getNome();
         }
     }
 

@@ -35,8 +35,10 @@ public class AccountList extends Fragment implements FuncAdapter.FuncOnClickList
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FuncDB funcDB=new FuncDB(getContext());
-        funcs=funcDB.findAll();
-
+        Bundle b = getArguments();
+        if(b!=null) {
+            funcs = funcDB.findGeneratedBy(b.getString("manager"));
+        }
         View v= inflater.inflate(R.layout.fragment_account_list, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recicler_func);
         layoutManager = new LinearLayoutManager(getActivity());
@@ -67,6 +69,7 @@ public class AccountList extends Fragment implements FuncAdapter.FuncOnClickList
         FuncDB funcDB= new FuncDB(getContext());
         funcDB.deleteByMatricula(func.getMatricula());
         funcs.remove(id);
+        funcAdapter.refreshFuncList(funcs);
         funcAdapter.notifyItemRemoved(id);
     }
 }

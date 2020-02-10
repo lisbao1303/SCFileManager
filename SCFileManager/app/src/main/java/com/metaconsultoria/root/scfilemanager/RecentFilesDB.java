@@ -358,7 +358,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         }
     }
 
-    public MyComent findByComentId(MyArquive arq,int id) {
+    public MyComent findByComentId(MyArquive arq,long id) {
         SQLiteDatabase db = getWritableDatabase();
         try {
             Cursor c = db.query("tab"+String.valueOf(arq.id), null, "id=" +String.valueOf(id), null, null, null, null);
@@ -373,6 +373,16 @@ public class RecentFilesDB extends SQLiteOpenHelper {
             } else {
                 return null;
             }
+        } finally {
+            db.close();
+        }
+    }
+
+    public int deleteComentByID(MyArquive arq,long id) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            int count = db.delete("tab"+String.valueOf(arq.id), "coment_id=?", new String[]{String.valueOf(id)});
+            return count;
         } finally {
             db.close();
         }

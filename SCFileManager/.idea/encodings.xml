@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" addBOMForNewFiles="with NO BOM" />
+  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+    <file url="file://$USER_HOME$/AndroidStudio/DeviceExplorer/Nexus_9_API_24 [emulator-5554]/data/user/0/com.metaconsultoria.root.scfilemanager/databases/elevated.sqlite" charset="ISO-8859-1" />
+  </component>
 </project>

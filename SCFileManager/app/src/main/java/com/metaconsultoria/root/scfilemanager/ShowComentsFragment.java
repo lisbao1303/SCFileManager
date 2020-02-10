@@ -26,6 +26,7 @@ public class ShowComentsFragment extends Fragment implements ComentAdapter.Comen
     private LinearLayoutManager layoutManager;
     private RecentFilesDB db;
     private MyArquive arq;
+    private ComentAdapter comentAdapter;
 
     public ShowComentsFragment() {
         // Required empty public constructor
@@ -54,7 +55,8 @@ public class ShowComentsFragment extends Fragment implements ComentAdapter.Comen
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(coments!=null) {recyclerView.setAdapter(new ComentAdapter(getContext(),coments,this));}
+        comentAdapter =new ComentAdapter(getContext(),coments,this);
+        if(coments!=null) {recyclerView.setAdapter(comentAdapter);}
     }
 
     @Override
@@ -64,6 +66,19 @@ public class ShowComentsFragment extends Fragment implements ComentAdapter.Comen
 
     @Override
     public void onClickComent(View view, int idx) {
+
+    }
+
+    @Override
+    public void onClickDellComent(View view, int idx) {
+        db.deleteComentByID(arq,coments.get(idx).getId());
+        coments.remove(idx);
+        comentAdapter.refreshComentList(coments);
+        comentAdapter.notifyItemRemoved(idx);
+    }
+
+    @Override
+    public void onClickEditComent(View view, int idx) {
 
     }
 

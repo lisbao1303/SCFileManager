@@ -27,9 +27,12 @@ public class FuncAdapter extends RecyclerView.Adapter<FuncAdapter.FuncViewHolder
         if(funcs==null){ return 0;}
         else{return this.funcs.size();}
     }
+    public void refreshFuncList(List<Funcionario> funcs){
+        this.funcs=funcs;
+    }
 
     @Override
-    public void onBindViewHolder(@NonNull final FuncAdapter.FuncViewHolder staredViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final FuncAdapter.FuncViewHolder staredViewHolder, int i) {
         Funcionario c = funcs.get(i);
         if(c!=null) {
             staredViewHolder.nome.setText(context.getText(R.string.nome_const)+ c.getNome());
@@ -39,15 +42,15 @@ public class FuncAdapter extends RecyclerView.Adapter<FuncAdapter.FuncViewHolder
                 staredViewHolder.removeView.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        funcListener.onClickRemove(v, i);
+                        funcListener.onClickRemove(v, staredViewHolder.getAdapterPosition());
                     }
                 });
                 staredViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                                                                 @Override
-                                                                 public void onClick(View v) {
-                                                                     funcListener.onClickFunc(v, i);
-                                                                 }
-                                                             }
+                    @Override
+                    public void onClick(View v) {
+                        funcListener.onClickFunc(v, staredViewHolder.getAdapterPosition());
+                    }
+                }
 
                 );
             }

@@ -41,7 +41,7 @@ public class NewComentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         final Activity activity = getActivity();
 
-        activity.findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {
+        activity.findViewById(R.id.imageButtonEdit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText editText1=(EditText) activity.findViewById(R.id.editText_name_new_coment);

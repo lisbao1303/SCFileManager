@@ -250,41 +250,40 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         item.setChecked(true);
         setMainFrag(item.getItemId());
-
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
 
-    private boolean setMainFrag(int id){
+    public boolean setMainFrag(int id){
+        boolean returnstatement;
         if (id == R.id.nav_arq_window) {
             this.abrirArqPage();
             this.attToolbarArqPage();
-            Log.wtf("teste","maroto");
-            return true;
+            returnstatement=true;
         }  else if (id == R.id.nav_edit_window) {
             this.attToolbarEditPage();
             this.abrirEditPage();
-            return true;
+            returnstatement=true;
         } else if (id == R.id.nav_fav_explorer) {
-            Log.wtf("teste","maroto");
             this.attToolbarFavoritos();
             this.abrirFavoritos();
-            return true;
+            returnstatement=true;
         } else if (id == R.id.nav_add_qr_code) {
             this.abrirAddQr();
             this.attToolbarAddQr();
-            return true;
+            returnstatement=true;
         } else if (id == R.id.nav_user_manager) {
             this.abrirAcountMan();
             this.attToolbarAcountMan();
-            return true;
+            returnstatement=true;
         }else {
             Log.wtf("nao achor","nd");
-            return false;
+            returnstatement=false;
         }
+        navDrawerSelected=id;
+        return returnstatement;
     }
 
     private boolean refreshToolbar(int id){
