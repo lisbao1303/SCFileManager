@@ -1,8 +1,12 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.text.TextPaint;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -42,6 +46,25 @@ public class QRCodeGenerator {
         canvas.drawBitmap(overlayedBitmap,new Matrix(),null);
         canvas.drawBitmap(overlayBitmap, (float)marginLeft, (float)marginTop,null);
         return overlayedBitmap;
+    }
+
+    public static Bitmap genratePrintPdf(Bitmap imageQr,Bitmap metaIc,String nome,String path){
+        Bitmap bit=Bitmap.createBitmap(imageQr.getWidth(),(int)(imageQr.getWidth()*1.5) , Bitmap.Config.ARGB_8888);
+        Canvas canvas= new Canvas(bit);
+        canvas.drawBitmap(bit,new Matrix(),null);
+        double marginLeft = 0;
+        double marginTop = (bit.getHeight()*0.5-imageQr.getHeight()*0.5);
+        canvas.drawBitmap(imageQr,(float)marginLeft,(float)marginTop,null);
+        marginLeft = (imageQr.getWidth()- metaIc.getWidth());
+        marginTop = (bit.getHeight()-metaIc.getHeight());
+        canvas.drawBitmap(metaIc,(float)marginLeft,(float)marginTop,null);
+        Paint paint = new TextPaint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(25);
+        canvas.drawText(nome,40,50,paint);
+        paint.setTextSize(12);
+        canvas.drawText(path,30,bit.getHeight()-50,paint);
+        return bit;
     }
 
 }

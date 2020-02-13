@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,8 +29,11 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -86,7 +90,9 @@ public class QRCodePreview extends AppCompatActivity {
         if(i==R.id.action_print){
                 PrintHelper photoPrinter = new PrintHelper(this);
                 photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-                photoPrinter.printBitmap("droids.jpg - test print", bitmap);
+                Bitmap bit= BitmapFactory.decodeResource(getResources(),R.mipmap.meta_2);
+                bit = Bitmap.createScaledBitmap(bit, 80, 80, true);
+                photoPrinter.printBitmap("droids.jpg - test print", QRCodeGenerator.genratePrintPdf(bitmap,bit,arq.getNome(),arq.getPath()));
         }
         if(i==R.id.action_send){
                 String str=FileHandler.saveImageToInternalStorage(bitmap,this,arq.getNome());
@@ -149,7 +155,6 @@ public class QRCodePreview extends AppCompatActivity {
 
             PdfWriter.getInstance(document, fOut);
             document.open();
-
             //////////////////
             Font f1=new Font(Font.FontFamily.HELVETICA,20,Font.BOLD);
             Font f2=new Font(Font.FontFamily.HELVETICA,12,Font.NORMAL);
@@ -157,14 +162,29 @@ public class QRCodePreview extends AppCompatActivity {
             p1.setAlignment(Element.ALIGN_CENTER);
             //p1.setSpacingAfter(10);
             document.add(p1);
+            document.addTitle(nome);
             Image img = Image.getInstance((new File(Uri.parse(str).getPath())).getAbsolutePath());
             img.setAlignment(Element.ALIGN_CENTER);
             img.scaleToFit(new Rectangle(200,200));
-            img.setSpacingAfter(30);
             document.add(img);
-            Paragraph p2 =new Paragraph(arq.getPath(),f2);
+            PdfPTable table= new PdfPTable(new float[] { 0.8f, 0.2f });
+            PdfPCell p2 =(new PdfPCell(new Paragraph(arq.getPath(),f2)));
+            p2.setBorder(PdfPCell.NO_BORDER);
+            Bitmap bit= BitmapFactory.decodeResource(getResources(),R.mipmap.meta_2);
+            ByteArrayOutputStream stream3 = new ByteArrayOutputStream();
+            bit.compress(Bitmap.CompressFormat.PNG, 100, stream3);
+            Image maimg = Image.getInstance(stream3.toByteArray());
+            maimg.scaleToFit(new Rectangle(30,30));
+            PdfPCell p3 =(new PdfPCell(maimg));
+            p3.setBorder(PdfPCell.NO_BORDER);
+            p3.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            p3.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+            table.addCell(p2);
+            table.addCell(p3);
+            table.setWidthPercentage(90.0f);
+            table.setSpacingBefore(30);
             //p1.setAlignment(Element.ALIGN_CENTER);
-            document.add(p2);
+            document.add(table);
         } catch (DocumentException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
