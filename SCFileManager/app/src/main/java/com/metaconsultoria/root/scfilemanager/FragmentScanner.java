@@ -1,10 +1,12 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +28,6 @@ public class FragmentScanner extends Fragment implements ZXingScannerView.Result
     private ZXingScannerView scannerView;
     private LinearLayout scannerViewLayout;
     private CustomZXingScannerView customZXingScannerView;
-    private String mainpath = Environment.getExternalStorageDirectory().getPath();
 
 
     @Nullable
@@ -71,10 +72,12 @@ public class FragmentScanner extends Fragment implements ZXingScannerView.Result
     @Override
     public void handleResult(Result result) {
         if (result != null) {
-            boolean exists = (new File(mainpath+result.getText())).exists();
+            String str=result.getText();
+            Log.wtf("teste",str);
+            boolean exists = (new File(Uri.parse(result.getText()).getPath())).exists();
             if(exists) {
                 FragmentFileEx.FragmentListener mListener = (FragmentFileEx.FragmentListener) getActivity();
-                mListener.Scanner(mainpath+result.getText());
+                mListener.Scanner((new File(Uri.parse(result.getText()).getPath())).getAbsolutePath());
                 scannerView.resumeCameraPreview(this);
             }else{
                 Toast.makeText(getContext().getApplicationContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();

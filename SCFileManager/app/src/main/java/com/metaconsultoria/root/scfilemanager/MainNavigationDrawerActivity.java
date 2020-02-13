@@ -40,6 +40,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private MenuItem configItem;
     private MenuItem listCardItem;
     private FragmentMainTabs fragMain;
+    private EditScreen config =null;
+    private StaredFragment fav =null;
     private int tabselected=0;
     private int navDrawerSelected;
     private Bundle instance = null;
@@ -338,7 +340,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     // metodo de selecao do drawer
     private void abrirEditPage(){
-        EditScreen config= new EditScreen();
+        if(config==null){config= new EditScreen();}
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, config).commit();
     }
 
@@ -352,7 +354,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     // metodo de selecao do drawer
     private void abrirFavoritos(){
-        StaredFragment fav= new StaredFragment();
+        if(fav==null){fav= new StaredFragment();}
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fav).commit();
     }
 

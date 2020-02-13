@@ -154,9 +154,9 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
             mfile.mkdir();
             File provider = new File(mfile.getPath(),"/storage");
             FileHandler.copyToProvider(ur.getPath(),provider.getPath());
-            File shareFile=new File(provider.getPath()+"/"+arquivo.getNome()+".pdf");
+            File shareFile=new File(provider.getPath()+"/"+arquivo.getNome());
 
-
+            Log.wtf("open with",shareFile.getPath());
             Uri uri = FileProvider.getUriForFile(this, getPackageName()+".fileprovider", shareFile);
 
             intent = new Intent(Intent.ACTION_VIEW)

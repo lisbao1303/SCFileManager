@@ -127,9 +127,12 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
                 Toast.makeText(getContext(),"calma, papai ta aqui",Toast.LENGTH_SHORT);
             }else{
                 File m_isFile = new File(clickablelist.m_pathp.get(idx).toString());
+
                 int m_ultimoponto = m_isFile.getAbsolutePath().lastIndexOf(".");
                 String m_caminhofile = m_isFile.getAbsolutePath();
                 file = Uri.fromFile(m_isFile);
+
+                Log.wtf("sera",m_isFile.getPath());
                 if (m_isFile.isDirectory()) {
                     ultimodir= m_isFile.toString();
                     getDirFromRoot(m_isFile.toString(),null);

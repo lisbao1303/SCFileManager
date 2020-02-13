@@ -48,6 +48,7 @@ public class FragmentTab2 extends Fragment{
         if(savedInstanceState==null) {
             mfragment = new FragmentFileEx();
             Bundle arguments = new Bundle();
+            Log.wtf("teste",mainpath);
             arguments.putString("arqpath", mainpath);
             arguments.putString("text", null);
             arguments.putBoolean("isGenerator",false);

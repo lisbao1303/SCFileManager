@@ -1,8 +1,14 @@
 package com.metaconsultoria.root.scfilemanager;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class FileHandler{
 
@@ -98,6 +104,39 @@ public class FileHandler{
         catch (Exception e) {
             Log.e("tag", e.getMessage());
         }
+    }
+
+    public static String saveImageToInternalStorage(Bitmap image, Context contx,String arqName ) {
+        File pictureFile = getOutputMediaFile(contx,arqName);
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.close();
+
+            return Uri.fromFile(pictureFile).toString();
+        } catch (Exception e) {
+            Log.e("saveToInternalStorage()", e.getMessage());
+            return null;
+        }
+    }
+
+    static private  File getOutputMediaFile(Context contx, String arqName){
+
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                + "/Android/data/"
+                + contx.getApplicationContext().getPackageName()
+                + "/Files/QR_images");
+
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                return null;
+            }
+        }
+        // Create a media file name
+        File mediaFile;
+        String mImageName="QR_"+ arqName +".jpeg";
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+        return mediaFile;
     }
 
     public static void copyToProvider(String arqpath,String provider){
