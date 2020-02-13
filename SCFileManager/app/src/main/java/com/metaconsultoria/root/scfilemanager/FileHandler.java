@@ -89,9 +89,11 @@ public class FileHandler{
 
         catch (FileNotFoundException fnfe1) {
             Log.e("tag", fnfe1.getMessage());
+            fnfe1.printStackTrace();
         }
         catch (Exception e) {
             Log.e("tag", e.getMessage());
+            e.printStackTrace();
         }
 
     }

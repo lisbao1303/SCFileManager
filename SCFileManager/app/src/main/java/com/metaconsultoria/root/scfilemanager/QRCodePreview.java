@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.print.PrintManager;
 import android.support.v4.content.FileProvider;
+import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -80,24 +81,16 @@ public class QRCodePreview extends AppCompatActivity {
         if(i==R.id.action_pdf){
             String str=FileHandler.saveImageToInternalStorage(bitmap,this,arq.getNome());
             str= makePdf(this,arq.getNome(),str);
-            openWith(str,"QR_"+arq.getNome(),"application/pdf");
+            openWith(str,"QR_"+arq.getNome()+".pdf","application/pdf");
         }
         if(i==R.id.action_print){
-                // Get a PrintManager instance
-                PrintManager printManager = (PrintManager) this
-                        .getSystemService(Context.PRINT_SERVICE);
-
-                // Set job name, which will be displayed in the print queue
-                String jobName = this.getString(R.string.app_name) + " Document";
-
-                // Start a print job, passing in a PrintDocumentAdapter implementation
-                // to handle the generation of a print document
-                printManager.print(jobName, new MyPrintDocumentAdapter(this),
-                        null); //
+                PrintHelper photoPrinter = new PrintHelper(this);
+                photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                photoPrinter.printBitmap("droids.jpg - test print", bitmap);
         }
         if(i==R.id.action_send){
                 String str=FileHandler.saveImageToInternalStorage(bitmap,this,arq.getNome());
-                openWith(str,arq.getNome(),"image/jpeg");
+                openWith(str,"QR_"+arq.getNome()+".jpeg","image/jpeg");
         }
         if(i==android.R.id.home){
             this.onBackPressed();
@@ -146,11 +139,11 @@ public class QRCodePreview extends AppCompatActivity {
             document.addAuthor("Thiago de Souza");
             document.addSubject("This is the result of a Test.");
 
-            File dir = new File(path,"QR_"+arq.getNome());
+            File dir = new File(path,"QR_"+arq.getNome()+".pdf");
             if (!dir.exists()) {
                 dir.getParentFile().mkdirs();
             }
-            //path=dir.getPath();
+            path=dir.getPath();
             FileOutputStream fOut = new FileOutputStream(dir);
             fOut.flush();
 
@@ -158,8 +151,8 @@ public class QRCodePreview extends AppCompatActivity {
             document.open();
 
             //////////////////
-            Font f1=new Font(Font.FontFamily.TIMES_ROMAN,20,Font.BOLD);
-            Font f2=new Font(Font.FontFamily.TIMES_ROMAN,12,Font.NORMAL);
+            Font f1=new Font(Font.FontFamily.HELVETICA,20,Font.BOLD);
+            Font f2=new Font(Font.FontFamily.HELVETICA,12,Font.NORMAL);
             Paragraph p1 =new Paragraph(nome,f1);
             p1.setAlignment(Element.ALIGN_CENTER);
             //p1.setSpacingAfter(10);
@@ -169,7 +162,7 @@ public class QRCodePreview extends AppCompatActivity {
             img.scaleToFit(new Rectangle(200,200));
             img.setSpacingAfter(30);
             document.add(img);
-            Paragraph p2 =new Paragraph(str,f2);
+            Paragraph p2 =new Paragraph(arq.getPath(),f2);
             //p1.setAlignment(Element.ALIGN_CENTER);
             document.add(p2);
         } catch (DocumentException e) {
