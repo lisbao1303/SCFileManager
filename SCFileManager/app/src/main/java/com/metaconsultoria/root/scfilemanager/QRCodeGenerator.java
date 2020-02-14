@@ -61,9 +61,43 @@ public class QRCodeGenerator {
         Paint paint = new TextPaint();
         paint.setColor(Color.BLACK);
         paint.setTextSize(25);
-        canvas.drawText(nome,40,50,paint);
+        int cont=0;
+        int loc=50;
+        int contador=0;
+        while(contador<3) {
+            if(cont+30>nome.length()){
+                canvas.drawText(nome,cont,nome.length(), 40, loc, paint);
+                break;
+            }
+            canvas.drawText(nome,cont,cont+30, 40, loc, paint);
+            cont=cont+30;
+            loc=loc+50;
+            contador++;
+            if(cont>nome.length()){break;}
+        }
         paint.setTextSize(12);
-        canvas.drawText(path,30,bit.getHeight()-50,paint);
+        cont=path.length();
+        loc=20;
+        contador=0;
+        int linesNumber = cont/50;
+        if(linesNumber>=5){
+            loc=20*5;
+            path=path.substring(path.length()-5*50);
+        }else{
+            loc=loc+20*linesNumber;
+        }
+        cont=0;
+        while(contador<5) {
+            if(cont+50>path.length()){
+                canvas.drawText(path,cont,path.length(), 40,bit.getHeight()-loc, paint);
+                break;
+            }
+            canvas.drawText(path,cont,cont+50, 40, bit.getHeight()-loc, paint);
+            cont=cont+50;
+            loc=loc-20;
+            contador++;
+            if(cont>path.length()){break;}
+        }
         return bit;
     }
 

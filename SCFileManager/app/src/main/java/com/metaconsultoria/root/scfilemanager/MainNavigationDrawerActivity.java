@@ -354,7 +354,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     // metodo de selecao do drawer
     private void abrirFavoritos(){
-        if(fav==null){fav= new StaredFragment();}
+        fav= new StaredFragment();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fav).commit();
     }
 
