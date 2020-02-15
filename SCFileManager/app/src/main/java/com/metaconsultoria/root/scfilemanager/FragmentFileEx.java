@@ -1,5 +1,7 @@
 package com.metaconsultoria.root.scfilemanager;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -125,8 +127,11 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
         }
         teste++;
         if(isGenerator){
-            TextView textView=this.getActivity().findViewById(R.id.editText_restauracao);
-            if(textView!=null)textView.setText(p_rootPath);
+            Activity act=this.getActivity();
+            if(act!=null) {
+                TextView textView = act.findViewById(R.id.editText_restauracao);
+                if (textView != null) textView.setText(p_rootPath);
+            }
         }
     }
 

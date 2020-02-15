@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -20,16 +21,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
-import java.lang.invoke.ConstantCallSite;
 
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
@@ -50,6 +47,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         instance = savedInstanceState;
+
+        //testando permissoes
         if(!checkPermissoes()){
             try {
                 requestPermissoes();
@@ -59,6 +58,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             }
         }
 
+        //encontrando cartao fisico
         File[] teste = this.getExternalFilesDirs(null);
         String buffer="";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -81,6 +81,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         buffer=buffer.substring(0,buffer.indexOf("/Android"));
         ConstantesDoProjeto.getInstance().setMainPath(buffer);
         ConstantesDoProjeto.getInstance().setMainPathProtected(buffer+"/ArquivosSouza");
+
+        //inicio da activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navigation_drawer);
 
@@ -110,7 +112,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
                 if(!setMainFrag(navDrawerSelected)){
                     Log.wtf("teste","maroto");
                 fragMain = new FragmentMainTabs();
-                this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();}
+                this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
+                navDrawerSelected=R.id.nav_arq_window;}
         super.onResume();
         FuncDB fdb = new FuncDB(this);
         if(fdb.findAll()==null){
@@ -160,9 +163,21 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(fragMain.getCurentTab()==1){
-              if(mainFragmentFileEx.upDir()){super.onBackPressed();}
-        }else {
+        } else if(navDrawerSelected==R.id.nav_arq_window){
+              fragMain=(FragmentMainTabs) this.getSupportFragmentManager().findFragmentById(R.id.screen_area);
+              if(fragMain.getCurentTab()==1) {
+                  FragmentFileEx fragmentFileEx=(FragmentFileEx) this.getSupportFragmentManager().findFragmentById(R.id.file_ex_area);
+                  if (fragmentFileEx.upDir()) {
+                      super.onBackPressed();
+                  }
+              }
+        } else if(navDrawerSelected==R.id.nav_add_qr_code){
+            FragmentFileEx fragmentFileEx=(FragmentFileEx) this.getSupportFragmentManager().findFragmentById(R.id.replace_add_qr_fragment);
+            if (fragmentFileEx.upDir()) {
+                super.onBackPressed();
+            }
+
+        } else {
             super.onBackPressed();
         }
 
@@ -397,7 +412,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     // metodo de selecao do drawer
     private void abrirAddQr(){
-        FragmentAddQR mfragment=  new FragmentAddQR();
+        FragmentAddQR mfragment= new FragmentAddQR();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, mfragment).commit();
     }
 

@@ -11,18 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.util.Objects;
+
 
 public class FragmentAddQR extends Fragment implements View.OnClickListener{
 
     private FragmentFileEx mfragment;
-
+    private ImageView imageView;
     public FragmentAddQR() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        setRetainInstance(true);
         super.onCreate(savedInstanceState);
     }
 
@@ -30,19 +31,20 @@ public class FragmentAddQR extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment_add_qr, container, false);
+        View vi=inflater.inflate(R.layout.fragment_fragment_add_qr, container, false);
+        imageView =vi.findViewById(R.id.imageView_icon1);
+        imageView.setOnClickListener(this);
+        vi.findViewById(R.id.imageView_icon2).setOnClickListener(this);
+        vi.findViewById(R.id.imageView_icon3).setOnClickListener(this);
+        vi.findViewById(R.id.imageView_icon4).setOnClickListener(this);
+        vi.findViewById(R.id.imageView_help).setOnClickListener(this);
+
+        return vi;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        ImageView imageView =this.getActivity().findViewById(R.id.imageView_icon1);
-        imageView.setOnClickListener(this);
-        this.getActivity().findViewById(R.id.imageView_icon2).setOnClickListener(this);
-        this.getActivity().findViewById(R.id.imageView_icon3).setOnClickListener(this);
-        this.getActivity().findViewById(R.id.imageView_icon4).setOnClickListener(this);
-        this.getActivity().findViewById(R.id.imageView_help).setOnClickListener(this);
 
         if(ConstantesDoProjeto.getInstance().isProtect()){
             imageView.setAlpha(0.3f);
@@ -59,8 +61,10 @@ public class FragmentAddQR extends Fragment implements View.OnClickListener{
             arguments.putString("text", null);
             arguments.putBoolean("isGenerator",true);
             mfragment.setArguments(arguments);
-
-            this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace_add_qr_fragment, mfragment).commit();
+            Objects.requireNonNull(this.getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.replace_add_qr_fragment, mfragment).commit();
+        }
+        if(savedInstanceState!=null){
+            mfragment=(FragmentFileEx) Objects.requireNonNull(this.getActivity()).getSupportFragmentManager().findFragmentById(R.id.replace_add_qr_fragment);
         }
     }
 
