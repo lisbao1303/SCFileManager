@@ -54,6 +54,7 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
             if(ConstantesDoProjeto.getInstance().isProtect()){
                 mySwitch.setChecked(true);
             }
+            vi.findViewById(R.id.buttonLimparCache).setOnClickListener(this);
         }
         return vi;
     }
@@ -71,9 +72,14 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
                 if(ConstantesDoProjeto.getInstance().isProtect()){
                     mySwitch.setChecked(true);
                 }
+                getActivity().findViewById(R.id.buttonLimparCache).setOnClickListener(this);
             }else{
                 Toast.makeText(getContext(),R.string.string_usuario_ou_senha_incorretos,Toast.LENGTH_SHORT).show();
             }
+        }
+        if(v.getId()==R.id.buttonLimparCache){
+            RecentFilesDB db= new RecentFilesDB(getContext());
+            db.deleteAll();
         }
 
         }
