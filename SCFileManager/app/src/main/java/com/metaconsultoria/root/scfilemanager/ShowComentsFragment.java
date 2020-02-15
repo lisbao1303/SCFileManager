@@ -32,31 +32,38 @@ public class ShowComentsFragment extends Fragment implements ComentAdapter.Comen
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        db= new RecentFilesDB(getContext());
-        coments=db.findAllComent(arq);
-        if(coments==null){
-            return  inflater.inflate(R.layout.fragment_show_coments_null, container, false);
-        }
-        else {
-            View v = inflater.inflate(R.layout.fragment_show_coments, container, false);
-            recyclerView = (RecyclerView) v.findViewById(R.id.reciclerView);
-            layoutManager = new LinearLayoutManager(getActivity());
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            return v;
-        }
+            db = new RecentFilesDB(getContext());
+            coments = db.findAllComent(arq);
+            if (coments == null) {
+                return inflater.inflate(R.layout.fragment_show_coments_null, container, false);
+            } else {
+                View v = inflater.inflate(R.layout.fragment_show_coments, container, false);
+                recyclerView = (RecyclerView) v.findViewById(R.id.reciclerView);
+                layoutManager = new LinearLayoutManager(getActivity());
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                return v;
+            }
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        comentAdapter =new ComentAdapter(getContext(),coments,this);
-        if(coments!=null) {recyclerView.setAdapter(comentAdapter);}
+            super.onActivityCreated(savedInstanceState);
+            comentAdapter = new ComentAdapter(getContext(), coments, this);
+            if (coments != null) {
+                recyclerView.setAdapter(comentAdapter);
+            }
+
     }
 
     @Override

@@ -126,7 +126,7 @@ public class QRCodePreview extends AppCompatActivity {
             startActivity(intent);
         } else {
             intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(arqpath), "image/jpeg");
+            intent.setDataAndType(Uri.parse(arqpath), tipo);
             intent = Intent.createChooser(intent, getString(R.string.send_to));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

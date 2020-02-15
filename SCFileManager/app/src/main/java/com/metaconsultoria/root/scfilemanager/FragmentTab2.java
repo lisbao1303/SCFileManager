@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 public class FragmentTab2 extends Fragment{
     private Bundle instance;
-    private String mainpath = Environment.getExternalStorageDirectory().getPath();
+    private String mainpath;
     public FragmentFileEx mfragment;
     public FragmentTab2() {
         // Required empty public constructor
@@ -32,6 +32,11 @@ public class FragmentTab2 extends Fragment{
         instance =savedInstanceState;
         setRetainInstance(true);
         if (getArguments() != null) {
+        }
+        if(ConstantesDoProjeto.getInstance().isProtect()) {
+            mainpath = ConstantesDoProjeto.getInstance().getMainPathProtected();
+        }else{
+            mainpath = ConstantesDoProjeto.getInstance().getMainPath();
         }
     }
 

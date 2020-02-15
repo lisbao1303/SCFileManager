@@ -21,6 +21,13 @@ import com.github.barteksc.pdfviewer.listener.OnPageScrollListener;
 
 public class FragmentPDF extends Fragment implements OnPageChangeListener,  OnLoadCompleteListener, OnDrawListener, OnErrorListener, OnPageScrollListener{
     private SharedPreferences pdfReader;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

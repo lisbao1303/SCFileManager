@@ -28,6 +28,9 @@ import android.widget.Toast;
 
 import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.lang.invoke.ConstantCallSite;
+
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -40,8 +43,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private MenuItem configItem;
     private MenuItem listCardItem;
     private FragmentMainTabs fragMain;
-    private EditScreen config =null;
-    private StaredFragment fav =null;
     private int tabselected=0;
     private int navDrawerSelected;
     private Bundle instance = null;
@@ -57,6 +58,29 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
+
+        File[] teste = this.getExternalFilesDirs(null);
+        String buffer="";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            for(int i=0;i<teste.length;i++){
+                if(Environment.isExternalStorageRemovable((teste[i]))){
+                    buffer=teste[i].getPath();
+                    break;
+                }
+                if(i==(teste.length-1)){
+                    buffer=teste[0].getPath();
+                }
+            }
+        }else{
+            if(teste.length>1){
+                buffer=teste[1].getPath();
+            }else{
+                buffer=teste[0].getPath();
+            }
+        }
+        buffer=buffer.substring(0,buffer.indexOf("/Android"));
+        ConstantesDoProjeto.getInstance().setMainPath(buffer);
+        ConstantesDoProjeto.getInstance().setMainPathProtected(buffer+"/ArquivosSouza");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navigation_drawer);
 
@@ -318,7 +342,12 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     // metodo de selecao do drawer
     private void attToolbarArqPage(){
         this.setTitle(R.string.title_activity_main_navigation_drawer);
-        findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+        if(tabselected==0) {
+            findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+        }
+        if(tabselected==1){
+            findViewById(R.id.floatingActionButton).setVisibility(View.VISIBLE);
+        }
         if(tabselected==0){searchItem.setVisible(false);}
         else{searchItem.setVisible(true);}
         configItem.setVisible(true);
@@ -340,7 +369,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     // metodo de selecao do drawer
     private void abrirEditPage(){
-        if(config==null){config= new EditScreen();}
+        EditScreen config= new EditScreen();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, config).commit();
     }
 
@@ -354,7 +383,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
     // metodo de selecao do drawer
     private void abrirFavoritos(){
-        fav= new StaredFragment();
+        StaredFragment fav= new StaredFragment();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fav).commit();
     }
 

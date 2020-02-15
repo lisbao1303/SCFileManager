@@ -33,13 +33,13 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         private NavigationView drawer;
         private FrameLayout fundo;
         private int shortAnimationDuration;
+        private int tabSelected=-1;
         private boolean isDrawerOpen =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_reader);
-
         Toolbar toolbar = findViewById(R.id.toolbar_2);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -62,11 +62,22 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         Log.wtf("arquivoID",String.valueOf(arquivo.id));
         setStared(arquivo.getStared());
 
-        Bundle arguments= new Bundle();
-        arguments.putString("caminho",arquivo.getPath());
-        FragmentPDF fragment= new FragmentPDF();
-        fragment.setArguments(arguments);
-        this.getSupportFragmentManager().beginTransaction().replace(R.id.pdf_screen_area,fragment).commit();
+        if(savedInstanceState==null) {
+            Bundle arguments = new Bundle();
+            arguments.putString("caminho", arquivo.getPath());
+            FragmentPDF fragment = new FragmentPDF();
+            fragment.setArguments(arguments);
+            this.getSupportFragmentManager().beginTransaction().replace(R.id.pdf_screen_area, fragment).commit();
+        }else{
+            if(isDrawerOpen=savedInstanceState.getBoolean("is_drawer_open")){
+                showdrawer(drawer,fundo);
+                if((tabSelected=savedInstanceState.getInt("tab_selected"))==0){
+                    ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_comment_black_24dp);
+                }if((tabSelected=savedInstanceState.getInt("tab_selected"))==1){
+                    ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
+                }
+            }
+        }
         this.setTitle(arquivo.getNome()+".pdf");
     }
 
@@ -99,7 +110,6 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         if (isDrawerOpen) {
             closedrawer(drawer,fundo);
         } else{
-            Log.wtf("teste",String.valueOf(ConstantesDoProjeto.getInstance().isProtect()));
             super.onBackPressed();
         }
     }
@@ -126,6 +136,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
             comFrag.setArq(arquivo);
             this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
             showdrawer(drawer,fundo);
+            tabSelected=0;
         }
         if(id==R.id.bottom_nav_new_coment){
             ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
@@ -133,6 +144,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
             comFrag.setArq(arquivo);
             this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
             showdrawer(drawer,fundo);
+            tabSelected=1;
         }
         return false;
     }
@@ -234,6 +246,14 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         isDrawerOpen=false;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("is_drawer_open",isDrawerOpen);
+        if(isDrawerOpen){
+           outState.putInt("tab_selected",tabSelected);
+        }
+        super.onSaveInstanceState(outState);
+    }
 }
 
 //TODO:sistema de Delecao de arquivos da pasta storage, deixar um arquivo por vez

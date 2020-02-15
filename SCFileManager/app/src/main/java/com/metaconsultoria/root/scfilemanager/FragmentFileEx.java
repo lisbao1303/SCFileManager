@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.commons.io.FileUtils;
@@ -93,6 +95,10 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
         getDirFromRoot(mPath,null);
     }
 
+    public void refresh(){
+        getDirFromRoot(ultimodir,null);
+    }
+
     public void NewSearch(String text){
         if(text!=null && text.length()!=0) {
             procura = text;
@@ -118,6 +124,10 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
             teste = 1;
         }
         teste++;
+        if(isGenerator){
+            TextView textView=this.getActivity().findViewById(R.id.editText_restauracao);
+            if(textView!=null)textView.setText(p_rootPath);
+        }
     }
 
 
@@ -132,7 +142,6 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
                 String m_caminhofile = m_isFile.getAbsolutePath();
                 file = Uri.fromFile(m_isFile);
 
-                Log.wtf("sera",m_isFile.getPath());
                 if (m_isFile.isDirectory()) {
                     ultimodir= m_isFile.toString();
                     getDirFromRoot(m_isFile.toString(),null);

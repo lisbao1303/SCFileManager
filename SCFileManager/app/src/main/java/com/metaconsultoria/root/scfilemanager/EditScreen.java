@@ -5,17 +5,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 
-public class EditScreen extends Fragment implements View.OnClickListener{
+public class EditScreen extends Fragment implements View.OnClickListener,Switch.OnCheckedChangeListener{
     private LayoutInflater inflater;
     private ViewGroup container;
     private View vi;
+    private Switch mySwitch;
     private boolean isElevated;
 
 
@@ -45,6 +49,11 @@ public class EditScreen extends Fragment implements View.OnClickListener{
             vi.findViewById(R.id.button).setOnClickListener(this);
         }else{
             vi = inflater.inflate(R.layout.fragment_edit_screen, container, false);
+            mySwitch=((Switch)vi.findViewById(R.id.switch1));
+            mySwitch.setOnCheckedChangeListener(this);
+            if(ConstantesDoProjeto.getInstance().isProtect()){
+                mySwitch.setChecked(true);
+            }
         }
         return vi;
     }
@@ -57,13 +66,17 @@ public class EditScreen extends Fragment implements View.OnClickListener{
             if(autenticateElevatedUser(matricula,senha)){
                 container.removeAllViews();
                 getLayoutInflater().inflate(R.layout.fragment_edit_screen,container,true);
+                mySwitch=((Switch)getActivity().findViewById(R.id.switch1));
+                mySwitch.setOnCheckedChangeListener(this);
+                if(ConstantesDoProjeto.getInstance().isProtect()){
+                    mySwitch.setChecked(true);
+                }
             }else{
                 Toast.makeText(getContext(),R.string.string_usuario_ou_senha_incorretos,Toast.LENGTH_SHORT).show();
             }
         }
 
-
-    }
+        }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -80,4 +93,13 @@ public class EditScreen extends Fragment implements View.OnClickListener{
         return false;
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(mySwitch.isChecked()){
+            ConstantesDoProjeto.getInstance().setProtect(true);
+            Log.wtf("carai",String.valueOf(ConstantesDoProjeto.getInstance().isProtect()));
+        }else{
+            ConstantesDoProjeto.getInstance().setProtect(false);
+        }
+    }
 }
