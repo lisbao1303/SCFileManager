@@ -44,8 +44,7 @@ public class FragmentScanner extends Fragment implements ZXingScannerView.Result
 
 
         customZXingScannerView = new CustomZXingScannerView(getContext());
-        customZXingScannerView.setBorderColor(Color.GRAY);
-        customZXingScannerView.setLaserColor(Color.BLUE);
+        customZXingScannerView.setBorderColor(Color.rgb(28,40,100));
 
         scannerView = new ZXingScannerView(getContext()) {
             @Override

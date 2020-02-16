@@ -2,11 +2,17 @@ package com.metaconsultoria.root.scfilemanager;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.media.Image;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import me.dm7.barcodescanner.core.DisplayUtils;
@@ -14,12 +20,8 @@ import me.dm7.barcodescanner.core.IViewFinder;
 
 ////Custom View Leitor de QR
 public class CustomZXingScannerView extends View implements IViewFinder {
-    private static final String TAG = "ViewFinderView";
 
     private Rect mFramingRect;
-
-    private int cntr = 0;
-    private boolean goingup = false;
 
     private static final float PORTRAIT_WIDTH_RATIO = 6f / 8;
     private static final float PORTRAIT_WIDTH_HEIGHT_RATIO = 0.75f;
@@ -30,38 +32,37 @@ public class CustomZXingScannerView extends View implements IViewFinder {
 
     private static final float SQUARE_DIMENSION_RATIO = 5f / 8;
 
-    private static final int[] SCANNER_ALPHA = {128};
+    private static final int[] SCANNER_ALPHA = {100,80,60,40,20,20,40,60,80,100};
     private int scannerAlpha;
-    private static final int POINT_SIZE = 10;
     private static final long ANIMATION_DELAY = 1;
 
-    private final int mDefaultLaserColor = getResources().getColor(R.color.viewfinder_laser);
     private final int mDefaultMaskColor = getResources().getColor(R.color.viewfinder_mask);
     private final int mDefaultBorderColor = getResources().getColor(R.color.viewfinder_border);
-    private final int mDefaultBorderStrokeWidth = getResources().getInteger(R.integer.viewfinder_border_width);
-    private final int mDefaultBorderLineLength = getResources().getInteger(R.integer.viewfinder_border_length);
+    private int mDefaultBorderStrokeWidth = 30;
+    private int mDefaultBorderLineLength = 110;
 
-    protected Paint mLaserPaint;
     protected Paint mFinderMaskPaint;
     protected Paint mBorderPaint;
     protected int mBorderLineLength;
     protected boolean mSquareViewFinder;
+    private Context context;
 
     public CustomZXingScannerView(Context context) {
         super(context);
+        this.context=context;
         init();
     }
 
     public CustomZXingScannerView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context=context;
         init();
     }
 
     private void init() {
+        mDefaultBorderLineLength = (int)dp(45,context);
+        mDefaultBorderStrokeWidth = (int)dp(6,context);
         //set up laser paint
-        mLaserPaint = new Paint();
-        mLaserPaint.setColor(mDefaultLaserColor);
-        mLaserPaint.setStyle(Paint.Style.FILL);
 
         //finder mask paint
         mFinderMaskPaint = new Paint();
@@ -76,8 +77,10 @@ public class CustomZXingScannerView extends View implements IViewFinder {
         mBorderLineLength = mDefaultBorderLineLength;
     }
 
-    public void setLaserColor(int laserColor) {
-        mLaserPaint.setColor(laserColor);
+
+    @Override
+    public void setLaserColor(int i) {
+
     }
 
     public void setMaskColor(int maskColor) {
@@ -121,7 +124,6 @@ public class CustomZXingScannerView extends View implements IViewFinder {
 
     }
 
-    // TODO: Need a better way to configure this. Revisit when working on 2.0
     public void setSquareViewFinder(boolean set) {
         mSquareViewFinder = set;
     }
@@ -144,71 +146,71 @@ public class CustomZXingScannerView extends View implements IViewFinder {
 
         drawViewFinderMask(canvas);
         drawViewFinderBorder(canvas);
-        drawLaser(canvas);
+        drawAnimation(canvas);
     }
 
+    public static float dp(float dp, Context context){
+        return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
     public void drawViewFinderMask(Canvas canvas) {
         int width = canvas.getWidth();
         int height = canvas.getHeight();
         Rect framingRect = getFramingRect();
 
         canvas.drawRect(0, 0, width, framingRect.top, mFinderMaskPaint);
-        canvas.drawRect(0, framingRect.top, framingRect.left, framingRect.bottom + 1, mFinderMaskPaint);
-        canvas.drawRect(framingRect.right + 1, framingRect.top, width, framingRect.bottom + 1, mFinderMaskPaint);
-        canvas.drawRect(0, framingRect.bottom + 1, width, height, mFinderMaskPaint);
+        canvas.drawRect(0, framingRect.top, framingRect.left, framingRect.bottom , mFinderMaskPaint);
+        canvas.drawRect(framingRect.right , framingRect.top, width, framingRect.bottom , mFinderMaskPaint);
+        canvas.drawRect(0, framingRect.bottom , width, height, mFinderMaskPaint);
     }
 
     public void drawViewFinderBorder(Canvas canvas) {
         Rect framingRect = getFramingRect();
 
-//        for (int i = framingRect.left - 1; i < framingRect.height(); i = i + mBorderLineLength) {
-//            canvas.drawLine(framingRect.left - 1, i, framingRect.left - 1, i + mBorderLineLength, mBorderPaint);
-//        }
-        canvas.drawLine(framingRect.centerX() - 1, framingRect.top - 1-mBorderLineLength+50, framingRect.centerX() - 1, framingRect.top - 1 + mBorderLineLength-50, mBorderPaint);
+        canvas.drawLine(framingRect.left -(mDefaultBorderStrokeWidth/2) , framingRect.top -mDefaultBorderStrokeWidth, framingRect.left -(mDefaultBorderStrokeWidth/2) , framingRect.top  + mBorderLineLength, mBorderPaint);
+        canvas.drawLine(framingRect.left -mDefaultBorderStrokeWidth, framingRect.top -(mDefaultBorderStrokeWidth/2) , framingRect.left  + mBorderLineLength, framingRect.top -(mDefaultBorderStrokeWidth/2), mBorderPaint);
 
-        canvas.drawLine(framingRect.centerX() - 1, framingRect.bottom + 1+mBorderLineLength-50, framingRect.centerX() - 1, framingRect.bottom + 1 - mBorderLineLength+50, mBorderPaint);
+        canvas.drawLine(framingRect.left -(mDefaultBorderStrokeWidth/2), framingRect.bottom +mDefaultBorderStrokeWidth, framingRect.left -(mDefaultBorderStrokeWidth/2), framingRect.bottom  - mBorderLineLength, mBorderPaint);
+        canvas.drawLine(framingRect.left -mDefaultBorderStrokeWidth, framingRect.bottom +(mDefaultBorderStrokeWidth/2), framingRect.left  + mBorderLineLength, framingRect.bottom +(mDefaultBorderStrokeWidth/2), mBorderPaint);
 
-        canvas.drawLine(framingRect.left - 1-mBorderLineLength+50, framingRect.centerY() - 1, framingRect.left - 1+mBorderLineLength-50, framingRect.centerY() - 1 , mBorderPaint);
+        canvas.drawLine(framingRect.right+(mDefaultBorderStrokeWidth/2), framingRect.top -mDefaultBorderStrokeWidth, framingRect.right+(mDefaultBorderStrokeWidth/2) , framingRect.top  + mBorderLineLength, mBorderPaint);
+        canvas.drawLine(framingRect.right +mDefaultBorderStrokeWidth, framingRect.top -(mDefaultBorderStrokeWidth/2) , framingRect.right  - mBorderLineLength, framingRect.top -(mDefaultBorderStrokeWidth/2) , mBorderPaint);
 
-        canvas.drawLine(framingRect.right + 1+mBorderLineLength-50, framingRect.centerY() - 1, framingRect.right - 1-mBorderLineLength+50, framingRect.centerY() - 1 , mBorderPaint);
-
-        canvas.drawLine(framingRect.left - 1, framingRect.top - 1, framingRect.left - 1, framingRect.top - 1 + mBorderLineLength+400, mBorderPaint);
-        canvas.drawLine(framingRect.left - 1, framingRect.top - 1, framingRect.left - 1 + mBorderLineLength+400, framingRect.top - 1, mBorderPaint);
-
-        canvas.drawLine(framingRect.left - 1, framingRect.bottom + 1, framingRect.left - 1, framingRect.bottom + 1 - mBorderLineLength-400, mBorderPaint);
-        canvas.drawLine(framingRect.left - 1, framingRect.bottom + 1, framingRect.left - 1 + mBorderLineLength+400, framingRect.bottom + 1, mBorderPaint);
-
-        canvas.drawLine(framingRect.right + 1, framingRect.top - 1, framingRect.right + 1, framingRect.top - 1 + mBorderLineLength+400, mBorderPaint);
-        canvas.drawLine(framingRect.right + 1, framingRect.top - 1, framingRect.right + 1 - mBorderLineLength-400, framingRect.top - 1, mBorderPaint);
-
-        canvas.drawLine(framingRect.right + 1, framingRect.bottom + 1, framingRect.right + 1, framingRect.bottom + 1 - mBorderLineLength-400, mBorderPaint);
-        canvas.drawLine(framingRect.right + 1, framingRect.bottom + 1, framingRect.right + 1 - mBorderLineLength-400, framingRect.bottom + 1, mBorderPaint);
+        canvas.drawLine(framingRect.right +(mDefaultBorderStrokeWidth/2), framingRect.bottom +mDefaultBorderStrokeWidth, framingRect.right+(mDefaultBorderStrokeWidth/2) , framingRect.bottom  - mBorderLineLength, mBorderPaint);
+        canvas.drawLine(framingRect.right +mDefaultBorderStrokeWidth , framingRect.bottom +(mDefaultBorderStrokeWidth/2), framingRect.right  - mBorderLineLength, framingRect.bottom +(mDefaultBorderStrokeWidth/2), mBorderPaint);
     }
+    public void drawAnimation(Canvas canvas) {
+        Rect framingRect = getFramingRect();
+        Bitmap bipmap5 = BitmapFactory.decodeResource(context.getResources(),R.mipmap.ic_souzacruzqr);
+        Paint paint = new Paint();
+        paint.setAlpha(100);
+        Point center = new Point((framingRect.width() / 2)+framingRect.left, (framingRect.height() / 2)+framingRect.top);
+        int rectW = mBorderLineLength+(mDefaultBorderStrokeWidth/2)+ (int)dp(20,context);
+        int rectH = (int)(rectW*0.60);
+        int left = center.x - (rectW / 2);
+        int top = center.y - (rectH / 2);
+        int right = center.x + (rectW / 2);
+        int bottom = center.y + (rectH / 2);
+        Rect rect = new Rect(left, top, right, bottom);
 
-    public void drawLaser(Canvas canvas) {
-        mLaserPaint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
-        scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
-        int middle = mFramingRect.height() / 2 + mFramingRect.top;
-        middle = middle + cntr;
-        if ((cntr < 400) && (goingup == false)) {
-            canvas.drawRect(mFramingRect.left -3, middle - 10, mFramingRect.right +4 , middle + 4, mLaserPaint);
-            cntr = cntr + 5;
-        }
+        canvas.drawBitmap(getResizedBitmap(bipmap5,rectW,rectH),null,rect,paint);
 
-        if ((cntr >= 380) && (goingup == false)) goingup = true;
+        //postInvalidateDelayed(ANIMATION_DELAY);
+    }
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
 
-        if ((cntr > -400) && (goingup == true)) {
-            canvas.drawRect(mFramingRect.left -3, middle - 10, mFramingRect.right +4, middle + 4, mLaserPaint);
-            cntr = cntr - 5;
-        }
-
-        if ((cntr <= -370) && (goingup == true)) goingup = false;
-
-        postInvalidateDelayed(ANIMATION_DELAY,
-                mFramingRect.left - POINT_SIZE,
-                mFramingRect.top - POINT_SIZE,
-                mFramingRect.right + POINT_SIZE,
-                mFramingRect.bottom + POINT_SIZE);
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(
+                bm, 0, 0, width, height, matrix, false);
+        bm.recycle();
+        return resizedBitmap;
     }
 
     @Override
@@ -250,6 +252,5 @@ public class CustomZXingScannerView extends View implements IViewFinder {
 
         int leftOffset = (viewResolution.x - width) / 2;
         int topOffset = (viewResolution.y - height) / 2;
-        mFramingRect = new Rect(leftOffset, topOffset-80, leftOffset + width, topOffset + height+80);
-    }
+        mFramingRect = new Rect(leftOffset, topOffset-(int)dp(30,context), leftOffset + width, topOffset + height+(int)dp(30,context));    }
 }
