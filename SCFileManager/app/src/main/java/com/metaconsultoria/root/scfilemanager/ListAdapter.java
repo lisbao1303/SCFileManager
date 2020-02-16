@@ -65,10 +65,43 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         if (m_file.isDirectory())
             return R.mipmap.file_folder_ic_hd;
         else {
-
             if(m_lastIndex!=-1 &&m_filepath.substring(m_lastIndex).equalsIgnoreCase(".pdf")) {
                 return R.mipmap.file_pdf_ic_hd;
-            } else {
+            } else if(m_lastIndex!=-1 &&(m_filepath.substring(m_lastIndex).equalsIgnoreCase(".doc")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".docm")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".docx")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".dot")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".dotm")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".odt")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".dotx"))){
+                return R.mipmap.word_souza_cruz;
+            } else if(m_lastIndex!=-1 &&(m_filepath.substring(m_lastIndex).equalsIgnoreCase(".csv")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".ods")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".xla")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".xlam")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".xls")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".xlsb")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".xlsm")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".xlsx")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".xlt")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".xltm")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".xltx")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".xlw"))){
+                return R.mipmap.excel_souza_cruz;
+            } else if(m_lastIndex!=-1 &&(m_filepath.substring(m_lastIndex).equalsIgnoreCase(".odp")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".pot")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".potm")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".potx")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".ppa")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".ppam")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".pps")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".ppsm")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".ppsx")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".ppt")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".pptm")||
+                    m_filepath.substring(m_lastIndex).equalsIgnoreCase(".pptx"))){
+                return R.mipmap.power_point_souza_cruz;
+            }else{
                 return R.mipmap.file_ic_hd;
             }
         }

@@ -44,7 +44,7 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
         // Inflate the layout for this fragment
         this.inflater = inflater;
         this.container = container;
-        if(savedInstanceState==null || savedInstanceState.getBoolean("is_elevated")==false){
+        if(savedInstanceState==null || !savedInstanceState.getBoolean("is_elevated")){
             vi = inflater.inflate(R.layout.autenticate_layout, container, false);
             vi.findViewById(R.id.button).setOnClickListener(this);
         }else{
@@ -81,7 +81,6 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
             RecentFilesDB db= new RecentFilesDB(getContext());
             db.deleteAll();
         }
-
         }
 
     @Override

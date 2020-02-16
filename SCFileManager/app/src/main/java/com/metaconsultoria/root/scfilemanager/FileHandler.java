@@ -1,14 +1,16 @@
 package com.metaconsultoria.root.scfilemanager;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class FileHandler{
 
@@ -145,5 +147,34 @@ public class FileHandler{
         String path=arqpath.substring(0,arqpath.lastIndexOf('/'));
         String arq=arqpath.substring(arqpath.lastIndexOf('/'));
         FileHandler.copyFile(path,arq,provider);
+    }
+
+    public static void openWith(String arqpath, String name, String tipo, Activity act){
+        Intent intent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Uri ur = Uri.parse(arqpath);
+            File mfile = new File(act.getFilesDir().getPath());
+            mfile.mkdir();
+            File provider = new File(mfile.getPath(),"/storage");
+            FileHandler.copyToProvider(ur.getPath(),provider.getPath());
+            File shareFile=new File(provider.getPath()+"/"+name);
+
+            Log.wtf("open with",shareFile.getPath());
+            Uri uri = FileProvider.getUriForFile(act, act.getPackageName()+".fileprovider", shareFile);
+
+            intent = new Intent(Intent.ACTION_VIEW)
+                    .setDataAndType(uri,tipo)
+                    .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            intent =intent.createChooser(intent,act.getString(R.string.send_to));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            act.startActivity(intent);
+        } else {
+            intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.parse(arqpath), tipo);
+            intent = Intent.createChooser(intent, act.getString(R.string.send_to));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            act.startActivity(intent);
+        }
     }
 }

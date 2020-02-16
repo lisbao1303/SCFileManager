@@ -2,15 +2,17 @@ package com.metaconsultoria.root.scfilemanager;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import java.io.File;
@@ -319,6 +322,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             this.abrirAcountMan();
             this.attToolbarAcountMan();
             returnstatement=true;
+        } else if (id == R.id.nav_about) {
+            this.abrirAbout();
+            returnstatement=false;
+            id=navDrawerSelected;
         }else {
             Log.wtf("nao achor","nd");
             returnstatement=false;
@@ -438,6 +445,25 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         mainFragmentFileEx.refresh(arguments);
         fragMain.performClick(1);
 
+    }
+
+    private void abrirAbout(){
+
+        final Dialog certo = new Dialog(this);
+        certo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if(getResources().getConfiguration().screenWidthDp > 480){
+        certo.setContentView(R.layout.sobre_l);
+        }else {
+            certo.setContentView(R.layout.sobre_s);
+        }
+        certo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        certo.findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                certo.dismiss();
+            }
+        });
+        certo.show();
     }
 
 

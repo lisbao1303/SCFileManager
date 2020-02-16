@@ -15,7 +15,8 @@
         app:cardElevation="5dp">
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
             <fragment
             android:id="@+id/fragment"
             android:name="com.metaconsultoria.root.scfilemanager.FragmentScanner"

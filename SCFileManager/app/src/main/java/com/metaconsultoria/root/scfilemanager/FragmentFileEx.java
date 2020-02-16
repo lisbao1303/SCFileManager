@@ -1,7 +1,6 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -115,6 +113,7 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
             task[i].cancel(true);
         }
     }
+
     //// Obtendo os arquivos da memória
     private void getDirFromRoot(String p_rootPath, String search) {
         m_listAdapter = null;
@@ -158,6 +157,140 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
                                 file.toString()
                         );
                         mListener.setPdfActivity(arq);
+
+                    //Abrir tipos do word
+                    } else if(m_ultimoponto!=-1 && (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".doc")||
+                            m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".dot"))){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/msword",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".odt")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.oasis.opendocument.text",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".docx")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".docm")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-word.document.macroenabled.12",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".dotx")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.openxmlformats-officeDocument.wordprocessingml.template",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".dotm")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-word.template.macroenabled.12",
+                                getActivity());
+                    }
+
+                    //Abrir tipos Excel
+                    else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".csv")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "text.csv",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".ods")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.oasis.opendocument.spreadsheet",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".xlam")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-excel.addin.macroenabled.12",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".xls")||
+                            m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".xla")||
+                            m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".xlt"))){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-excel",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".xlsb")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-excel.sheet.binary.macroenabled.12",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".xlsm")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-excel.sheet.macroenabled.12",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".xlsx")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".xltb")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-excel.template.binary.macroenabled.12",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".xltm")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-excel.template.macroenabled.12",
+                                getActivity());
+                    }
+
+                    //Abrir tipos power point
+                    else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".odp")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.oasis.opendocument.presentation",
+                                getActivity());
+                    } else if(m_ultimoponto!=-1 && (m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pot")||
+                            m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".ppt")||
+                            m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pps")||
+                            m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".ppa"))){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-powerpoint",
+                                getActivity());
+                    }else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".potm")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-powerpoint.template.macroenabled.12",
+                                getActivity());
+                    }else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pptm")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-powerpoint.presentation.macroenabled.12",
+                                getActivity());
+                    }else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".ppsm")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-powerpoint.slideshow.macroenabled.12",
+                                getActivity());
+                    }else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".ppam")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.ms-powerpoint.addin.macroenabled.12",
+                                getActivity());
+                    }else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".potx")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.openxmlformats-officeDocument.presentationml.template",
+                                getActivity());
+                    }else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".pptx")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.openxmlformats-officeDocument.presentationml.presentation",
+                                getActivity());
+                    }else if(m_ultimoponto!=-1 && m_caminhofile.substring(m_ultimoponto).equalsIgnoreCase(".ppsx")){
+                        FileHandler.openWith(file.toString(),
+                                file.getPath().substring(file.getPath().lastIndexOf('/') + 1),
+                                "application/vnd.openxmlformats-officeDocument.presentationml.slideshow",
+                                getActivity());
                     }
                 }
 

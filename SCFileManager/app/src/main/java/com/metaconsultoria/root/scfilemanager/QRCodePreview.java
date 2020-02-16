@@ -1,5 +1,6 @@
 package com.metaconsultoria.root.scfilemanager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -38,7 +39,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 
 public class QRCodePreview extends AppCompatActivity {
         private MyFileDirectory arq;
@@ -85,7 +85,7 @@ public class QRCodePreview extends AppCompatActivity {
         if(i==R.id.action_pdf){
             String str=FileHandler.saveImageToInternalStorage(bitmap,this,arq.getNome());
             str= makePdf(this,arq.getNome(),str);
-            openWith(str,"QR_"+arq.getNome()+".pdf","application/pdf");
+            FileHandler.openWith(str,"QR_"+arq.getNome()+".pdf","application/pdf",this);
         }
         if(i==R.id.action_print){
                 PrintHelper photoPrinter = new PrintHelper(this);
@@ -96,7 +96,7 @@ public class QRCodePreview extends AppCompatActivity {
         }
         if(i==R.id.action_send){
                 String str=FileHandler.saveImageToInternalStorage(bitmap,this,arq.getNome());
-                openWith(str,"QR_"+arq.getNome()+".jpeg","image/jpeg");
+                FileHandler.openWith(str,"QR_"+arq.getNome()+".jpeg","image/jpeg",this);
         }
         if(i==android.R.id.home){
             this.onBackPressed();
@@ -104,34 +104,6 @@ public class QRCodePreview extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void openWith(String arqpath, String name,String tipo){
-        Intent intent;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri ur = Uri.parse(arqpath);
-            File mfile = new File(getFilesDir().getPath());
-            mfile.mkdir();
-            File provider = new File(mfile.getPath(),"/storage");
-            FileHandler.copyToProvider(ur.getPath(),provider.getPath());
-            File shareFile=new File(provider.getPath()+"/"+name);
-
-            Log.wtf("open with",shareFile.getPath());
-            Uri uri = FileProvider.getUriForFile(this, getPackageName()+".fileprovider", shareFile);
-
-            intent = new Intent(Intent.ACTION_VIEW)
-                    .setDataAndType(uri,tipo)
-                    .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            intent =intent.createChooser(intent,getString(R.string.send_to));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else {
-            intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(arqpath), tipo);
-            intent = Intent.createChooser(intent, getString(R.string.send_to));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-    }
 
     public String makePdf(Context contx, String nome,String str ) {
         Document document = null;
