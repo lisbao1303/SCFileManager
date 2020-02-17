@@ -1,8 +1,11 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -57,24 +60,37 @@ public class ActivityNewFunc extends AppCompatActivity implements View.OnClickLi
                                                 senha,
                                                 confirmSenha);
 
-            if(senha.equals(confirmSenha) && check){
-                FuncDB fdb =new FuncDB(this);
-                Funcionario fx= new Funcionario();
-                fx.setNome(nome);
-                fx.setMatricula(matricula);
-                fx.setSenha(senha);
-                fx.setRestauracao(restauracao);
-                if(isFirstAcess) {
-                    fdb.save(fx);
-                }else{
-                    fdb.save(fx,generator);
+
+            if(check) {
+                if (senha.equals(confirmSenha)) {
+                    FuncDB fdb = new FuncDB(this);
+                    if(fdb.findByMatricula(matricula)==null){
+                        Funcionario fx = new Funcionario();
+                        fx.setNome(nome);
+                        fx.setMatricula(matricula);
+                        fx.setSenha(senha);
+                        fx.setRestauracao(restauracao);
+                        if (isFirstAcess) {
+                            fdb.save(fx);
+                        } else {
+                            fdb.save(fx, generator);
+                        }
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("matricula", matricula);
+                        setResult(Activity.RESULT_OK, returnIntent);
+                        finish();
+                    }else{
+                        new AlertDialog.Builder(this)
+                                .setTitle("Usuario Ja Cadastrado")
+                                .setMessage("A matricula "+matricula+" ja esta cadastrada no banco "+
+                                        "de daddos, remova o usuario cadastrado antes de salvar o "+
+                                        "novo funcionario.")
+                                .setNeutralButton(android.R.string.ok, null)
+                                .show();
+                    }
+                } else {
+                    Toast.makeText(this, "Senhas conflitantes", Toast.LENGTH_SHORT).show();
                 }
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("matricula", matricula);
-                setResult(Activity.RESULT_OK,returnIntent);
-                finish();
-            }else{
-                Toast.makeText(this,"falei",Toast.LENGTH_SHORT);
             }
 
         }

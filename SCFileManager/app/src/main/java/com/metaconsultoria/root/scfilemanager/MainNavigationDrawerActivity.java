@@ -85,6 +85,11 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         ConstantesDoProjeto.getInstance().setMainPath(buffer);
         ConstantesDoProjeto.getInstance().setMainPathProtected(buffer+"/ArquivosSouza");
 
+        //?is protect
+        FuncDB fdb= new FuncDB(this);
+        if(fdb.getValor("is_protected")==null){
+            fdb.saveChave("is_protected","false");
+        }
         //inicio da activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navigation_drawer);
@@ -451,7 +456,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
         final Dialog certo = new Dialog(this);
         certo.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        if(getResources().getConfiguration().screenWidthDp > 480){
+        if(getResources().getConfiguration().screenWidthDp > 600 && getResources().getConfiguration().screenHeightDp > 800){
         certo.setContentView(R.layout.sobre_l);
         }else {
             certo.setContentView(R.layout.sobre_s);

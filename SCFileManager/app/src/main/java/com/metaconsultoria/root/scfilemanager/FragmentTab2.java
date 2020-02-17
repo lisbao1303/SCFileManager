@@ -33,7 +33,7 @@ public class FragmentTab2 extends Fragment{
         setRetainInstance(true);
         if (getArguments() != null) {
         }
-        if(ConstantesDoProjeto.getInstance().isProtect()) {
+        if((new FuncDB(getContext())).getValor("is_protected").equals("true")) {
             mainpath = ConstantesDoProjeto.getInstance().getMainPathProtected();
         }else{
             mainpath = ConstantesDoProjeto.getInstance().getMainPath();

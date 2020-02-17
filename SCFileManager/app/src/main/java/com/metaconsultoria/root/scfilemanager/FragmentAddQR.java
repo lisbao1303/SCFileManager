@@ -46,14 +46,14 @@ public class FragmentAddQR extends Fragment implements View.OnClickListener{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if(ConstantesDoProjeto.getInstance().isProtect()){
+        if((new FuncDB(getContext())).getValor("is_protected").equals("true")){
             imageView.setAlpha(0.3f);
             imageView.setClickable(false);
         }
         if(savedInstanceState==null) {
             mfragment = new FragmentFileEx();
             Bundle arguments = new Bundle();
-            if(ConstantesDoProjeto.getInstance().isProtect()) {
+            if((new FuncDB(getContext())).getValor("is_protected").equals("true")) {
                 arguments.putString("arqpath", ConstantesDoProjeto.getInstance().getMainPathProtected());
             }else{
                 arguments.putString("arqpath", ConstantesDoProjeto.getInstance().getMainPath());

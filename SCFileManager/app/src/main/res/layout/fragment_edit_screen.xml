@@ -52,7 +52,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:gravity="start"
-            android:text="Restringe o acesso a memoria do aparelho apenas as pastas relacionadas a maquina"
+            android:text="Restringe o acesso a memoria do aparelho apenas as pastas relacionadas a maquina."
             android:textColor="@android:color/tertiary_text_light"
             android:textSize="15sp"
             app:layout_constrainedWidth="true"
@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
-            android:text="Apaga todos os dados extras salvos pelo aplicativo como arquivos recentemente usados e comentarios"
+            android:text="Apaga todos os dados extras salvos pelo aplicativo como arquivos recentemente usados e comentarios."
             android:textColor="@android:color/tertiary_text_light"
             android:gravity="start"
             android:textSize="15sp"
@@ -154,14 +154,24 @@
             app:layout_constraintTop_toBottomOf="@+id/dividerEditHori2" />
 
         <ImageButton
-            android:id="@+id/switch3"
+            android:id="@+id/buttonSalvar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:srcCompat="@drawable/ic_save_black_24dp"
+            app:layout_constraintBottom_toTopOf="@+id/dividerEditHori3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title2" />
+
+        <ImageButton
+            android:id="@+id/switch4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             app:srcCompat="@drawable/ic_restore_black_24dp"
-            app:layout_constraintBottom_toTopOf="@+id/dividerEditHori3"
+            app:layout_constraintBottom_toTopOf="@+id/dividerEditHori4"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title2" />
+            app:layout_constraintTop_toBottomOf="@+id/dividerEditHori3" />
 
         <TextView
             android:id="@+id/textViewEdit3"
@@ -169,19 +179,19 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Restaurar Dados"
+            android:text="Salvar Versao Segura"
             android:textColor="@android:color/secondary_text_light"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title2" />
 
         <TextView
-            android:id="@+id/textViewEditHide3"
+            android:id="@+id/textViewSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
-            android:text="Restaura os arquivos de volta ao momento da intalaçao do app"
+            android:text="Gerar copia da versao atual dos arquivos salvos para restauraçoes futuras."
             android:textColor="@android:color/tertiary_text_light"
             android:textSize="15sp"
             app:layout_constrainedWidth="true"
@@ -197,7 +207,7 @@
             android:layout_marginEnd="8dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintBottom_toTopOf="@+id/dividerEditHori3"
-            app:layout_constraintEnd_toStartOf="@+id/switch3"
+            app:layout_constraintEnd_toStartOf="@+id/buttonSalvar"
             app:layout_constraintTop_toBottomOf="@+id/title2"
             app:layout_constrainedHeight="true"/>
 
@@ -207,8 +217,55 @@
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"
             android:layout_margin="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/textViewEditHide3" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewSave" />
 
+
+
+        <TextView
+            android:id="@+id/textViewEdit4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Restaurar Dados"
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dividerEditHori3" />
+
+        <TextView
+            android:id="@+id/textViewEditHide4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:text="Restaura os arquivos de volta a ultima versao segura salva."
+            android:textColor="@android:color/tertiary_text_light"
+            android:textSize="15sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@+id/dividerEditVert4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEdit4" />
+
+        <View
+            android:id="@+id/dividerEditVert4"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toTopOf="@+id/dividerEditHori3"
+            app:layout_constraintEnd_toStartOf="@+id/buttonSalvar"
+            app:layout_constraintTop_toBottomOf="@+id/dividerEditHori3"
+            app:layout_constrainedHeight="true"/>
+
+        <View
+            android:id="@+id/dividerEditHori4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_margin="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEditHide4" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

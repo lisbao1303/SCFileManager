@@ -217,7 +217,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/root/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_remove_circle_outline_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/root/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_save_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -227,11 +227,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="height" value="150" />
-                            <entry key="outputName" value="ic_remove_circle_outline_black_24dp" />
-                            <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="$PROJECT_DIR$/../../ArteAppSouza/ADD NEW QR codes souza.svg" />
-                            <entry key="width" value="150" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_home_protected" />
+                            <entry key="sourceFile" value="$PROJECT_DIR$/../../ArteAppSouza/souza.svg" />
                           </map>
                         </option>
                       </PersistentState>

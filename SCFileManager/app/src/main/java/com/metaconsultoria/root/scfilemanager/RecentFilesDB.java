@@ -388,6 +388,24 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         }
     }
 
+    public int deleteAllComents(MyArquive arq) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            int count = db.delete("tab"+String.valueOf(arq.id), "", null);
+            return count;
+        } finally {
+            db.close();
+        }
+    }
+
+    public void clearDataBase(){
+        List<MyArquive> list = findAll();
+        for (MyArquive arq: list) {
+            this.execSQL("drop table tab"+String.valueOf(arq.id)+";");
+        }
+        this.execSQL("drop table recent_arquivos;");
+    }
+
 }
 
 //TODO: sistema automatico de delecao de arquivos do database caso a referencia ao path seja nula

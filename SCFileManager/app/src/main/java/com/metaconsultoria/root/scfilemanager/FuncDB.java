@@ -14,6 +14,7 @@ import java.util.List;
 public class FuncDB extends SQLiteOpenHelper {
     public static final String NOME_DO_BANCO = "elevated.sqlite";
     private static final String TABLE_OF_FUNC_NAME ="elevated_func";
+    private static final String TABLE_OF_KEY_VALUES ="chave_valor";
     private static final int VERSAO_DO_BANCO = 1;
     private Context cont;
 
@@ -30,6 +31,9 @@ public class FuncDB extends SQLiteOpenHelper {
                         "restauracao text," +
                         "senha text not null," +
                         "generated_by text);"
+        );
+        db.execSQL(
+                "create table if not exists "+FuncDB.TABLE_OF_KEY_VALUES+" (chave text, valor text);"
         );
     }
 
@@ -224,5 +228,71 @@ public class FuncDB extends SQLiteOpenHelper {
             db.close();
         }
     }
+
+    public long saveChave(String chave,String valor){
+        ContentValues values = new ContentValues();
+        values.put("chave", chave);
+        values.put("valor", valor);
+
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            return db.insert(FuncDB.TABLE_OF_KEY_VALUES, "", values);
+        } finally {
+            db.close();
+        }
+    }
+
+    public String getValor(String chave) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            Cursor c = db.query(FuncDB.TABLE_OF_KEY_VALUES, null, "chave='" + chave + "'", null, null, null, null);
+            if (c.getCount() > 0) {
+                c.moveToFirst();
+                return c.getString(c.getColumnIndex("valor"));
+            } else {
+                return null;
+            }
+        } finally {
+            db.close();
+        }
+    }
+
+    public int updateValue(String  chave, String valor) {
+        if(this.getValor(chave)==null){return -1;}
+        ContentValues values = new ContentValues();
+        values.put("valor", valor);
+        String selection = "chave" + " LIKE ?";
+        String[] selectionArgs = {chave};
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            return db.update(
+                    FuncDB.TABLE_OF_KEY_VALUES,
+                    values,
+                    selection,
+                    selectionArgs);
+        }finally {
+            db.close();
+        }
+    }
+
+    public int deleteChave(String chave) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            return db.delete(FuncDB.TABLE_OF_KEY_VALUES, "chave=?", new String[]{chave});
+        } finally {
+            db.close();
+        }
+    }
+
+    public int deleteAllChaves() {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            return db.delete(FuncDB.TABLE_OF_KEY_VALUES, "", null);
+        } finally {
+            db.close();
+        }
+    }
+
+
 }
 

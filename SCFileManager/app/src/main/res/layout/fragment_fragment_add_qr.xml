@@ -55,7 +55,7 @@
                     android:layout_gravity="center_vertical"
                     android:paddingStart="30dp"
                     android:paddingEnd="30dp"
-                    app:srcCompat="@drawable/ic_home_black_24dp" />
+                    app:srcCompat="@drawable/ic_home_protected" />
 
                 <View
                     android:id="@+id/dividerVert2"
