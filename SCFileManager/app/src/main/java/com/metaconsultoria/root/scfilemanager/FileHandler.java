@@ -116,7 +116,6 @@ public class FileHandler{
             FileOutputStream fos = new FileOutputStream(pictureFile);
             image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.close();
-
             return Uri.fromFile(pictureFile).toString();
         } catch (Exception e) {
             Log.e("saveToInternalStorage()", e.getMessage());
@@ -125,7 +124,6 @@ public class FileHandler{
     }
 
     static private  File getOutputMediaFile(Context contx, String arqName){
-
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
                 + "/Android/data/"
                 + contx.getApplicationContext().getPackageName()
@@ -176,5 +174,9 @@ public class FileHandler{
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             act.startActivity(intent);
         }
+    }
+
+    public static void copiDirectory(String inputPath, String inputDirectory, String outputPath){
+        File inputPathFile = new File(inputPath);
     }
 }
