@@ -65,8 +65,14 @@
     <string name="string_cadastrar_usuario">Cadastrar Novo Funcionario</string>
     <string name="string_cadastrar_usuario_erro_1">O Campo: "</string>
     <string name="string_cadastrar_usuario_erro_2">" deve ser preenchido</string>
+    <string name="string_cadastrar_usuario_erro_3">" nao pode conter espaços</string>
     <string name="string_caminho_add_qr_view">Caminho:/…</string>
     <string name="edit_screen">Gera copia da versao atual dos arquivos salvos para restauraçoes futuras.</string>
+    <string name="string_help">Os QR codes gerados no aplicativo sao diretamente relacionados
+                            a pasta na qual o arquivo esta localizado, mudar um arquivo de local
+                            apos ter gerado seu codigo pode tornar-lo inutilizavel.
+                            Caso seja necessario mudar um arquivo de local deve-se gerar um novo
+                            codigo logo apos a mudança em substituiçao ao codigo inutilizado."</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

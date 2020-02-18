@@ -96,8 +96,8 @@ public class ManageAcounts extends Fragment implements View.OnClickListener, Act
             }
             vi.findViewById(R.id.floatingActionButtonAdd).setOnClickListener(this);
             ((TextView)vi.findViewById(R.id.textViewPrimaryName)).setText(this.funcionario.getFirstName());
-            ((TextView)vi.findViewById(R.id.textViewName)).setText(this.funcionario.getNome());
-            ((TextView)vi.findViewById(R.id.textViewMatricula)).setText(this.funcionario.getMatricula());
+            ((TextView)vi.findViewById(R.id.textViewName)).setText(this.getText(R.string.nome_const)+this.funcionario.getNome());
+            ((TextView)vi.findViewById(R.id.textViewMatricula)).setText(this.getText(R.string.matricula_const)+this.funcionario.getMatricula());
             AccountList manFuncList= new AccountList();
             Bundle b= new Bundle();
             b.putString("manager",this.funcionario.getMatricula());
@@ -126,8 +126,8 @@ public class ManageAcounts extends Fragment implements View.OnClickListener, Act
                 }
                 getActivity().findViewById(R.id.floatingActionButtonAdd).setOnClickListener(this);
                 ((TextView)getActivity().findViewById(R.id.textViewPrimaryName)).setText(this.funcionario.getFirstName());
-                ((TextView)getActivity().findViewById(R.id.textViewName)).setText(this.funcionario.getNome());
-                ((TextView)getActivity().findViewById(R.id.textViewMatricula)).setText(this.funcionario.getMatricula());
+                ((TextView)getActivity().findViewById(R.id.textViewName)).setText(this.getText(R.string.nome_const)+this.funcionario.getNome());
+                ((TextView)getActivity().findViewById(R.id.textViewMatricula)).setText(this.getText(R.string.matricula_const)+this.funcionario.getNome());
                 AccountList manFuncList= new AccountList();
                 Bundle b= new Bundle();
                 b.putString("manager",this.funcionario.getMatricula());
@@ -189,6 +189,9 @@ public class ManageAcounts extends Fragment implements View.OnClickListener, Act
     }
 
     private boolean autenticateElevatedUser(String matricula, String senha){
+        if (matricula.substring(matricula.length() - 1).equals(" ")) {
+            matricula = matricula.substring(0, matricula.length() - 1);
+        }
         FuncDB fdb=new FuncDB(getContext());
         Funcionario func = fdb.findByMatricula(matricula);
         if(func!=null){

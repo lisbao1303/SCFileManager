@@ -1,9 +1,12 @@
 package com.metaconsultoria.root.scfilemanager;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -84,7 +87,14 @@ public class FragmentAddQR extends Fragment implements View.OnClickListener{
         }else if(id==R.id.imageView_icon4){
 
         }else if(id==R.id.imageView_help){
-            Snackbar.make(getView(),"teste",Snackbar.LENGTH_LONG).show();
+            View view= getLayoutInflater().inflate(R.layout.layout_help, null);
+
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Cuidado")
+                    .setView(view)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setIcon(R.drawable.ic_info_outline_black_24dp)
+                    .show();
         }
     }
 }

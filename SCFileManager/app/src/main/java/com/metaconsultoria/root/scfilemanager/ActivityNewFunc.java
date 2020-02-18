@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -60,6 +61,23 @@ public class ActivityNewFunc extends AppCompatActivity implements View.OnClickLi
                                                 senha,
                                                 confirmSenha);
 
+            if(check) {
+                if (nome.substring(nome.length() - 1).equals(" ")) {
+                    nome = nome.substring(0, nome.length() - 1);
+                }
+                if (matricula.substring(matricula.length() - 1).equals(" ")) {
+                    matricula = matricula.substring(0, matricula.length() - 1);
+                }
+                if (restauracao.substring(restauracao.length() - 1).equals(" ")) {
+                    restauracao = restauracao.substring(0, restauracao.length() - 1);
+                }
+
+
+                check = isSpaceCorect(matricula,
+                                        restauracao,
+                                        senha,
+                                        confirmSenha);
+            }
 
             if(check) {
                 if (senha.equals(confirmSenha)) {
@@ -104,38 +122,68 @@ public class ActivityNewFunc extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    public boolean isThereAnEmptyText(String nome,String matricula,String restauracao, String senha, String comfirmSenha){
-        if(nome.equals("")||nome.equals(getString(R.string.string_nome))){
-            String buffer= this.addToBuffer(getString(R.string.string_nome));
+    private boolean isThereAnEmptyText(String nome,String matricula,String restauracao, String senha, String comfirmSenha){
+        if(nome.equals("")||nome.equals(" ")||nome.equals(getString(R.string.string_nome))){
+            String buffer= this.addToBufferEmpty(getString(R.string.string_nome));
             Toast.makeText(this,buffer,Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(matricula.equals("")||matricula.equals(getString(R.string.string_matricula))){
-            String buffer= this.addToBuffer(getString(R.string.string_matricula));
+        if(matricula.equals("")||matricula.equals(" ")||matricula.equals(getString(R.string.string_matricula))){
+            String buffer= this.addToBufferEmpty(getString(R.string.string_matricula));
             Toast.makeText(this,buffer,Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(restauracao.equals("")||restauracao.equals(getString(R.string.string_email))){
-            String buffer= this.addToBuffer(getString(R.string.string_email));
+        if(restauracao.equals("")||restauracao.equals(" ")||restauracao.equals(getString(R.string.string_email))){
+            String buffer= this.addToBufferEmpty(getString(R.string.string_email));
             Toast.makeText(this,buffer,Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(senha.equals("")||senha.equals(getString(R.string.string_senha))){
-            String buffer= this.addToBuffer(getString(R.string.string_senha));
+        if(senha.equals("")||senha.equals(" ")||senha.equals(getString(R.string.string_senha))){
+            String buffer= this.addToBufferEmpty(getString(R.string.string_senha));
             Toast.makeText(this,buffer,Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(comfirmSenha.equals("")||comfirmSenha.equals(getString(R.string.string_confirm_senha))){
-            String buffer= this.addToBuffer(getString(R.string.string_confirm_senha));
+        if(comfirmSenha.equals("")||comfirmSenha.equals(" ")||comfirmSenha.equals(getString(R.string.string_confirm_senha))){
+            String buffer= this.addToBufferEmpty(getString(R.string.string_confirm_senha));
             Toast.makeText(this,buffer,Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
 
-    private String addToBuffer(String add){
+    private boolean isSpaceCorect(String matricula,String restauracao, String senha, String comfirmSenha){
+        if(matricula.indexOf(' ')>=0){
+            String buffer= this.addToBufferSpaceError(getString(R.string.string_matricula));
+            Toast.makeText(this,buffer,Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(restauracao.indexOf(' ')>=0){
+            String buffer= this.addToBufferSpaceError(getString(R.string.string_email));
+            Toast.makeText(this,buffer,Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(senha.indexOf(' ')>=0){
+            String buffer= this.addToBufferSpaceError(getString(R.string.string_senha));
+            Toast.makeText(this,buffer,Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(comfirmSenha.indexOf(' ')>=0){
+            String buffer= this.addToBufferSpaceError(getString(R.string.string_confirm_senha));
+            Toast.makeText(this,buffer,Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private String addToBufferEmpty(String add){
         return getString(R.string.string_cadastrar_usuario_erro_1)+add+getString(R.string.string_cadastrar_usuario_erro_2);
     }
+
+    private String addToBufferSpaceError(String add){
+        return getString(R.string.string_cadastrar_usuario_erro_1)+add+getString(R.string.string_cadastrar_usuario_erro_3);
+    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

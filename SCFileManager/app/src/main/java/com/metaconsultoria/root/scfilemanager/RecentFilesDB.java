@@ -400,10 +400,12 @@ public class RecentFilesDB extends SQLiteOpenHelper {
 
     public void clearDataBase(){
         List<MyArquive> list = findAll();
-        for (MyArquive arq: list) {
-            this.execSQL("drop table tab"+String.valueOf(arq.id)+";");
+        if(list!=null) {
+            for (MyArquive arq : list) {
+                this.execSQL("drop table tab" + String.valueOf(arq.id) + ";");
+            }
+            this.execSQL("drop table recent_arquivos;");
         }
-        this.execSQL("drop table recent_arquivos;");
     }
 
 }

@@ -150,6 +150,9 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
     }
 
     private boolean autenticateElevatedUser(String matricula, String senha){
+        if (matricula.substring(matricula.length() - 1).equals(" ")) {
+            matricula = matricula.substring(0, matricula.length() - 1);
+        }
         FuncDB fdb=new FuncDB(getContext());
         func = fdb.findByMatricula(matricula);
         if(func!=null){
