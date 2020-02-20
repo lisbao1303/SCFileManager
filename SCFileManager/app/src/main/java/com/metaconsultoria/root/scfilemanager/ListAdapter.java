@@ -18,11 +18,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
     private ListOnClickListener listOnClickListener;
     private final boolean isGenerator;
 
-    public ListAdapter(Context p_context, Listedfiles list, ListOnClickListener listOnClickListener, @NonNull boolean isGenerator) {
+    public ListAdapter(Context p_context, Listedfiles list, ListOnClickListener listOnClickListener, @NonNull boolean isGenerator,boolean isHideView) {
         this.m_context = p_context;
-        this.list = list;
         this.listOnClickListener=listOnClickListener;
         this.isGenerator=isGenerator;
+        if(isHideView){
+            for (int i=0;i<list.m_itemp.size();i++) {
+                if(setFileImageType(new File( (String) list.m_pathp.get(i)))==R.mipmap.file_ic_hd){
+                    list.m_itemp.remove(i);
+                    list.m_pathp.remove(i);
+                }
+            }
+        }
+        this.list = list;
     }
 
     @Override

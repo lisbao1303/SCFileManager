@@ -41,6 +41,7 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
     private ProgressBar progress;
     private String procura = null;
     private boolean isGenerator= false;
+    private boolean isHideView=false;
     int teste = 1;
 
 
@@ -423,7 +424,7 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
 
     private void changelistview(Listedfiles list){
         if(list.m_itemp.toArray().length>0) {
-            m_listAdapter = new ListAdapter(getActivity(), list,this,isGenerator);
+           m_listAdapter = new ListAdapter(getActivity(), list,this,isGenerator,isHideView());
         }else{
             Toast.makeText(getContext(),"Arquivo não encontrado",Toast.LENGTH_LONG).show();
         }
@@ -450,6 +451,14 @@ public class FragmentFileEx extends Fragment implements View.OnClickListener, Li
             this.refresh(arguments);
             return false;
         }
+    }
+
+    public boolean isHideView() {
+        return isHideView;
+    }
+
+    public void setHideView(boolean hideView) {
+        isHideView = hideView;
     }
 
     public interface FragmentListener {

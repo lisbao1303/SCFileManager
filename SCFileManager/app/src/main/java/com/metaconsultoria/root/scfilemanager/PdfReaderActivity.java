@@ -119,34 +119,46 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id=menuItem.getItemId();
         if(id==R.id.bottom_nav_star){
-            if(arquivo.getStared()){
-                    arquivo.setStared(false);
-                    db.attStared(arquivo.getPath(),false);
-                    setStared(false);
-                }
-                else{
-                    arquivo.setStared(true);
-                    db.attStared(arquivo.getPath(),true);
-                    setStared(true);
-                }
+            stareClick();
         }
         if(id==R.id.bottom_nav_coment){
-            ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_comment_black_24dp);
-            ShowComentsFragment comFrag=new ShowComentsFragment();
-            comFrag.setArq(arquivo);
-            this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
-            showdrawer(drawer,fundo);
-            tabSelected=0;
+            comentsClick();
         }
         if(id==R.id.bottom_nav_new_coment){
-            ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
-            NewComentFragment comFrag=new NewComentFragment();
-            comFrag.setArq(arquivo);
-            this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
-            showdrawer(drawer,fundo);
-            tabSelected=1;
+            newComentClick();
         }
         return false;
+    }
+
+    public void stareClick(){
+        if(arquivo.getStared()){
+            arquivo.setStared(false);
+            db.attStared(arquivo.getPath(),false);
+            setStared(false);
+        }
+        else{
+            arquivo.setStared(true);
+            db.attStared(arquivo.getPath(),true);
+            setStared(true);
+        }
+    }
+
+    public void comentsClick() {
+        ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_comment_black_24dp);
+        ShowComentsFragment comFrag=new ShowComentsFragment();
+        comFrag.setArq(arquivo);
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
+        showdrawer(drawer,fundo);
+        tabSelected=0;
+    }
+
+    public void newComentClick() {
+        ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
+        NewComentFragment comFrag=new NewComentFragment();
+        comFrag.setArq(arquivo);
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
+        showdrawer(drawer,fundo);
+        tabSelected=1;
     }
 
     private void setStared(boolean state){
@@ -254,8 +266,18 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         }
         super.onSaveInstanceState(outState);
     }
+
+    public void editComent(MyArquive arq,long id){
+        ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
+        NewComentFragment comFrag=new NewComentFragment();
+        comFrag.setArq(arquivo);
+        Bundle b = new Bundle();
+        b.putLong("coment_id",id);
+        comFrag.setArguments(b);
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.nav_bottom_replace_location,comFrag).commit();
+        showdrawer(drawer,fundo);
+        tabSelected=1;
+    }
 }
 
 //TODO:sistema de Delecao de arquivos da pasta storage, deixar um arquivo por vez
-
-//TODO:escurecer tela em segundo plano e fazer cliques na parte escura esconder o drawer

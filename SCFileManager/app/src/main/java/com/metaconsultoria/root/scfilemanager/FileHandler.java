@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
+import android.support.v4.provider.DocumentFile;
 import android.util.Log;
 
 import java.io.*;
@@ -25,7 +26,7 @@ public class FileHandler{
             File dir = new File (outputPath);
             if (!dir.exists())
             {
-                dir.mkdirs();
+                if(!dir.mkdirs()){}
             }
 
 
@@ -45,7 +46,8 @@ public class FileHandler{
             out = null;
 
         }  catch (FileNotFoundException fnfe1) {
-            Log.e("tag", fnfe1.getMessage());
+            Log.e("tag123", fnfe1.getMessage());
+            fnfe1.printStackTrace();
         }
         catch (Exception e) {
             Log.e("tag", e.getMessage());
@@ -177,6 +179,33 @@ public class FileHandler{
     }
 
     public static void copiDirectory(String inputPath, String inputDirectory, String outputPath){
-        File inputPathFile = new File(inputPath);
+        String inputPathDir=inputPath+inputDirectory;
+        String outputPathDir=outputPath+inputDirectory;
+        File inputPathDirectory = new File(inputPathDir);
+        File outputPathDirectory = new File(outputPathDir);
+        if(outputPathDirectory.exists()){
+            deleteDirectory(outputPathDirectory);
+        }
+        File[] subDirs = inputPathDirectory.listFiles();
+        for (File fileIterator: subDirs) {
+            if(fileIterator.isDirectory()){
+                copiDirectory(inputPathDir,"/"+fileIterator.getName(),outputPathDir);
+            }else if(fileIterator.isFile()){
+                copyFile(inputPathDir,"/"+fileIterator.getName(),outputPathDir);
+            }
+        }
     }
+
+    public static void deleteDirectory(File fileToDelete){
+        File[] subDirs = fileToDelete.listFiles();
+        for (File fileIterator: subDirs) {
+            if(fileIterator.isDirectory()){
+                deleteDirectory(fileIterator);
+            }else if(fileIterator.isFile()){
+                fileIterator.delete();
+            }
+        }
+        fileToDelete.delete();
+    }
+
 }

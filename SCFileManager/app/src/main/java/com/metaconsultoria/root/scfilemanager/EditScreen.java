@@ -2,23 +2,18 @@ package com.metaconsultoria.root.scfilemanager;
 
 
 import android.app.AlertDialog;
-import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,17 +21,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 
 
-public class EditScreen extends Fragment implements View.OnClickListener,Switch.OnCheckedChangeListener,AlertDialog.OnCancelListener{
+public class EditScreen extends Fragment implements View.OnClickListener,Switch.OnCheckedChangeListener{
     private LayoutInflater inflater;
     private ViewGroup container;
     private View vi;
@@ -45,8 +33,6 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
     private boolean isCleaned=false;
     private Funcionario func;
     private TextView textViewSave;
-    private AsyncTask task;
-    private AlertDialog dialog;
 
 
     public EditScreen() {
@@ -55,12 +41,14 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onDestroy() {
         container.removeAllViews();
+        ConstantesDoProjeto.getInstance().setEditScreenShow(false);
         super.onDestroy();
     }
 
@@ -94,6 +82,8 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
             if(fdb.getValor("last_save")!=null){
                 textViewSave.setText(getString(R.string.edit_screen)+fdb.getValor("last_save"));
             }
+            ConstantesDoProjeto.getInstance().setEditScreenShow(true);
+            ConstantesDoProjeto.getInstance().setEditScreen(this);
         }
         return vi;
     }
@@ -119,6 +109,14 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
                 if(fdb.getValor("last_save")!=null){
                     textViewSave.setText(getString(R.string.edit_screen)+fdb.getValor("last_save"));
                 }
+                ConstantesDoProjeto.getInstance().setEditScreenShow(true);
+                ConstantesDoProjeto.getInstance().setEditScreen(this);
+                if(ConstantesDoProjeto.getInstance().isSaving()){
+                    this.showProgresBarrSave();
+                }
+                if(ConstantesDoProjeto.getInstance().isRestoring()){
+                    this.showProgresBarrRestore();
+                }
             }else{
                 Toast.makeText(getContext(),R.string.string_usuario_ou_senha_incorretos,Toast.LENGTH_SHORT).show();
             }
@@ -131,16 +129,34 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
             isCleaned=true;
         }
         if(v.getId()==R.id.buttonSalvar){
-            this.showProgresBarr("Salvando BackUp");
-            task=new FileHandlerSaveThread();
-            ((FileHandlerSaveThread)task).execute(func);
+            if(!ConstantesDoProjeto.getInstance().isRestoring()) {
+                this.showProgresBarrSave();
+                File file=new File(ConstantesDoProjeto.getInstance().getMainPathProtected());
+                if(file.exists()){
+                    new FileHandlerSaveThread().execute(getFunc());
+                } else{
+                    Toast.makeText(getContext(),"Arquivo nao Encontrado",Toast.LENGTH_LONG).show();
+                    this.closeProgresBarrSave();
+                }
+            }else{
+                Toast.makeText(getActivity(),"Restauraçao em andamento",Toast.LENGTH_LONG).show();
+            }
         }
         if(v.getId()==R.id.buttonRestaurar){
-            this.showProgresBarr("Restaurando BackUp");
-            task=new FileHandlerRestoreThread();
-            ((FileHandlerRestoreThread)task).execute(func);
+            if(!ConstantesDoProjeto.getInstance().isSaving()) {
+                this.showProgresBarrRestore();
+                File file=new File(getActivity().getExternalFilesDir(null).getPath()+"/ArquivosSouza");
+                if(file.exists()) {
+                    new FileHandlerRestoreThread().execute(this);
+                }else{
+                    Toast.makeText(getContext(),"BackUp nao Encontrado",Toast.LENGTH_LONG).show();
+                    this.closeProgresBarrSave();
+                }
+            }else{
+                Toast.makeText(getActivity(),"BackUp em andamento",Toast.LENGTH_LONG).show();
+            }
         }
-        }
+    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -170,42 +186,50 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
         }
     }
 
-    private void showProgresBarr(String title){
-        final AlertDialog.Builder certo = new AlertDialog.Builder(getContext());
-        View v =getLayoutInflater().inflate(R.layout.savin_layout,null);
-        certo.setView(v);
-        certo.setNegativeButton(android.R.string.cancel,(new DialogInterface.OnClickListener() {
-            private Fragment frag;
-            public DialogInterface.OnClickListener getInstance(Fragment frag){
-                this.frag=frag;
-                return this;
-            }
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((EditScreen)frag).onCancel(null);
-            }
-        }).getInstance(this));
-        certo.setOnCancelListener(this);
-        certo.setTitle(title);
-        dialog=certo.show();
+    private void showProgresBarrSave(){
+        ImageButton imgbut= getActivity().findViewById(R.id.buttonSalvar);
+        imgbut.setImageAlpha(0);
+        imgbut.setClickable(false);
+        getActivity().findViewById(R.id.progressBarSave).setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onCancel(@Nullable DialogInterface dialog) {
-        task.cancel(true);
+    private void closeProgresBarrSave(){
+        ImageButton imgbut= getActivity().findViewById(R.id.buttonSalvar);
+        imgbut.setImageAlpha(255);
+        imgbut.setClickable(true);
+        getActivity().findViewById(R.id.progressBarSave).setVisibility(View.INVISIBLE);
+    }
+
+    private void showProgresBarrRestore(){
+        ImageButton imgbut= getActivity().findViewById(R.id.buttonRestaurar);
+        imgbut.setImageAlpha(0);
+        imgbut.setClickable(false);
+        getActivity().findViewById(R.id.progressBarRestore).setVisibility(View.VISIBLE);
+    }
+
+    private void closeProgresBarrRestore(){
+        ImageButton imgbut= getActivity().findViewById(R.id.buttonRestaurar);
+        imgbut.setImageAlpha(255);
+        imgbut.setClickable(true);
+        getActivity().findViewById(R.id.progressBarRestore).setVisibility(View.INVISIBLE);
     }
 
 
     private class FileHandlerSaveThread extends AsyncTask<Funcionario,Void,Funcionario> {
 
+        private final Context contx=getContext();
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            ConstantesDoProjeto.getInstance().setSaving(true);
         }
 
         @Override
         protected Funcionario doInBackground(Funcionario... funcs) {
-            for(int i=0;i<1000;i++)Log.wtf("saida","lol");
+            FileHandler.copiDirectory(ConstantesDoProjeto.getInstance().getMainPathProtectedCopy(),
+                        "/ArquivosSouza",
+                                        ConstantesDoProjeto.getInstance().getBackUpPath());
             return funcs[0];
         }
 
@@ -213,12 +237,11 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
         protected void onCancelled() {
             //task = null;
             super.onCancelled();
-
         }
 
         @Override
         protected void onPostExecute(Funcionario func) {
-            FuncDB fdb= new FuncDB(getContext());
+            FuncDB fdb= new FuncDB(contx);
             String lastSave= " Ultima atualizaçao feita por " +
                     func.getNome()+" ("+
                     func.getMatricula()+") em "+
@@ -228,30 +251,41 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
             }else{
                 fdb.updateValue("last_save",lastSave);
             }
-            onTaskSaveResult();
+            if(contx.getApplicationContext()!=null) {
+                Toast.makeText(contx.getApplicationContext(), "BackUp salvo", Snackbar.LENGTH_LONG).show();
+            }
+            if(ConstantesDoProjeto.getInstance().isEditScreenShow()){
+                ConstantesDoProjeto.getInstance().getEditScreen().onTaskSaveResult();
+            }
+            ConstantesDoProjeto.getInstance().setSaving(false);
         }
     }
 
     private void onTaskSaveResult(){
-        dialog.dismiss();
         FuncDB fdb = new FuncDB(getContext());
         if(fdb.getValor("last_save")!=null){
-            textViewSave.setText(getString(R.string.edit_screen)+fdb.getValor("last_save"));
-            Snackbar.make(getActivity().findViewById(R.id.screen_area),"BackUp salvo",Snackbar.LENGTH_LONG).show();
+            ((TextView)getActivity().findViewById(R.id.textViewSave))
+                    .setText(getString(R.string.edit_screen)+fdb.getValor("last_save"));
         }
+        this.closeProgresBarrSave();
     }
 
-    private class FileHandlerRestoreThread extends AsyncTask<Funcionario,Void,Funcionario> {
+    private class FileHandlerRestoreThread extends AsyncTask<Fragment,Void,Fragment> {
+
+        private final Context contx=getContext();
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            ConstantesDoProjeto.getInstance().setRestoring(true);
         }
 
         @Override
-        protected Funcionario doInBackground(Funcionario... funcs) {
-            for(int i=0;i<1000;i++)Log.wtf("saida","lol");
-            return funcs[0];
+        protected Fragment doInBackground(Fragment... contx) {
+            FileHandler.copiDirectory(ConstantesDoProjeto.getInstance().getBackUpPath(),
+                    "/ArquivosSouza",
+                    ConstantesDoProjeto.getInstance().getMainPathProtectedCopy());
+            return contx[0];
         }
 
         @Override
@@ -262,15 +296,25 @@ public class EditScreen extends Fragment implements View.OnClickListener,Switch.
         }
 
         @Override
-        protected void onPostExecute(Funcionario func) {
-            onTaskRestoreResult();
+        protected void onPostExecute(Fragment fragment) {
+            if(contx.getApplicationContext()!=null) {
+                Toast.makeText(contx.getApplicationContext(), "Restauraçao Completa", Snackbar.LENGTH_LONG).show();
+            }
+            if(ConstantesDoProjeto.getInstance().isEditScreenShow()){
+                ConstantesDoProjeto.getInstance().getEditScreen().onTaskRestoreResult();
+            }
+            ConstantesDoProjeto.getInstance().setRestoring(false);
         }
     }
 
 
     private void onTaskRestoreResult(){
-        dialog.dismiss();
-        Snackbar.make(getActivity().findViewById(R.id.screen_area),"Dados Restaurados",Snackbar.LENGTH_LONG).show();
+        //dialog.dismiss();
+        this.closeProgresBarrRestore();
+    }
+
+    public Funcionario getFunc(){
+        return this.func;
     }
 
 }

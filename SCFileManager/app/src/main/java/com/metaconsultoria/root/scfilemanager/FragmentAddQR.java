@@ -85,7 +85,13 @@ public class FragmentAddQR extends Fragment implements View.OnClickListener{
         }else if(id==R.id.imageView_icon3){
             mfragment.refresh();
         }else if(id==R.id.imageView_icon4){
-
+            if(mfragment.isHideView()){
+                ((ImageView)this.getActivity().findViewById(id)).setImageResource(R.drawable.ic_hidden);
+                mfragment.setHideView(false);
+            }else {
+                ((ImageView)this.getActivity().findViewById(id)).setImageResource(R.drawable.ic_remove_red_eye_black_24dp);
+                mfragment.setHideView(true);
+            }mfragment.refresh();
         }else if(id==R.id.imageView_help){
             View view= getLayoutInflater().inflate(R.layout.layout_help, null);
 

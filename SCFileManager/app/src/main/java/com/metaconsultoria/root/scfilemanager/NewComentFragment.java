@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -45,27 +46,65 @@ public class NewComentFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         final Activity activity = getActivity();
-
-        activity.findViewById(R.id.imageButtonEdit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText editText1=(EditText) activity.findViewById(R.id.editText_name_new_coment);
-                EditText editText2=(EditText) activity.findViewById(R.id.editText_coment_new_coment);
-                NewComentFragment.utilHideKeyboard(activity,editText2);
-                String name = editText1.getText().toString();
-                String text = editText2.getText().toString();
-                if(!name.equals("") && !name.equals(getString(R.string.new_coment_name_hint))) {
-                    if(!text.equals("") && !text.equals(getString(R.string.new_coment_coment_hint))){
-                        MyComent coment = new MyComent(name, text, NewComentFragment.utilGetDate());
-                        db=new RecentFilesDB(getContext());
-                        db.saveComent(coment, arq);
-                        getActivity().onBackPressed();
-                        Toast.makeText(getActivity(),R.string.coment_acepted,Toast.LENGTH_SHORT).show();
-                    }else{Toast.makeText(getActivity(),R.string.erro_coment_2,Toast.LENGTH_SHORT).show();}
-                }else { Toast.makeText(getActivity(),R.string.erro_coment_1,Toast.LENGTH_SHORT).show();}
-            }
+        if(getArguments()==null) {
+            activity.findViewById(R.id.imageButtonEdit).setOnClickListener(new View.OnClickListener() {
+                                                                               @Override
+                                                                               public void onClick(View v) {
+                                                                                   EditText editText1 = (EditText) activity.findViewById(R.id.editText_name_new_coment);
+                                                                                   EditText editText2 = (EditText) activity.findViewById(R.id.editText_coment_new_coment);
+                                                                                   NewComentFragment.utilHideKeyboard(activity, editText2);
+                                                                                   String name = editText1.getText().toString();
+                                                                                   String text = editText2.getText().toString();
+                                                                                   if (!name.equals("") && !name.equals(getString(R.string.new_coment_name_hint))) {
+                                                                                       if (!text.equals("") && !text.equals(getString(R.string.new_coment_coment_hint))) {
+                                                                                           MyComent coment = new MyComent(name, text, NewComentFragment.utilGetDate());
+                                                                                           db = new RecentFilesDB(getContext());
+                                                                                           db.saveComent(coment, arq);
+                                                                                           getActivity().onBackPressed();
+                                                                                           Toast.makeText(getActivity(), R.string.coment_acepted, Toast.LENGTH_SHORT).show();
+                                                                                       } else {
+                                                                                           Toast.makeText(getActivity(), R.string.erro_coment_2, Toast.LENGTH_SHORT).show();
+                                                                                       }
+                                                                                   } else {
+                                                                                       Toast.makeText(getActivity(), R.string.erro_coment_1, Toast.LENGTH_SHORT).show();
+                                                                                   }
+                                                                               }
+                                                                           }
+            );
+        }else{
+            ((TextView)activity.findViewById(R.id.coment_title)).setText("Editar Comentario:");
+            db = new RecentFilesDB(getContext());
+            MyComent lastcoment=db.findByComentId(arq,getArguments().getLong("coment_id"));
+            ((EditText) getActivity().findViewById(R.id.editText_name_new_coment)).setText(lastcoment.getName());
+            ((EditText) getActivity().findViewById(R.id.editText_coment_new_coment)).setText(lastcoment.getComent());
+            activity.findViewById(R.id.imageButtonEdit).setOnClickListener(new View.OnClickListener() {
+                                                                               @Override
+                                                                               public void onClick(View v) {
+                                                                                   EditText editText1 = (EditText) activity.findViewById(R.id.editText_name_new_coment);
+                                                                                   EditText editText2 = (EditText) activity.findViewById(R.id.editText_coment_new_coment);
+                                                                                   NewComentFragment.utilHideKeyboard(activity, editText2);
+                                                                                   String name = editText1.getText().toString();
+                                                                                   String text = editText2.getText().toString();
+                                                                                   if (!name.equals("") && !name.equals(getString(R.string.new_coment_name_hint))) {
+                                                                                       if (!text.equals("") && !text.equals(getString(R.string.new_coment_coment_hint))) {
+                                                                                           db = new RecentFilesDB(getContext());
+                                                                                           MyComent coment=db.findByComentId(arq,getArguments().getLong("coment_id"));
+                                                                                           coment.setName(name);
+                                                                                           coment.setComent(text);
+                                                                                           coment.setData_hr(utilGetDate());
+                                                                                           db.updateByComentId(arq,coment);
+                                                                                           getActivity().onBackPressed();
+                                                                                           Toast.makeText(getActivity(), R.string.coment_acepted, Toast.LENGTH_SHORT).show();
+                                                                                       } else {
+                                                                                           Toast.makeText(getActivity(), R.string.erro_coment_2, Toast.LENGTH_SHORT).show();
+                                                                                       }
+                                                                                   } else {
+                                                                                       Toast.makeText(getActivity(), R.string.erro_coment_1, Toast.LENGTH_SHORT).show();
+                                                                                   }
+                                                                               }
+                                                                           }
+            );
         }
-        );
 
         final EditText myEditText1=(EditText)activity.findViewById(R.id.editText_name_new_coment);
         myEditText1.setOnFocusChangeListener(new View.OnFocusChangeListener() {

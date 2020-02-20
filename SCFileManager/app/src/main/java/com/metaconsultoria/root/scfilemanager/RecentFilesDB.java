@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -23,6 +24,10 @@ public class RecentFilesDB extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
+        existsConfirmation(db);
+    }
+
+    public void existsConfirmation(SQLiteDatabase db){
         db.execSQL(
                 "create table if not exists recent_arquivos (id integer primary key autoincrement," +
                         "nome text," +
@@ -75,6 +80,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
     public List<MyArquive> findAll() {
         SQLiteDatabase db = getWritableDatabase();
         try {
+            existsConfirmation(db);
             Cursor c = db.query("recent_arquivos", null, null, null, null, null, null);
             if (c.getCount() > 0) {
                 List<MyArquive> fx_vetor = new ArrayList<MyArquive>();
@@ -103,6 +109,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
     public MyArquive findByPath(String path) {
         SQLiteDatabase db = getWritableDatabase();
         try {
+            existsConfirmation(db);
             Cursor c = db.query("recent_arquivos", null, "path='" + path + "'", null, null, null, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
@@ -126,6 +133,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
     public int deleteByPath(String path) {
         SQLiteDatabase db = getWritableDatabase();
         try {
+            existsConfirmation(db);
             int count = db.delete("recent_arquivos", "path=?", new String[]{path});
             return count;
         } finally {
@@ -136,6 +144,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
     public int deleteAll() {
         SQLiteDatabase db = getWritableDatabase();
         try {
+            existsConfirmation(db);
             int count = db.delete("recent_arquivos", "", null);
             return count;
         } finally {
@@ -160,6 +169,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         String[] selectionArgs = {path};
         SQLiteDatabase db = getWritableDatabase();
         try {
+            existsConfirmation(db);
             return db.update(
                     "recent_arquivos",
                     values,
@@ -178,6 +188,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         String[] selectionArgs = {path};
         SQLiteDatabase db = getWritableDatabase();
         try {
+            existsConfirmation(db);
             return db.update(
                     "recent_arquivos",
                     values,
@@ -219,20 +230,27 @@ public class RecentFilesDB extends SQLiteOpenHelper {
     public List<MyArquive> mySelect(int number){
         SQLiteDatabase db = getWritableDatabase();
         try {
+            existsConfirmation(db);
             Cursor c = db.query("recent_arquivos", null, null, null, null, null, "lastuseMRU", String.valueOf(number));
-            if(c==null){return null;}
+            if (c == null) {
+                return null;
+            }
             if (c.getCount() > 0) {
                 List<MyArquive> fx_vetor = new ArrayList<MyArquive>();
                 if (c.moveToFirst()) {
                     do {
                         MyArquive fx = new MyArquive();
-                        fx.id=c.getLong(c.getColumnIndex("id"));
+                        fx.id = c.getLong(c.getColumnIndex("id"));
                         fx.setNome(c.getString(c.getColumnIndex("nome")));
                         fx.setPath(c.getString(c.getColumnIndex("path")));
                         fx.setLastuse(c.getString(c.getColumnIndex("lastuse")));
-                        if(c.getInt(c.getColumnIndex("isStared"))==0){fx.setStared(false);}
-                        if(c.getInt(c.getColumnIndex("isStared"))==1){fx.setStared(true);}
-                        Log.wtf("arquivoID",String.valueOf(c.getInt(c.getColumnIndex("id"))));
+                        if (c.getInt(c.getColumnIndex("isStared")) == 0) {
+                            fx.setStared(false);
+                        }
+                        if (c.getInt(c.getColumnIndex("isStared")) == 1) {
+                            fx.setStared(true);
+                        }
+                        Log.wtf("arquivoID", String.valueOf(c.getInt(c.getColumnIndex("id"))));
                         fx_vetor.add(fx);
                     } while (c.moveToNext());
                 }
@@ -260,6 +278,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
     public List<MyArquive> selectStareds(){
         SQLiteDatabase db = getWritableDatabase();
         try {
+            existsConfirmation(db);
             Cursor c = db.query("recent_arquivos", null, "isStared=1", null, null, null, "nome", null);
             if(c==null){return null;}
             if (c.getCount() > 0) {
@@ -374,6 +393,26 @@ public class RecentFilesDB extends SQLiteOpenHelper {
                 return null;
             }
         } finally {
+            db.close();
+        }
+    }
+
+    public int updateByComentId(MyArquive arq,MyComent coment){
+        ContentValues values = new ContentValues();
+        values.put("nome", coment.getName());
+        values.put("coment", coment.getComent());
+        values.put("data_hr", coment.getData_hr());
+        String selection = "id" + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(coment.getId())};
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            existsConfirmation(db);
+            return db.update(
+                    "tab"+String.valueOf(arq.id),
+                    values,
+                    selection,
+                    selectionArgs);
+        }finally {
             db.close();
         }
     }

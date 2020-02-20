@@ -15,6 +15,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.provider.DocumentFile;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,6 +31,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
@@ -81,14 +83,19 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
                 buffer=teste[0].getPath();
             }
         }
-        buffer=buffer.substring(0,buffer.indexOf("/Android"));
-        ConstantesDoProjeto.getInstance().setMainPath(buffer);
+
+        String protectPath=buffer.substring(0,buffer.indexOf("/Android"));
+        String storage= teste[0].getPath();
+      //  storage=storage.substring(0,storage.indexOf("/Android"));
+        ConstantesDoProjeto.getInstance().setMainPath(protectPath);
         ConstantesDoProjeto.getInstance().setMainPathProtected(buffer+"/ArquivosSouza");
+        ConstantesDoProjeto.getInstance().setMainPathProtectedCopy(buffer);
+        ConstantesDoProjeto.getInstance().setBackUpPath(storage);
 
         //?is protect
         FuncDB fdb= new FuncDB(this);
         if(fdb.getValor("is_protected")==null){
-            fdb.saveChave("is_protected","false");
+            fdb.saveChave("is_protected","true");
         }
         //inicio da activity
         super.onCreate(savedInstanceState);
