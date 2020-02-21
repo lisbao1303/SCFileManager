@@ -15,7 +15,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.provider.DocumentFile;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -92,6 +91,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         ConstantesDoProjeto.getInstance().setMainPathProtectedCopy(buffer);
         ConstantesDoProjeto.getInstance().setBackUpPath(storage);
 
+        File testinho =new File(ConstantesDoProjeto.getInstance().getMainPathProtected());
+        if(!testinho.exists()){
+            testinho.mkdirs();
+        }
         //?is protect
         FuncDB fdb= new FuncDB(this);
         if(fdb.getValor("is_protected")==null){
@@ -338,6 +341,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             this.abrirAbout();
             returnstatement=false;
             id=navDrawerSelected;
+        } else if (id == R.id.nav_novo_arq) {
+            this.abrirHelp();
+            returnstatement=false;
+            id=navDrawerSelected;
         }else {
             Log.wtf("nao achor","nd");
             returnstatement=false;
@@ -467,6 +474,25 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         certo.setContentView(R.layout.sobre_l);
         }else {
             certo.setContentView(R.layout.sobre_s);
+        }
+        certo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        certo.findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                certo.dismiss();
+            }
+        });
+        certo.show();
+    }
+
+    private void abrirHelp(){
+
+        final Dialog certo = new Dialog(this);
+        certo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if(getResources().getConfiguration().screenWidthDp > 600 && getResources().getConfiguration().screenHeightDp > 800){
+            certo.setContentView(R.layout.novo_arq_l);
+        }else {
+            certo.setContentView(R.layout.novo_arq_s);
         }
         certo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         certo.findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {

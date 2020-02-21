@@ -9,9 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 
-public class FragmentTab2 extends Fragment{
+public class FragmentTab2 extends Fragment implements View.OnClickListener{
     private Bundle instance;
     private String mainpath;
     public FragmentFileEx mfragment;
@@ -44,7 +45,11 @@ public class FragmentTab2 extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment_tab2, container, false);
+        View vi= inflater.inflate(R.layout.fragment_fragment_tab2, container, false);
+        vi.findViewById(R.id.imageView7).setOnClickListener(this);
+        vi.findViewById(R.id.imageView8).setOnClickListener(this);
+        vi.findViewById(R.id.imageView9).setOnClickListener(this);
+        return vi;
     }
 
     @Override
@@ -70,5 +75,15 @@ public class FragmentTab2 extends Fragment{
     public void onStart() {
         Log.wtf("here it is","porra");
         super.onStart();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.imageView8){mfragment.refresh();}
+        if(v.getId()==R.id.imageView7){Bundle b=new Bundle();
+            b.putString("arqpath",ConstantesDoProjeto.getInstance().getMainPathProtected());
+            mfragment.refresh(b);}
+        if(v.getId()==R.id.imageView9){RecentFilesFragment mFragmentRecent = new RecentFilesFragment();
+            this.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.file_recent_area, mFragmentRecent).commit();}
     }
 }

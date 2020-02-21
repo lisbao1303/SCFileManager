@@ -20,7 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class NewComentFragment extends Fragment {
+public class NewComentFragment extends Fragment implements View.OnClickListener{
     private int fragHeight;
     private RecentFilesDB db;
     private MyArquive arq;
@@ -47,65 +47,15 @@ public class NewComentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         final Activity activity = getActivity();
         if(getArguments()==null) {
-            activity.findViewById(R.id.imageButtonEdit).setOnClickListener(new View.OnClickListener() {
-                                                                               @Override
-                                                                               public void onClick(View v) {
-                                                                                   EditText editText1 = (EditText) activity.findViewById(R.id.editText_name_new_coment);
-                                                                                   EditText editText2 = (EditText) activity.findViewById(R.id.editText_coment_new_coment);
-                                                                                   NewComentFragment.utilHideKeyboard(activity, editText2);
-                                                                                   String name = editText1.getText().toString();
-                                                                                   String text = editText2.getText().toString();
-                                                                                   if (!name.equals("") && !name.equals(getString(R.string.new_coment_name_hint))) {
-                                                                                       if (!text.equals("") && !text.equals(getString(R.string.new_coment_coment_hint))) {
-                                                                                           MyComent coment = new MyComent(name, text, NewComentFragment.utilGetDate());
-                                                                                           db = new RecentFilesDB(getContext());
-                                                                                           db.saveComent(coment, arq);
-                                                                                           getActivity().onBackPressed();
-                                                                                           Toast.makeText(getActivity(), R.string.coment_acepted, Toast.LENGTH_SHORT).show();
-                                                                                       } else {
-                                                                                           Toast.makeText(getActivity(), R.string.erro_coment_2, Toast.LENGTH_SHORT).show();
-                                                                                       }
-                                                                                   } else {
-                                                                                       Toast.makeText(getActivity(), R.string.erro_coment_1, Toast.LENGTH_SHORT).show();
-                                                                                   }
-                                                                               }
-                                                                           }
-            );
+            activity.findViewById(R.id.imageButtonEdit).setOnClickListener(this);
         }else{
             ((TextView)activity.findViewById(R.id.coment_title)).setText("Editar Comentario:");
             db = new RecentFilesDB(getContext());
             MyComent lastcoment=db.findByComentId(arq,getArguments().getLong("coment_id"));
-            ((EditText) getActivity().findViewById(R.id.editText_name_new_coment)).setText(lastcoment.getName());
-            ((EditText) getActivity().findViewById(R.id.editText_coment_new_coment)).setText(lastcoment.getComent());
-            activity.findViewById(R.id.imageButtonEdit).setOnClickListener(new View.OnClickListener() {
-                                                                               @Override
-                                                                               public void onClick(View v) {
-                                                                                   EditText editText1 = (EditText) activity.findViewById(R.id.editText_name_new_coment);
-                                                                                   EditText editText2 = (EditText) activity.findViewById(R.id.editText_coment_new_coment);
-                                                                                   NewComentFragment.utilHideKeyboard(activity, editText2);
-                                                                                   String name = editText1.getText().toString();
-                                                                                   String text = editText2.getText().toString();
-                                                                                   if (!name.equals("") && !name.equals(getString(R.string.new_coment_name_hint))) {
-                                                                                       if (!text.equals("") && !text.equals(getString(R.string.new_coment_coment_hint))) {
-                                                                                           db = new RecentFilesDB(getContext());
-                                                                                           MyComent coment=db.findByComentId(arq,getArguments().getLong("coment_id"));
-                                                                                           coment.setName(name);
-                                                                                           coment.setComent(text);
-                                                                                           coment.setData_hr(utilGetDate());
-                                                                                           db.updateByComentId(arq,coment);
-                                                                                           getActivity().onBackPressed();
-                                                                                           Toast.makeText(getActivity(), R.string.coment_acepted, Toast.LENGTH_SHORT).show();
-                                                                                       } else {
-                                                                                           Toast.makeText(getActivity(), R.string.erro_coment_2, Toast.LENGTH_SHORT).show();
-                                                                                       }
-                                                                                   } else {
-                                                                                       Toast.makeText(getActivity(), R.string.erro_coment_1, Toast.LENGTH_SHORT).show();
-                                                                                   }
-                                                                               }
-                                                                           }
-            );
+            ((EditText) activity.findViewById(R.id.editText_name_new_coment)).setText(lastcoment.getName());
+            ((EditText) activity.findViewById(R.id.editText_coment_new_coment)).setText(lastcoment.getComent());
+            activity.findViewById(R.id.imageButtonEdit).setOnClickListener(this);
         }
-
         final EditText myEditText1=(EditText)activity.findViewById(R.id.editText_name_new_coment);
         myEditText1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -117,7 +67,7 @@ public class NewComentFragment extends Fragment {
             }
         });
 
-        final EditText myEditText2=(EditText)activity.findViewById(R.id.editText_name_new_coment);
+        final EditText myEditText2=(EditText)activity.findViewById(R.id.editText_coment_new_coment);
         myEditText2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -129,7 +79,6 @@ public class NewComentFragment extends Fragment {
         });
         super.onViewCreated(view, savedInstanceState);
     }
-
 
     public int getFragHeight() {
         return fragHeight;
@@ -159,4 +108,52 @@ public class NewComentFragment extends Fragment {
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.imageButtonEdit){
+            if(getArguments()==null){
+                EditText editText1 = (EditText) getActivity().findViewById(R.id.editText_name_new_coment);
+                EditText editText2 = (EditText) getActivity().findViewById(R.id.editText_coment_new_coment);
+                NewComentFragment.utilHideKeyboard(getActivity(), editText2);
+                String name = editText1.getText().toString();
+                String text = editText2.getText().toString();
+                if (!name.equals("") && !name.equals(getString(R.string.new_coment_name_hint))) {
+                    if (!text.equals("") && !text.equals(getString(R.string.new_coment_coment_hint))) {
+                        MyComent coment = new MyComent(name, text, NewComentFragment.utilGetDate());
+                        db = new RecentFilesDB(getContext());
+                        db.saveComent(coment, arq);
+                        getActivity().onBackPressed();
+                        Toast.makeText(getActivity(), R.string.coment_acepted, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), R.string.erro_coment_2, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), R.string.erro_coment_1, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }else{
+            EditText editText1 = (EditText)getActivity().findViewById(R.id.editText_name_new_coment);
+            EditText editText2 = (EditText)getActivity().findViewById(R.id.editText_coment_new_coment);
+            NewComentFragment.utilHideKeyboard(getActivity(), editText2);
+            String name = editText1.getText().toString();
+            String text = editText2.getText().toString();
+            if (!name.equals("") && !name.equals(getString(R.string.new_coment_name_hint))) {
+                if (!text.equals("") && !text.equals(getString(R.string.new_coment_coment_hint))) {
+                    db = new RecentFilesDB(getContext());
+                    MyComent coment=db.findByComentId(arq,getArguments().getLong("coment_id"));
+                    coment.setName(name);
+                    coment.setComent(text);
+                    coment.setData_hr(utilGetDate());
+                    db.updateByComentId(arq,coment);
+                    getActivity().onBackPressed();
+                    Toast.makeText(getActivity(), R.string.coment_acepted, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), R.string.erro_coment_2, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getActivity(), R.string.erro_coment_1, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

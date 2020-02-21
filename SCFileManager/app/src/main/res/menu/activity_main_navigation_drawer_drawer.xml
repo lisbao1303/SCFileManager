@@ -27,6 +27,11 @@
             android:title="@string/qr_code_generator"
             android:checkable="true"/>
         <item
+            android:id="@+id/nav_novo_arq"
+            android:icon="@drawable/ic_help_outline_black_24dp"
+            android:title="@string/novo_arq"
+            android:checkable="false"/>
+        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_info_outline_black_24dp"
             android:title="@string/about"

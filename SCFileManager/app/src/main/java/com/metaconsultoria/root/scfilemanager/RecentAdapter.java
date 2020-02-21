@@ -36,7 +36,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
             staredViewHolder.data_hr.setText(c.getData());
             staredViewHolder.imagem.setImageResource(getImageFileTipeIcon(c));
             if(c.getStared()){staredViewHolder.star.setImageResource(R.drawable.ic_star_black_24dp);}
-            else{staredViewHolder.star.setImageResource(R.drawable.ic_star_border_black_24dp);}
+            else{staredViewHolder.star.setVisibility(ImageView.INVISIBLE);}
 
             if (staredOnClickListener != null) {
                 staredViewHolder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -380,7 +380,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
     public MyComent findByComentId(MyArquive arq,long id) {
         SQLiteDatabase db = getWritableDatabase();
         try {
-            Cursor c = db.query("tab"+String.valueOf(arq.id), null, "id=" +String.valueOf(id), null, null, null, null);
+            Cursor c = db.query("tab"+String.valueOf(arq.id), null, "coment_id=" +String.valueOf(id), null, null, null, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 MyComent fx = new MyComent();
@@ -402,7 +402,7 @@ public class RecentFilesDB extends SQLiteOpenHelper {
         values.put("nome", coment.getName());
         values.put("coment", coment.getComent());
         values.put("data_hr", coment.getData_hr());
-        String selection = "id" + " LIKE ?";
+        String selection = "coment_id" + " LIKE ?";
         String[] selectionArgs = {String.valueOf(coment.getId())};
         SQLiteDatabase db = getWritableDatabase();
         try {

@@ -1,6 +1,7 @@
 package com.metaconsultoria.root.scfilemanager;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -68,15 +70,6 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
             FragmentPDF fragment = new FragmentPDF();
             fragment.setArguments(arguments);
             this.getSupportFragmentManager().beginTransaction().replace(R.id.pdf_screen_area, fragment).commit();
-        }else{
-            if(isDrawerOpen=savedInstanceState.getBoolean("is_drawer_open")){
-                showdrawer(drawer,fundo);
-                if((tabSelected=savedInstanceState.getInt("tab_selected"))==0){
-                    ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_comment_black_24dp);
-                }if((tabSelected=savedInstanceState.getInt("tab_selected"))==1){
-                    ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
-                }
-            }
         }
         this.setTitle(arquivo.getNome()+".pdf");
     }
@@ -130,6 +123,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         return false;
     }
 
+
     public void stareClick(){
         if(arquivo.getStared()){
             arquivo.setStared(false);
@@ -169,6 +163,14 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
         }
     }
 
+
+    @Override
+    protected void onPause() {
+        if(isDrawerOpen){
+            closedrawer(drawer,fundo);
+        }
+        super.onPause();
+    }
 
     public void openWith(){
         Intent intent;
@@ -236,6 +238,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
 
 
     private void closedrawer(final View drawer,final View fundo){
+
         final View shadow = (View) findViewById(R.id.shadow_backgroud);
         shadow.setAlpha(0.3f);
         drawer.setAlpha(1f);
@@ -268,7 +271,7 @@ public class PdfReaderActivity extends AppCompatActivity implements BottomNaviga
     }
 
     public void editComent(MyArquive arq,long id){
-        ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
+        ((ImageView)findViewById(R.id.imageView)).setImageResource(R.drawable.ic_edit_black_24dp);
         NewComentFragment comFrag=new NewComentFragment();
         comFrag.setArq(arquivo);
         Bundle b = new Bundle();

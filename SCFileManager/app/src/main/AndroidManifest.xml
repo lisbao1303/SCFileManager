@@ -38,7 +38,8 @@
         <activity
             android:name=".PdfReaderActivity"
             android:label="@string/title_activity_pdf_reader"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name=".MainNavigationDrawerActivity"
             android:label="@string/title_activity_main_navigation_drawer"
