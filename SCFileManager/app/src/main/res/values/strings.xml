@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SC File Manager</string>
-    <string name="login_name_text">N° de Matricula</string>
+    <string name="login_name_text">N° de Matrícula</string>
     <string name="login_password_text">Senha</string>
     <string name="ButtonLoginName">Entrar</string>
     <string name="title_activity_main_navigation_drawer">SC File Manager</string>
@@ -14,13 +14,13 @@
     <string name="pesquisador_ar">Explorador de Arquivos</string>
     <string name="editor_ar">Editor de Arquivos</string>
     <string name="restrict_acess">Aceso Restrito</string>
-    <string name="matricula_const">Matricula: </string>
+    <string name="matricula_const">Matrícula: </string>
     <string name="nome_const">Nome: </string>
     <string name="todo">TODO</string>
     <string name="textviewfile1">TextView</string>
     <string name="textviewfile2">TextView</string>
-    <string name="erro_login_1">Usuario Inexistente ou Senha Incorreta</string>
-    <string name="erro_login_2">Campo de Usuario Vazio</string>
+    <string name="erro_login_1">Usuário Inexistente ou Senha Incorreta</string>
+    <string name="erro_login_2">Campo de Usuário Vazio</string>
     <string name="erro_login_3">Campo de Senho Vazio</string>
     <string name="button">Button</string>
     <string name="pesquisar">Pesquisar</string>
@@ -31,25 +31,25 @@
     <string name="arq_window">Arquivo</string>
     <string name="tab_1_title">Leitor</string>
     <string name="tab_2_title">Gerenciador</string>
-    <string name="help_scanner">Aponte o aparelho para o codigo desejado</string>
+    <string name="help_scanner">Aponte o aparelho para o código desejado</string>
     <string name="title_activity_pdf_reader">Leitor PDF</string>
     <string name="bottom_nav_item_1">Favoritos</string>
-    <string name="bottom_nav_item_2">Comentarios</string>
+    <string name="bottom_nav_item_2">Comentários</string>
     <string name="bottom_nav_item_3">Comentar</string>
     <string name="action_pdf_open_with">Abrir com outro aplicativo</string>
     <string name="send_to">Abrir com:</string>
-    <string name="comentarios">Comentarios:</string>
-    <string name="erro_coment_1">Campo de Nome Obrigatorio</string>
-    <string name="erro_coment_2">Campo de Comentario Vazio</string>
-    <string name="coment_acepted">Comentario Salvo</string>
-    <string name="nav_bottom_comentarios">Comentarios:</string>
+    <string name="comentarios">Comentários:</string>
+    <string name="erro_coment_1">Campo de Nome Obrigatório</string>
+    <string name="erro_coment_2">Campo de Comentário Vazio</string>
+    <string name="coment_acepted">Comentário Salvo</string>
+    <string name="nav_bottom_comentarios">Comentários:</string>
     <string name="nav_bottom_comentar">Comentar:</string>
     <string name="new_coment_name_hint">Nome:</string>
-    <string name="new_coment_coment_hint">Comentario …</string>
+    <string name="new_coment_coment_hint">Comentário …</string>
     <string name="favoritos">Favoritos</string>
-    <string name="configuracoes">Configuraçoes</string>
-    <string name="coment_null_1">Nenhum comentario adicionado ainda:</string>
-    <string name="coment_null_2">Adicionar Comentario</string>
+    <string name="configuracoes">Configurações</string>
+    <string name="coment_null_1">Nenhum comentário adicionado ainda:</string>
+    <string name="coment_null_2">Adicionar Comentário</string>
     <string name="qr_code_generator">Gerar QR Code</string>
     <string name="about">Sobre</string>
     <string name="novo_arq">Adicionar Arquivo</string>
@@ -57,23 +57,23 @@
     <string name="string_entrar">ENTRAR</string>
     <string name="string_senha">Senha</string>
     <string name="string_confirm_senha">Confirmar Senha</string>
-    <string name="string_matricula">Matricula</string>
+    <string name="string_matricula">Matrícula</string>
     <string name="string_nome">Nome</string>
-    <string name="string_email">Email para Restauraçao</string>
+    <string name="string_email">Email para Restauração</string>
     <string name="string_add">Add</string>
     <string name="string_cancel">Cancel</string>
-    <string name="string_usuario_ou_senha_incorretos">Usuario ou Senha incorretos</string>
-    <string name="string_cadastrar_usuario">Cadastrar Novo Funcionario</string>
+    <string name="string_usuario_ou_senha_incorretos">Usuário ou Senha incorretos</string>
+    <string name="string_cadastrar_usuario">Cadastrar Novo Funcionário</string>
     <string name="string_cadastrar_usuario_erro_1">O Campo: "</string>
     <string name="string_cadastrar_usuario_erro_2">" deve ser preenchido</string>
     <string name="string_cadastrar_usuario_erro_3">" nao pode conter espaços</string>
     <string name="string_caminho_add_qr_view">Caminho:/…</string>
-    <string name="edit_screen">Gera copia da versao atual dos arquivos salvos para restauraçoes futuras.</string>
-    <string name="string_help">Os QR codes gerados no aplicativo sao diretamente relacionados
-                            a pasta na qual o arquivo esta localizado, mudar um arquivo de local
-                            apos ter gerado seu codigo pode tornar-lo inutilizavel.
-                            Caso seja necessario mudar um arquivo de local deve-se gerar um novo
-                            codigo logo apos a mudança em substituiçao ao codigo inutilizado."</string>
+    <string name="edit_screen">Gera cópia da versao atual dos arquivos salvos para restaurações futuras.</string>
+    <string name="string_help">Os QR codes gerados no aplicativo são diretamente relacionados
+                            a pasta na qual o arquivo está localizado, mudar um arquivo de local
+                            após ter gerado seu código pode torná-lo inutilizável.
+                            Caso seja necessário mudar um arquivo de local deve-se gerar um novo
+                            código logo após a mudança em substituição ao código inutilizado."</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

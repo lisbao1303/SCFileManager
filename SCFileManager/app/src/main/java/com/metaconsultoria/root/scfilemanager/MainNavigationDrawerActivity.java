@@ -1,22 +1,17 @@
 package com.metaconsultoria.root.scfilemanager;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,14 +24,17 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import com.metaconsultoria.root.scfilemanager.utils.ExternalDirsUtils;
+import com.metaconsultoria.root.scfilemanager.utils.PermissionUtils;
+import java.util.Objects;
 
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, FragmentFileEx.FragmentListener, ActivityCompat.OnRequestPermissionsResultCallback {
+        implements NavigationView.OnNavigationItemSelectedListener,
+                   SearchView.OnQueryTextListener,
+                   FragmentFileEx.FragmentListener,
+                   ActivityCompat.OnRequestPermissionsResultCallback {
 
-    //private String matricula;
     private FragmentFileEx mainFragmentFileEx;
     public MenuItem searchItem ;
     public RecentFilesDB db;
@@ -53,53 +51,17 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         instance = savedInstanceState;
 
         //testando permissoes
-        if(!checkPermissoes()){
-            try {
-                requestPermissoes();
-                while(checkPermissoes());
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+        getPermissoes();
 
         //encontrando cartao fisico
-        File[] teste = this.getExternalFilesDirs(null);
-        String buffer="";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            for(int i=0;i<teste.length;i++){
-                if(Environment.isExternalStorageRemovable((teste[i]))){
-                    buffer=teste[i].getPath();
-                    break;
-                }
-                if(i==(teste.length-1)){
-                    buffer=teste[0].getPath();
-                }
-            }
-        }else{
-            if(teste.length>1){
-                buffer=teste[1].getPath();
-            }else{
-                buffer=teste[0].getPath();
-            }
-        }
+        ExternalDirsUtils.prepareSdDirs(this);
 
-        String protectPath=buffer.substring(0,buffer.indexOf("/Android"));
-        String storage= teste[0].getPath();
-      //  storage=storage.substring(0,storage.indexOf("/Android"));
-        ConstantesDoProjeto.getInstance().setMainPath(protectPath);
-        ConstantesDoProjeto.getInstance().setMainPathProtected(buffer+"/ArquivosSouza");
-        ConstantesDoProjeto.getInstance().setMainPathProtectedCopy(buffer);
-        ConstantesDoProjeto.getInstance().setBackUpPath(storage);
-
-        File testinho =new File(ConstantesDoProjeto.getInstance().getMainPathProtected());
-        if(!testinho.exists()){
-            testinho.mkdirs();
-        }
         //?is protect
         FuncDB fdb= new FuncDB(this);
         if(fdb.getValor("is_protected")==null){
             fdb.saveChave("is_protected","true");
         }
+
         //inicio da activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navigation_drawer);
@@ -117,8 +79,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         if(instance!=null) {
             tabselected = instance.getInt("tab_selected");
         }
-        Log.wtf("resolvendo rotacao:",this.getClass().getName());
-        Thread.dumpStack();
     }
 
     @Override
@@ -126,23 +86,21 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if(checkPermissoes()&& instance==null){
-                if(!setMainFrag(navDrawerSelected)){
-                    Log.wtf("teste","maroto");
-                fragMain = new FragmentMainTabs();
-                this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
-                navDrawerSelected=R.id.nav_arq_window;}
-        super.onResume();
-        FuncDB fdb = new FuncDB(this);
-        if(fdb.findAll()==null){
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("isFirst",true);
-            Intent intent = new Intent(this, ActivityNewFunc.class);
-            intent.putExtras(bundle);
-            startActivityForResult(intent,ConstantesDoProjeto.NEW_USER_REQUEST);
-        }
-       }
-        else{
+        if(PermissionUtils.checkPermissoes(this)&& instance==null){
+                    if(!setMainFrag(navDrawerSelected)){
+                    fragMain = new FragmentMainTabs();
+                    this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fragMain).commit();
+                    navDrawerSelected=R.id.nav_arq_window;}
+            super.onResume();
+            FuncDB fdb = new FuncDB(this);
+            if(fdb.findAll()==null){
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isFirst",true);
+                Intent intent = new Intent(this, ActivityNewFunc.class);
+                intent.putExtras(bundle);
+                startActivityForResult(intent,ConstantesDoProjeto.NEW_USER_REQUEST);
+            }
+        }else{
                 if(instance!=null && navDrawerSelected==R.id.nav_arq_window){
                     fragMain=(FragmentMainTabs) this.getSupportFragmentManager().findFragmentById(R.id.screen_area);
                 }
@@ -210,7 +168,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         configItem = menu.findItem(R.id.action_settings);
         listCardItem = menu.findItem(R.id.action_list_mode);
         searchItem = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Procurar...");
 
@@ -230,7 +188,9 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             outState.putInt("tab_selected",0);
         }
 
-        outState.putInt("nav_drawer_selected",((NavigationView)findViewById(R.id.nav_view)).getCheckedItem().getItemId());
+        outState.putInt("nav_drawer_selected",
+                        Objects.requireNonNull(((NavigationView) findViewById(R.id.nav_view)).getCheckedItem()).getItemId());
+
         super.onSaveInstanceState(outState);
     }
 
@@ -286,6 +246,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
         if (id == R.id.action_settings) {
             ((NavigationView)findViewById(R.id.nav_view)).setCheckedItem(R.id.nav_edit_window);
+            attToolbarEditPage();
             abrirEditPage();
             return true;
         }
@@ -303,7 +264,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
+
+
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -314,8 +278,8 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         return true;
     }
 
-
     public boolean setMainFrag(int id){
+
         boolean returnstatement;
         if (id == R.id.nav_arq_window) {
             this.abrirArqPage();
@@ -375,12 +339,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         }
     }
 
-    public void botaoLeitorDeQR(View view) {
-          fragMain.performClick(0);
-          onScannerClick(findViewById(R.id.screen_area));
-    }
-
-    // metodo de selecao do drawer
     private void attToolbarArqPage(){
         this.setTitle(R.string.title_activity_main_navigation_drawer);
         if(tabselected==0) {
@@ -403,12 +361,16 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     private void attToolbarEditPage(){
         this.setTitle(R.string.configuracoes);
         findViewById(R.id.floatingActionButton).setVisibility(View.INVISIBLE);
+        if(searchItem!=null) {
+            if (searchItem.isActionViewExpanded()) {
+                searchItem.collapseActionView();
+            }
+        }
         searchItem.setVisible(false);
         configItem.setVisible(false);
         listCardItem.setVisible(false);
     }
 
-    // metodo de selecao do drawer
     private void abrirEditPage(){
         EditScreen config= new EditScreen();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, config).commit();
@@ -422,7 +384,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         listCardItem.setVisible(true);
     }
 
-    // metodo de selecao do drawer
     private void abrirFavoritos(){
         StaredFragment fav= new StaredFragment();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, fav).commit();
@@ -436,7 +397,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
         listCardItem.setVisible(false);
     }
 
-    // metodo de selecao do drawer
     private void abrirAddQr(){
         FragmentAddQR mfragment= new FragmentAddQR();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.screen_area, mfragment).commit();
@@ -506,33 +466,23 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
 
 
 
-
-
-
-
-    //permissoes
-
-    public boolean checkPermissoes() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int result_1 = ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE);
-            int result_2 = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA);
-            int result_3 = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            return (result_1 == PackageManager.PERMISSION_GRANTED &&
-                    result_2 == PackageManager.PERMISSION_GRANTED &&
-                    result_3 == PackageManager.PERMISSION_GRANTED);
-        }
-        return true;
+    public void botaoLeitorDeQR(View view) {
+        fragMain.performClick(0);
+        onScannerClick(findViewById(R.id.screen_area));
     }
-    public void requestPermissoes() throws Exception {
-        try {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.CAMERA,
-            }, 0x3);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+
+
+
+
+
+    private void getPermissoes(){
+        if(!PermissionUtils.checkPermissoes(this)){
+            try {
+                PermissionUtils.requestPermissoes(this);
+                while(PermissionUtils.checkPermissoes(this));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -550,12 +500,6 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             }
 
         }
-    }
-
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
     }
 
 

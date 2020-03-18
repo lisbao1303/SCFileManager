@@ -54,10 +54,10 @@ public class QRCodePreview extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        String path=getIntent().getExtras().getString("path");
-
-        arq= new MyFileDirectory(path);
-
+        if(getIntent().getExtras()!=null) {
+            String path = getIntent().getExtras().getString("path");
+            arq = new MyFileDirectory(path);
+        }
 
         ImageView localQR= findViewById(R.id.imageView_Previw_QR_Code);
         bitmap =QRCodeGenerator.generateQRCodeImage(arq.getPath(),500,500);
